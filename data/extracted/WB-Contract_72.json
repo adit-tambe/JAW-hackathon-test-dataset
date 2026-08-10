@@ -1,0 +1,467 @@
+{
+  "_doc_id": "WB-Contract_72",
+  "_doc_type": "boq_workbook",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\workbooks\\BOQ_and_Measurements_Contract_72.xlsx",
+  "contract_ref": "Contract_72",
+  "sheets": {
+    "BOQ": {
+      "headers": [
+        "Item No",
+        "Description",
+        "Unit",
+        "Quantity",
+        "Rate (INR)",
+        "Amount (INR)"
+      ],
+      "row_count": 7,
+      "data": [
+        {
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Unit": "cum",
+          "Quantity": 486052.512,
+          "Rate (INR)": 217,
+          "Amount (INR)": 105473395
+        },
+        {
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Unit": "cum",
+          "Quantity": 50146.905,
+          "Rate (INR)": 1163,
+          "Amount (INR)": 58320851
+        },
+        {
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Unit": "cum",
+          "Quantity": 81824.929,
+          "Rate (INR)": 1489,
+          "Amount (INR)": 121837320
+        },
+        {
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Unit": "MT",
+          "Quantity": 27439.21,
+          "Rate (INR)": 6233,
+          "Amount (INR)": 171028599
+        },
+        {
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Unit": "MT",
+          "Quantity": 22977.217,
+          "Rate (INR)": 6773,
+          "Amount (INR)": 155624688
+        },
+        {
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Unit": "cum",
+          "Quantity": 7201.073,
+          "Rate (INR)": 8727,
+          "Amount (INR)": 62843766
+        },
+        {
+          "Item No": "TOTAL",
+          "Description": null,
+          "Unit": null,
+          "Quantity": null,
+          "Rate (INR)": null,
+          "Amount (INR)": null
+        }
+      ]
+    },
+    "Measurements": {
+      "headers": [
+        "RA No",
+        "Measured On",
+        "Item No",
+        "Description",
+        "Qty Measured",
+        "Amount (INR)"
+      ],
+      "row_count": 45,
+      "data": [
+        {
+          "RA No": 1,
+          "Measured On": "2020-07-05 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 63281.783,
+          "Amount (INR)": 13732147
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2020-07-05 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 7349.719,
+          "Amount (INR)": 8547723
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2020-07-05 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 8145.601,
+          "Amount (INR)": 12128800
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2020-07-05 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2985.888,
+          "Amount (INR)": 18611040
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2020-07-05 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1233.666,
+          "Amount (INR)": 8355619
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2020-09-27 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 41252.212,
+          "Amount (INR)": 8951730
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2020-09-27 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 8698.115,
+          "Amount (INR)": 10115908
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2020-09-27 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 2292.908,
+          "Amount (INR)": 15529863
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2020-09-27 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 3068.389,
+          "Amount (INR)": 26777828
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2020-12-21 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 97780.945,
+          "Amount (INR)": 21218465
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2020-12-21 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 7853.167,
+          "Amount (INR)": 11693365
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2020-12-21 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2767.92,
+          "Amount (INR)": 17252447
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2020-12-21 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1284.64,
+          "Amount (INR)": 11211052
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-03-15 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 43548.055,
+          "Amount (INR)": 9449928
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-03-15 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 17735.633,
+          "Amount (INR)": 20626541
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-03-15 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1874.285,
+          "Amount (INR)": 12694534
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-03-15 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 2131.812,
+          "Amount (INR)": 18604326
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2021-06-07 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 45248.157,
+          "Amount (INR)": 9818850
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2021-06-07 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 5439.02,
+          "Amount (INR)": 8098701
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2021-06-07 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 3878.286,
+          "Amount (INR)": 24173359
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2021-06-07 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1461.232,
+          "Amount (INR)": 9896925
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2021-06-07 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1075.684,
+          "Amount (INR)": 9387494
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2021-08-31 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 13715.001,
+          "Amount (INR)": 20421636
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2021-08-31 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2811.412,
+          "Amount (INR)": 17523533
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2021-08-31 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 2684.79,
+          "Amount (INR)": 23430160
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2021-11-23 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 121598.945,
+          "Amount (INR)": 26386971
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2021-11-23 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 8740.271,
+          "Amount (INR)": 13014263
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2021-11-23 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 3525.444,
+          "Amount (INR)": 21974095
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-02-15 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 64325.848,
+          "Amount (INR)": 13958709
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-02-15 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 22368.312,
+          "Amount (INR)": 26014347
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-02-15 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1606.07,
+          "Amount (INR)": 10877909
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-02-15 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1205.954,
+          "Amount (INR)": 10524364
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-11 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 41068.571,
+          "Amount (INR)": 8911880
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-11 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 18911.56,
+          "Amount (INR)": 21994144
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-11 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 9552.562,
+          "Amount (INR)": 14223765
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-11 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2606.376,
+          "Amount (INR)": 16245540
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 64396.032,
+          "Amount (INR)": 13973939
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2592.375,
+          "Amount (INR)": 16158274
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 2474.101,
+          "Amount (INR)": 16757084
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1659.91,
+          "Amount (INR)": 14486032
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-10-26 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 12616.099,
+          "Amount (INR)": 14672523
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-10-26 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1586.597,
+          "Amount (INR)": 9889261
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-10-26 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 2835.132,
+          "Amount (INR)": 19202348
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-10-26 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 2018.013,
+          "Amount (INR)": 17611197
+        },
+        {
+          "RA No": "TOTAL",
+          "Measured On": null,
+          "Item No": null,
+          "Description": null,
+          "Qty Measured": null,
+          "Amount (INR)": null
+        }
+      ]
+    },
+    "Notes": {
+      "headers": [
+        "Bill of Quantities and measurement register — contract 72."
+      ],
+      "row_count": 3,
+      "data": [
+        {
+          "Bill of Quantities and measurement register — contract 72.": "Agency: National Infrastructure Corp. Ltd.."
+        },
+        {
+          "Bill of Quantities and measurement register — contract 72.": "Quantities are as measured jointly and recorded in the measurement book."
+        },
+        {
+          "Bill of Quantities and measurement register — contract 72.": "The measurement total reconciles to the running-account bills raised."
+        }
+      ]
+    }
+  }
+}

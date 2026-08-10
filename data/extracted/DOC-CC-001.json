@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-001",
+  "_doc_type": "completion_certificate",
+  "project_name": "RCC Bridge — Gujarat Pkg-1",
+  "client_name": "National Special Projects Office",
+  "contract_value": 333800000,
+  "contract_value_raw": null,
+  "completion_date": "2011-02-06",
+  "commencement_date": null,
+  "performance_grading": "Good",
+  "role": "Prime",
+  "work_category": "Bridges Flyovers",
+  "signing_officer": "Suresh Desai",
+  "work_description": "Bridges Flyovers work for National Special Projects Office",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-001.pdf"
+}

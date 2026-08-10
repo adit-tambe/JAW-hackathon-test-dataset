@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-064",
+  "_doc_type": "completion_certificate",
+  "project_name": "RCC Bridge — Tamil Nadu Pkg-64",
+  "client_name": "Mahanadi Steel Corporation",
+  "contract_value": 680900000,
+  "contract_value_raw": null,
+  "completion_date": "2017-01-26",
+  "commencement_date": null,
+  "performance_grading": "Good",
+  "role": "Prime",
+  "work_category": "Bridges Flyovers",
+  "signing_officer": "Rahul Das",
+  "work_description": "Bridges Flyovers work for Mahanadi Steel Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-064.pdf"
+}

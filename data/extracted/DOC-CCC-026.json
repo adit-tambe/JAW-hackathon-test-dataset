@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CCC-026",
+  "_doc_type": "company_completion_certificate",
+  "project_name": null,
+  "client_name": "NATIONAL INFRASTRUCTURE CORP. LTD.",
+  "contract_value": 123300000,
+  "contract_value_raw": null,
+  "completion_date": "2025-07-16",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": null,
+  "signing_officer": "Farhan Rao",
+  "work_description": "Construction work for NATIONAL INFRASTRUCTURE CORP. LTD.",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\company_completion_certificate\\DOC-CCC-026.pdf"
+}

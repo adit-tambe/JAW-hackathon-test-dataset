@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-090",
+  "_doc_type": "completion_certificate",
+  "project_name": "Canal Lining — Tamil Nadu Pkg-90",
+  "client_name": "Public Works Department, Govt of Tamil Nadu",
+  "contract_value": 260900000,
+  "contract_value_raw": null,
+  "completion_date": "2014-06-20",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "irrigation",
+  "signing_officer": "Manoj Verma",
+  "work_description": "irrigation work for Public Works Department, Govt of Tamil Nadu",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-090.pdf"
+}

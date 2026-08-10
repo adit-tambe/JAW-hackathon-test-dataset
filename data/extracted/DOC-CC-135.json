@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-135",
+  "_doc_type": "completion_certificate",
+  "project_name": "Drainage Works — Gujarat Pkg-135",
+  "client_name": "Public Health Engineering Dept, Gujarat",
+  "contract_value": 23300000,
+  "contract_value_raw": null,
+  "completion_date": "2010-10-16",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "roads maintenance",
+  "signing_officer": "Priya Gupta",
+  "work_description": "roads maintenance work for Public Health Engineering Dept, Gujarat",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-135.pdf"
+}

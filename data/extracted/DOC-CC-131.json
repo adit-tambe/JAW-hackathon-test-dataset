@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-131",
+  "_doc_type": "completion_certificate",
+  "project_name": "Pipeline Laying — Jharkhand Pkg-131",
+  "client_name": "Jal Nigam, Jharkhand",
+  "contract_value": 69200000,
+  "contract_value_raw": null,
+  "completion_date": "2021-08-17",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "Water Supply",
+  "signing_officer": "Gautam Joshi",
+  "work_description": "Water Supply work for Jal Nigam, Jharkhand",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-131.pdf"
+}

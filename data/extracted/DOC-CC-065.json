@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-065",
+  "_doc_type": "completion_certificate",
+  "project_name": "Pumping Station — Uttar Pradesh Pkg-65",
+  "client_name": "Jal Nigam, Uttar Pradesh",
+  "contract_value": 284100000,
+  "contract_value_raw": null,
+  "completion_date": "2018-11-15",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "water treatment",
+  "signing_officer": "Meera Roy",
+  "work_description": "water treatment work for Jal Nigam, Uttar Pradesh",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-065.pdf"
+}

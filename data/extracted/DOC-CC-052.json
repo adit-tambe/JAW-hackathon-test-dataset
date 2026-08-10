@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-052",
+  "_doc_type": "completion_certificate",
+  "project_name": "Stormwater Drainage — Tamil Nadu Pkg-52",
+  "client_name": "Mahanadi Steel Corporation",
+  "contract_value": 155200000,
+  "contract_value_raw": null,
+  "completion_date": "2015-02-10",
+  "commencement_date": null,
+  "performance_grading": "Very Good",
+  "role": "Prime",
+  "work_category": "Sewerage Drainage",
+  "signing_officer": "Manoj Verma",
+  "work_description": "Sewerage Drainage work for Mahanadi Steel Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-052.pdf"
+}

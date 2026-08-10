@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-032",
+  "_doc_type": "completion_certificate",
+  "project_name": "Institutional Building — Gujarat Pkg-32",
+  "client_name": "Mahanadi Steel Corporation",
+  "contract_value": 145700000,
+  "contract_value_raw": null,
+  "completion_date": "2023-12-07",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "buildings",
+  "signing_officer": "Deepa Chatterjee",
+  "work_description": "buildings work for Mahanadi Steel Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-032.pdf"
+}

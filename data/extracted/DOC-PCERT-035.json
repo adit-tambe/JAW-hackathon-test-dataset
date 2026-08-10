@@ -1,0 +1,11 @@
+{
+  "_doc_id": "DOC-PCERT-035",
+  "_doc_type": "personnel_certificate",
+  "person_name": "Unknown",
+  "cert_type": "PMP",
+  "cert_id": null,
+  "issue_date": null,
+  "expiry_date": "15 Sep 2029 Registrar, PMI DOC-PCERT-035 Page 1 of 1",
+  "issuing_body": "PMI",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\personnel_certificate\\DOC-PCERT-035.pdf"
+}

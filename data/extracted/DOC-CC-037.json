@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-037",
+  "_doc_type": "completion_certificate",
+  "project_name": "WTP Augmentation — Delhi Pkg-37",
+  "client_name": "Trishakti Power Generation Corporation",
+  "contract_value": 67500000,
+  "contract_value_raw": null,
+  "completion_date": "2020-08-27",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "water treatment",
+  "signing_officer": "Sanjay Joshi",
+  "work_description": "water treatment work for Trishakti Power Generation Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-037.pdf"
+}

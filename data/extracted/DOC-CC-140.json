@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-140",
+  "_doc_type": "completion_certificate",
+  "project_name": "Pipeline Laying — Maharashtra Pkg-140",
+  "client_name": "Peninsular Petroleum Corporation",
+  "contract_value": 28200000,
+  "contract_value_raw": null,
+  "completion_date": "2019-08-28",
+  "commencement_date": null,
+  "performance_grading": "Excellent",
+  "role": "Prime",
+  "work_category": "Water Supply",
+  "signing_officer": "Rahul Menon",
+  "work_description": "Water Supply work for Peninsular Petroleum Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-140.pdf"
+}

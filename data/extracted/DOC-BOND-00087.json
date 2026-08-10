@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-BOND-00087",
+  "_doc_type": "performance_bond",
+  "project_name": null,
+  "client_name": "Employer",
+  "contractor_name": "National Infrastructure Corp. Ltd.",
+  "bond_value": "INR 0",
+  "bond_value_raw": 0,
+  "contract_value": null,
+  "contract_value_raw": null,
+  "bank_name": "Prithvi Commercial Bank",
+  "bond_number": null,
+  "issue_date": null,
+  "expiry_date": null,
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\performance_bond\\DOC-BOND-00087.pdf"
+}

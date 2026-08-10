@@ -1,0 +1,11 @@
+{
+  "_doc_id": "DOC-PCERT-159",
+  "_doc_type": "personnel_certificate",
+  "person_name": "Unknown",
+  "cert_type": "Unknown",
+  "cert_id": null,
+  "issue_date": null,
+  "expiry_date": "01/01/2028 Registrar, ASQ DOC-PCERT-159 Page 1 of 1",
+  "issuing_body": "ASQ",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\personnel_certificate\\DOC-PCERT-159.pdf"
+}

@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-026",
+  "_doc_type": "completion_certificate",
+  "project_name": "Material Handling Plant — Uttar Pradesh Pkg-26",
+  "client_name": "Irrigation & Waterways Dept, Govt of Uttar Pradesh",
+  "contract_value": 123300000,
+  "contract_value_raw": null,
+  "completion_date": "2025-07-16",
+  "commencement_date": null,
+  "performance_grading": "Excellent",
+  "role": "Prime",
+  "work_category": "Industrial Epc",
+  "signing_officer": "Farhan Rao",
+  "work_description": "Industrial Epc work for Irrigation & Waterways Dept, Govt of Uttar Pradesh",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-026.pdf"
+}

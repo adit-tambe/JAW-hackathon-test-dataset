@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-141",
+  "_doc_type": "completion_certificate",
+  "project_name": "Drainage Works — Tamil Nadu Pkg-141",
+  "client_name": "Mahanadi Steel Corporation",
+  "contract_value": 39900000,
+  "contract_value_raw": null,
+  "completion_date": "2023-04-12",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "roads maintenance",
+  "signing_officer": "Jaya Desai",
+  "work_description": "roads maintenance work for Mahanadi Steel Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-141.pdf"
+}

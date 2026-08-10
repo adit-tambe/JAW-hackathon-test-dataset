@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-007",
+  "_doc_type": "completion_certificate",
+  "project_name": "Rigid Pavement — Madhya Pradesh Pkg-7",
+  "client_name": "MAHANADI STEEL CORPORATION",
+  "contract_value": 375200000,
+  "contract_value_raw": null,
+  "completion_date": "2020-05-09",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "roads highways",
+  "signing_officer": "Amit Iyer",
+  "work_description": "roads highways work for MAHANADI STEEL CORPORATION",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-007.pdf"
+}

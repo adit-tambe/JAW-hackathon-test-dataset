@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CCC-039",
+  "_doc_type": "company_completion_certificate",
+  "project_name": null,
+  "client_name": "National Infrastructure Corp. Ltd.",
+  "contract_value": 181700000,
+  "contract_value_raw": null,
+  "completion_date": "2014-12-05",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": null,
+  "signing_officer": "Meera Roy",
+  "work_description": "Construction work for National Infrastructure Corp. Ltd.",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\company_completion_certificate\\DOC-CCC-039.pdf"
+}

@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-132",
+  "_doc_type": "completion_certificate",
+  "project_name": "Patch Repair — Delhi Pkg-132",
+  "client_name": "Subarnarekha Valley Corporation",
+  "contract_value": 20400000,
+  "contract_value_raw": null,
+  "completion_date": "2015-02-17",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "roads maintenance",
+  "signing_officer": "Imran Joshi",
+  "work_description": "roads maintenance work for Subarnarekha Valley Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-132.pdf"
+}

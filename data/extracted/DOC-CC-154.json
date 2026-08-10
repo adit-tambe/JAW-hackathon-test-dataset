@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-154",
+  "_doc_type": "completion_certificate",
+  "project_name": "School Building — Delhi Pkg-154",
+  "client_name": "Subarnarekha Valley Corporation",
+  "contract_value": 19400000,
+  "contract_value_raw": null,
+  "completion_date": "2017-09-05",
+  "commencement_date": null,
+  "performance_grading": "Good",
+  "role": "Prime",
+  "work_category": "Small Buildings",
+  "signing_officer": "Uma Sen",
+  "work_description": "Small Buildings work for Subarnarekha Valley Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-154.pdf"
+}

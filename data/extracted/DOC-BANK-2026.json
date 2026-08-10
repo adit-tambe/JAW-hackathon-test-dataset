@@ -1,0 +1,6 @@
+{
+  "_doc_id": "DOC-BANK-2026",
+  "_doc_type": "bank_statement",
+  "content_summary": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2026–27\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2026-04-01\nOpening balance b/f\n867,408,731\n2026-04-01\nVendor payment #263\n28,030,603\n839,378,128\n2026-04-02\nVendor payment #239\n5,756,578\n833,621,550\n2026-04-03\nReceipt against invoice (rcpt #262)\n33,828,661\n867,450,211\n2026-04-07\nTDS deposited (202603)\n5,856,438\n861,593,773\n2026-04-10\nV",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\bank_statement\\DOC-BANK-2026.pdf"
+}

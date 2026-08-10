@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-097",
+  "_doc_type": "completion_certificate",
+  "project_name": "Check Dam — Maharashtra Pkg-97",
+  "client_name": "Public Works Department, Govt of Maharashtra",
+  "contract_value": 307300000,
+  "contract_value_raw": null,
+  "completion_date": "2018-04-12",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "irrigation",
+  "signing_officer": "Sanjay Joshi",
+  "work_description": "irrigation work for Public Works Department, Govt of Maharashtra",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-097.pdf"
+}

@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-103",
+  "_doc_type": "completion_certificate",
+  "project_name": "Steel Truss Bridge — Maharashtra Pkg-103",
+  "client_name": "Public Works Department, Govt of Maharashtra",
+  "contract_value": 586900000,
+  "contract_value_raw": null,
+  "completion_date": "2010-09-30",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "large bridges",
+  "signing_officer": "Imran Joshi",
+  "work_description": "large bridges work for Public Works Department, Govt of Maharashtra",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-103.pdf"
+}

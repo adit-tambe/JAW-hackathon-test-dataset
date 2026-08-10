@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-123",
+  "_doc_type": "completion_certificate",
+  "project_name": "Rail Tunnel — West Bengal Pkg-123",
+  "client_name": "Trishakti Power Generation Corporation",
+  "contract_value": 400000000,
+  "contract_value_raw": null,
+  "completion_date": "2010-02-26",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "tunnels",
+  "signing_officer": "Jaya Desai",
+  "work_description": "tunnels work for Trishakti Power Generation Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-123.pdf"
+}

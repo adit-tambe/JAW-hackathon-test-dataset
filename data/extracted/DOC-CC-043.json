@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-043",
+  "_doc_type": "completion_certificate",
+  "project_name": "Flyover — Uttar Pradesh Pkg-43",
+  "client_name": "Trishakti Power Generation Corporation",
+  "contract_value": 140300000,
+  "contract_value_raw": null,
+  "completion_date": "2019-03-30",
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": "bridges flyovers",
+  "signing_officer": "Priti Pillai",
+  "work_description": "bridges flyovers work for Trishakti Power Generation Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-043.pdf"
+}

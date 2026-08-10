@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-101",
+  "_doc_type": "completion_certificate",
+  "project_name": "Six-Lane Highway — Uttar Pradesh Pkg-101",
+  "client_name": "Lakshya Engineering & Construction",
+  "contract_value": 977200000,
+  "contract_value_raw": null,
+  "completion_date": "2018-02-08",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "expressways",
+  "signing_officer": "Divya Singh",
+  "work_description": "expressways work for Lakshya Engineering & Construction",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-101.pdf"
+}

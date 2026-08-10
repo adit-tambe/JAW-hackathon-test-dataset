@@ -1,0 +1,851 @@
+{
+  "_doc_id": "WB-Contract_74",
+  "_doc_type": "boq_workbook",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\workbooks\\BOQ_and_Measurements_Contract_74.xlsx",
+  "contract_ref": "Contract_74",
+  "sheets": {
+    "BOQ": {
+      "headers": [
+        "Item No",
+        "Description",
+        "Unit",
+        "Quantity",
+        "Rate (INR)",
+        "Amount (INR)"
+      ],
+      "row_count": 9,
+      "data": [
+        {
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Unit": "cum",
+          "Quantity": 606278.434,
+          "Rate (INR)": 235,
+          "Amount (INR)": 142475432
+        },
+        {
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Unit": "cum",
+          "Quantity": 99565.238,
+          "Rate (INR)": 1242,
+          "Amount (INR)": 123660025
+        },
+        {
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Unit": "cum",
+          "Quantity": 81258.418,
+          "Rate (INR)": 1775,
+          "Amount (INR)": 144233692
+        },
+        {
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Unit": "MT",
+          "Quantity": 18836.569,
+          "Rate (INR)": 5976,
+          "Amount (INR)": 112567334
+        },
+        {
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Unit": "MT",
+          "Quantity": 10108.926,
+          "Rate (INR)": 6160,
+          "Amount (INR)": 62270986
+        },
+        {
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Unit": "cum",
+          "Quantity": 18127.49,
+          "Rate (INR)": 8661,
+          "Amount (INR)": 157002191
+        },
+        {
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Unit": "MT",
+          "Quantity": 1005.885,
+          "Rate (INR)": 70747,
+          "Amount (INR)": 71163344
+        },
+        {
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Unit": "rmt",
+          "Quantity": 291955.603,
+          "Rate (INR)": 552,
+          "Amount (INR)": 161159493
+        },
+        {
+          "Item No": "TOTAL",
+          "Description": null,
+          "Unit": null,
+          "Quantity": null,
+          "Rate (INR)": null,
+          "Amount (INR)": null
+        }
+      ]
+    },
+    "Measurements": {
+      "headers": [
+        "RA No",
+        "Measured On",
+        "Item No",
+        "Description",
+        "Qty Measured",
+        "Amount (INR)"
+      ],
+      "row_count": 91,
+      "data": [
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 9150.003,
+          "Amount (INR)": 11364304
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 4171.841,
+          "Amount (INR)": 7405018
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 825.759,
+          "Amount (INR)": 4934736
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1023.515,
+          "Amount (INR)": 6304851
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 572.145,
+          "Amount (INR)": 4955345
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 160.669,
+          "Amount (INR)": 11366829
+        },
+        {
+          "RA No": 1,
+          "Measured On": "2021-09-07 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 19917.315,
+          "Amount (INR)": 10994358
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 44162.289,
+          "Amount (INR)": 10378138
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 4815.265,
+          "Amount (INR)": 5980559
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2425.835,
+          "Amount (INR)": 14496788
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1236.256,
+          "Amount (INR)": 7615336
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1677.98,
+          "Amount (INR)": 14532981
+        },
+        {
+          "RA No": 2,
+          "Measured On": "2021-10-07 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 7829.056,
+          "Amount (INR)": 4321639
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 16330.23,
+          "Amount (INR)": 3837604
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 8050.337,
+          "Amount (INR)": 9998519
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 3371.9,
+          "Amount (INR)": 5985122
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1720.849,
+          "Amount (INR)": 10600431
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1139.406,
+          "Amount (INR)": 9868397
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 182.142,
+          "Amount (INR)": 12885993
+        },
+        {
+          "RA No": 3,
+          "Measured On": "2021-11-06 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 7516.984,
+          "Amount (INR)": 4149375
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 32970.119,
+          "Amount (INR)": 7747978
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 5847.708,
+          "Amount (INR)": 7262853
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 5101.82,
+          "Amount (INR)": 9055730
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1732.747,
+          "Amount (INR)": 10354898
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1115.23,
+          "Amount (INR)": 9659010
+        },
+        {
+          "RA No": 4,
+          "Measured On": "2021-12-06 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 187.216,
+          "Amount (INR)": 13244972
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 2887.761,
+          "Amount (INR)": 3586599
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 4808.291,
+          "Amount (INR)": 8534716
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1415.816,
+          "Amount (INR)": 8460919
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 637.782,
+          "Amount (INR)": 3928738
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1050.125,
+          "Amount (INR)": 9095132
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 170.176,
+          "Amount (INR)": 12039426
+        },
+        {
+          "RA No": 5,
+          "Measured On": "2022-01-05 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 21159.259,
+          "Amount (INR)": 11679911
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2022-02-04 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 44601.234,
+          "Amount (INR)": 10481290
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2022-02-04 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 12850.675,
+          "Amount (INR)": 15960538
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2022-02-04 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 9023.01,
+          "Amount (INR)": 16015843
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2022-02-04 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 792.423,
+          "Amount (INR)": 6863175
+        },
+        {
+          "RA No": 6,
+          "Measured On": "2022-02-04 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 113.144,
+          "Amount (INR)": 8004595
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 51576.068,
+          "Amount (INR)": 12120376
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 4257.668,
+          "Amount (INR)": 5288024
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1949.996,
+          "Amount (INR)": 11653178
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 532.781,
+          "Amount (INR)": 4614417
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 152.633,
+          "Amount (INR)": 10798316
+        },
+        {
+          "RA No": 7,
+          "Measured On": "2022-03-06 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 23281.033,
+          "Amount (INR)": 12851130
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-04-05 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 12029.881,
+          "Amount (INR)": 14941112
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-04-05 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 10096.258,
+          "Amount (INR)": 17920858
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-04-05 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2416.698,
+          "Amount (INR)": 14442185
+        },
+        {
+          "RA No": 8,
+          "Measured On": "2022-04-05 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1626.832,
+          "Amount (INR)": 10021286
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 5732.553,
+          "Amount (INR)": 10175281
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1047.548,
+          "Amount (INR)": 6260147
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1618.827,
+          "Amount (INR)": 9971976
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1048.695,
+          "Amount (INR)": 9082745
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 159.98,
+          "Amount (INR)": 11318131
+        },
+        {
+          "RA No": 9,
+          "Measured On": "2022-05-05 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 19052.828,
+          "Amount (INR)": 10517161
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-06-04 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 22974.838,
+          "Amount (INR)": 5399087
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-06-04 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 11524.225,
+          "Amount (INR)": 20455500
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-06-04 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 191.511,
+          "Amount (INR)": 13548819
+        },
+        {
+          "RA No": 10,
+          "Measured On": "2022-06-04 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 32467.455,
+          "Amount (INR)": 17922035
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-07-04 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 11574.168,
+          "Amount (INR)": 14375117
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-07-04 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 5109.565,
+          "Amount (INR)": 9069478
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-07-04 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1895.323,
+          "Amount (INR)": 11326452
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-07-04 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 1365.199,
+          "Amount (INR)": 8409627
+        },
+        {
+          "RA No": 11,
+          "Measured On": "2022-07-04 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1633.156,
+          "Amount (INR)": 14144767
+        },
+        {
+          "RA No": 12,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 73909,
+          "Amount (INR)": 17368615
+        },
+        {
+          "RA No": 12,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 9537.138,
+          "Amount (INR)": 11845125
+        },
+        {
+          "RA No": 12,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 2842.214,
+          "Amount (INR)": 16985072
+        },
+        {
+          "RA No": 12,
+          "Measured On": "2022-08-03 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 20156.937,
+          "Amount (INR)": 11126629
+        },
+        {
+          "RA No": 13,
+          "Measured On": "2022-09-02 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 14841.306,
+          "Amount (INR)": 18432902
+        },
+        {
+          "RA No": 13,
+          "Measured On": "2022-09-02 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 6537.318,
+          "Amount (INR)": 11603740
+        },
+        {
+          "RA No": 13,
+          "Measured On": "2022-09-02 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1827.168,
+          "Amount (INR)": 15825100
+        },
+        {
+          "RA No": 13,
+          "Measured On": "2022-09-02 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 162.038,
+          "Amount (INR)": 11463699
+        },
+        {
+          "RA No": 14,
+          "Measured On": "2022-10-02 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 15828.816,
+          "Amount (INR)": 19659389
+        },
+        {
+          "RA No": 14,
+          "Measured On": "2022-10-02 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 4236.33,
+          "Amount (INR)": 7519486
+        },
+        {
+          "RA No": 14,
+          "Measured On": "2022-10-02 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 204.206,
+          "Amount (INR)": 14446971
+        },
+        {
+          "RA No": 14,
+          "Measured On": "2022-10-02 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 28441.295,
+          "Amount (INR)": 15699595
+        },
+        {
+          "RA No": 15,
+          "Measured On": "2022-11-01 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 57249.098,
+          "Amount (INR)": 13453538
+        },
+        {
+          "RA No": 15,
+          "Measured On": "2022-11-01 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 4919.977,
+          "Amount (INR)": 6110611
+        },
+        {
+          "RA No": 15,
+          "Measured On": "2022-11-01 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 3439.172,
+          "Amount (INR)": 20552494
+        },
+        {
+          "RA No": 15,
+          "Measured On": "2022-11-01 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 243.244,
+          "Amount (INR)": 17208798
+        },
+        {
+          "RA No": 16,
+          "Measured On": "2022-12-01 00:00:00",
+          "Item No": 1,
+          "Description": "Earthwork in excavation & embankment",
+          "Qty Measured": 24825.302,
+          "Amount (INR)": 5833946
+        },
+        {
+          "RA No": 16,
+          "Measured On": "2022-12-01 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 2341.61,
+          "Amount (INR)": 20280682
+        },
+        {
+          "RA No": 16,
+          "Measured On": "2022-12-01 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 286.063,
+          "Amount (INR)": 20238088
+        },
+        {
+          "RA No": 16,
+          "Measured On": "2022-12-01 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 19878.125,
+          "Amount (INR)": 10972725
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 2,
+          "Description": "Granular sub-base (GSB)",
+          "Qty Measured": 5851.932,
+          "Amount (INR)": 7268100
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 3,
+          "Description": "Wet mix macadam (WMM)",
+          "Qty Measured": 4119.495,
+          "Amount (INR)": 7312103
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 4,
+          "Description": "Dense bituminous macadam (DBM)",
+          "Qty Measured": 1116.26,
+          "Amount (INR)": 6670770
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 5,
+          "Description": "Bituminous concrete (BC)",
+          "Qty Measured": 575.632,
+          "Amount (INR)": 3545894
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 6,
+          "Description": "RCC M30 for structures",
+          "Qty Measured": 1290.183,
+          "Amount (INR)": 11174271
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 7,
+          "Description": "Reinforcement steel Fe500",
+          "Qty Measured": 155.43,
+          "Amount (INR)": 10996223
+        },
+        {
+          "RA No": 17,
+          "Measured On": "2022-12-31 00:00:00",
+          "Item No": 8,
+          "Description": "RCC kerb & channel",
+          "Qty Measured": 18764.638,
+          "Amount (INR)": 10358080
+        },
+        {
+          "RA No": "TOTAL",
+          "Measured On": null,
+          "Item No": null,
+          "Description": null,
+          "Qty Measured": null,
+          "Amount (INR)": null
+        }
+      ]
+    },
+    "Notes": {
+      "headers": [
+        "Bill of Quantities and measurement register — contract 74."
+      ],
+      "row_count": 3,
+      "data": [
+        {
+          "Bill of Quantities and measurement register — contract 74.": "Agency: National Infrastructure Corp. Ltd.."
+        },
+        {
+          "Bill of Quantities and measurement register — contract 74.": "Quantities are as measured jointly and recorded in the measurement book."
+        },
+        {
+          "Bill of Quantities and measurement register — contract 74.": "The measurement total reconciles to the running-account bills raised."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-025",
+  "_doc_type": "completion_certificate",
+  "project_name": "Residential Quarters — Uttar Pradesh Pkg-25",
+  "client_name": "Trishakti Power Generation Corporation",
+  "contract_value": 417100000,
+  "contract_value_raw": null,
+  "completion_date": "2021-06-05",
+  "commencement_date": null,
+  "performance_grading": "Excellent",
+  "role": "Prime",
+  "work_category": "Buildings",
+  "signing_officer": "Sunita Joshi",
+  "work_description": "Buildings work for Trishakti Power Generation Corporation",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-025.pdf"
+}

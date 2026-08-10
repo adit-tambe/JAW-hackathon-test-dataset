@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CCC-046",
+  "_doc_type": "company_completion_certificate",
+  "project_name": null,
+  "client_name": "National Infrastructure Corp. Ltd.",
+  "contract_value": 318900000,
+  "contract_value_raw": null,
+  "completion_date": null,
+  "commencement_date": null,
+  "performance_grading": null,
+  "role": "Prime",
+  "work_category": null,
+  "signing_officer": null,
+  "work_description": "Construction work for National Infrastructure Corp. Ltd.",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\company_completion_certificate\\DOC-CCC-046.pdf"
+}

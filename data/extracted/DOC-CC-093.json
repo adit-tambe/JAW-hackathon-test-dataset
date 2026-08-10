@@ -1,0 +1,16 @@
+{
+  "_doc_id": "DOC-CC-093",
+  "_doc_type": "completion_certificate",
+  "project_name": "WTP Augmentation — Maharashtra Pkg-93",
+  "client_name": "Public Works Department, Govt of Maharashtra",
+  "contract_value": 214200000,
+  "contract_value_raw": null,
+  "completion_date": "2021-05-26",
+  "commencement_date": null,
+  "performance_grading": "Satisfactory",
+  "role": "Prime",
+  "work_category": "water treatment",
+  "signing_officer": "Asha Nair",
+  "work_description": "water treatment work for Public Works Department, Govt of Maharashtra",
+  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\completion_certificate\\DOC-CC-093.pdf"
+}
