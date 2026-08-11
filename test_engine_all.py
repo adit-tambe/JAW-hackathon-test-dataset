@@ -1,22 +1,11 @@
-"""
-answer_engine.py — Deterministic question answering engine (100% offline).
-
-Two-stage architecture:
-  Stage 1: Pattern-based question parser (no LLM needed)
-  Stage 2: SQL-driven answer computation
-"""
-import argparse
 import json
-import re
 import sqlite3
-import sys
+import re
 from datetime import datetime
 from statistics import mean, median
 from collections import Counter
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.config import DB_PATH, SAMPLE_QUESTIONS_PATH, PROJECT_ROOT
+from src.config import DB_PATH
 from src.money import _words_to_number, format_as_answer
 
 
@@ -113,8 +102,7 @@ def get_client_id_from_project(conn, project_name: str):
         return row[0]
     pkg_m = re.search(r'(?:package|pkg)\s*[-#]?\s*(\d+)', clean_p, re.I)
     if pkg_m:
-        pkg_num = pkg_m.group(1)
-        cur = conn.execute("SELECT client_id FROM works WHERE project_name LIKE ? OR project_name LIKE ?", (f"%Pkg-{pkg_num}", f"%Pkg-{pkg_num} %"))
+        cur = conn.execute("SELECT client_id FROM works WHERE project_name LIKE ?", (f"%Pkg-{pkg_m.group(1)}%",))
         row = cur.fetchone()
         if row:
             return row[0]
@@ -128,18 +116,6 @@ def get_client_id_from_engineer(conn, engineer_id: int):
     row = cur.fetchone()
     if row:
         return row[0]
-    return None
-
-
-def parse_date_str(dstr: str) -> str:
-    if not dstr:
-        return None
-    dstr_clean = dstr.replace(',', '').strip()
-    for fmt in ["%B %d %Y", "%b %d %Y", "%Y-%m-%d"]:
-        try:
-            return datetime.strptime(dstr_clean, fmt).strftime("%Y-%m-%d")
-        except ValueError:
-            pass
     return None
 
 
@@ -188,10 +164,9 @@ def parse_question(conn, question_text: str) -> dict:
     if not proj:
         pkg_m = re.search(r'(?:package|pkg)\s*[-#]?\s*(\d+)', qlow)
         if pkg_m:
-            pkg_num = pkg_m.group(1)
             cur = conn.execute(
-                "SELECT project_name FROM works WHERE project_name LIKE ? OR project_name LIKE ?",
-                (f"%Pkg-{pkg_num}", f"%Pkg-{pkg_num} %"))
+                "SELECT project_name FROM works WHERE project_name LIKE ?",
+                (f"%Pkg-{pkg_m.group(1)}%",))
             row = cur.fetchone()
             if row:
                 proj = row[0]
@@ -249,17 +224,17 @@ def parse_question(conn, question_text: str) -> dict:
 
     # Target value
     target_val = None
-    tgt_m = re.search(r'(?:target|reach|threshold|mark|bar|cutoff)\b.*?\b(?:inr\s*)?(\d+)\s*(?:cr|crore)', qlow)
+    tgt_m = re.search(r'([\w-]+(?:\s+[\w-]+)*)\s+crore\s+(?:mark|credential|target|threshold|bar)', qlow)
     if tgt_m:
-        target_val = int(float(tgt_m.group(1)) * 10_000_000)
+        word_val = _words_to_number(tgt_m.group(1) + ' crore')
+        if word_val:
+            target_val = int(word_val)
     if not target_val:
-        tgt_m = re.search(r'([\w-]+(?:\s+[\w-]+)*)\s+crore\s+(?:mark|credential|target|threshold|bar)', qlow)
+        tgt_m = re.search(r'(?:credential target|target|reach|clear the|credential threshold)\s+(?:of\s+)?(?:INR\s+)?([\d.]+)\s*(?:Cr|Crore|bar)', qlow)
         if tgt_m:
-            word_val = _words_to_number(tgt_m.group(1) + ' crore')
-            if word_val:
-                target_val = int(word_val)
+            target_val = int(float(tgt_m.group(1)) * 10_000_000)
     if not target_val:
-        tgt_m = re.search(r'(\d+)\s*(?:cr|crore)', qlow)
+        tgt_m = re.search(r'(\d+)\s*(?:cr|crore)\s+(?:mark|credential|target|threshold|bar)', qlow)
         if tgt_m:
             target_val = int(float(tgt_m.group(1)) * 10_000_000)
 
@@ -277,7 +252,8 @@ def parse_question(conn, question_text: str) -> dict:
     else:
         dm = re.search(r'([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})', qclean)
         if dm:
-            date_ref = parse_date_str(dm.group(1))
+            from src.extract_local_fast import parse_date
+            date_ref = parse_date(dm.group(1))
     if not date_ref:
         dm2 = re.search(r'(march\s+10,?\s+2021|mar\s+10\s+2021|march\s+2021|mar\s+10)', qlow)
         if dm2:
@@ -304,16 +280,10 @@ def parse_question(conn, question_text: str) -> dict:
         'date_reference': date_ref,
         'cert_type': cert_type,
         'cert_id': cert_id,
-        'qlow': qlow,
     }
 
 
 def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, threshold_val=None, target_val=None) -> str:
-    if 'as prime' in qlow or 'as sub-contractor' in qlow or 'subcontractor' in qlow or 'sub-contractor' in qlow or 'prime contractor' in qlow:
-        return 'role_split'
-
-    if 'excellent' in qlow or 'satisfactory' in qlow or 'graded' in qlow or 'marked satisfactory' in qlow or 'performance certificate' in qlow:
-        return 'doc_filtered_aggregate'
     if 'average size' in qlow or 'mean size' in qlow or 'average value' in qlow or 'mean across' in qlow or 'average across' in qlow or 'overall average' in qlow or 'average contract value' in qlow or 'mean scale' in qlow or 'typical scale' in qlow or 'mean volume' in qlow:
         return 'avg_work_size'
 
@@ -335,10 +305,7 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if 'collection' in qlow or 'collected' in qlow or 'cleared against' in qlow or 'out of 100' in qlow:
         return 'collection_percent'
 
-    if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val or 'target' in qlow):
-        return 'gap_to_threshold'
-
-    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow) and ('awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow or 'secure' in qlow):
+    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow) and ('awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow):
         return 'unbilled_gap'
 
     if 'mean and the median' in qlow or 'avg and median' in qlow or 'average contract value.*median' in qlow or 'rupee gap between avg and median' in qlow or 'larger the average' in qlow or 'average and median' in qlow or 'avg minus median' in qlow or 'mean-median gap' in qlow or 'mean and median' in qlow or 'mean against the median' in qlow:
@@ -353,7 +320,7 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if 'distinct' in qlow or ('categories' in qlow and ('brought to a close' in qlow or 'wrapped up' in qlow or 'concluded' in qlow or 'closed out' in qlow or 'completion' in qlow or 'how many' in qlow)):
         return 'distinct_count'
 
-    if 'testimonial' in qlow or ('share' in qlow and 'reference' in qlow) or 'endorsement' in qlow or 'formal verification' in qlow or 'client sign-off' in qlow or 'backed by a client reference' in qlow or ('reference letter' in qlow and ('divided' in qlow or 'share' in qlow or 'out of' in qlow or 'portion' in qlow)):
+    if 'testimonial' in qlow or ('share' in qlow and 'reference' in qlow) or 'endorsement' in qlow or 'formal verification' in qlow or 'client sign-off' in qlow or 'backed by a client reference' in qlow:
         return 'referenced_share'
 
     if 'excluding' in qlow or 'minus the' in qlow or 'remove the' in qlow or 'without the' in qlow or 'carve that out' in qlow or 'excluding water' in qlow or 'set aside' in qlow or 'drop the' in qlow or 'dropping the' in qlow or 'filter out' in qlow or 'stripped out' in qlow:
@@ -365,10 +332,7 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if (threshold_val or target_val) and ('crossing' in qlow or 'hitting' in qlow or 'exceeding' in qlow or 'clear' in qlow or 'cutoff' in qlow or 'threshold' in qlow or 'mark' in qlow or 'limit' in qlow or 'exceed' in qlow or 'or higher' in qlow or 'crore' in qlow):
         return 'threshold_aggregate'
 
-    if 'satisfactory' in qlow or 'graded' in qlow or 'marked satisfactory' in qlow or 'performance certificate' in qlow:
-        return 'doc_filtered_aggregate'
-
-    if 'as prime' in qlow or 'as sub-contractor' in qlow or 'subcontractor' in qlow or 'sub-contractor' in qlow or 'prime contractor' in qlow or 'prime' in qlow:
+    if 'as prime' in qlow or 'sub-contractor' in qlow:
         return 'role_split'
 
     if 'combined value' in qlow or 'total value' in qlow or 'sum' in qlow or 'aggregate' in qlow or 'baseline' in qlow or 'auditable sum' in qlow or 'track record' in qlow or 'full rollup' in qlow or 'full tally' in qlow or 'remaining value' in qlow:
@@ -509,19 +473,17 @@ def handle_date_span(conn, params: dict) -> float:
             
     comp_date = None
     if project_name:
-        cur = conn.execute("SELECT completion_date FROM works WHERE LOWER(project_name) = LOWER(?)", (normalize_text(project_name),))
+        cur = conn.execute("SELECT completion_date FROM works WHERE LOWER(project_name) LIKE LOWER(?)", (f"%{project_name[:20]}%",))
         row = cur.fetchone()
-        if not row:
-            pkg_m = re.search(r'(?:package|pkg)\s*[-#]?\s*(\d+)', project_name, re.I)
-            if pkg_m:
-                pkg_num = pkg_m.group(1)
-                cur = conn.execute("SELECT completion_date FROM works WHERE project_name LIKE ? OR project_name LIKE ?", (f"%Pkg-{pkg_num}", f"%Pkg-{pkg_num} %"))
-                row = cur.fetchone()
-        if not row:
-            cur = conn.execute("SELECT completion_date FROM works WHERE LOWER(project_name) LIKE LOWER(?)", (f"%{project_name[:20]}%",))
-            row = cur.fetchone()
         if row:
             comp_date = row[0]
+        else:
+            pkg_m = re.search(r'(?:package|pkg)\s*[-#]?\s*(\d+)', project_name, re.I)
+            if pkg_m:
+                cur = conn.execute("SELECT completion_date FROM works WHERE project_name LIKE ?", (f"%Pkg-{pkg_m.group(1)}%",))
+                row = cur.fetchone()
+                if row:
+                    comp_date = row[0]
             
     if not comp_date and engineer_id:
         cur = conn.execute("SELECT w.completion_date FROM works w JOIN engineer_works ew ON w.work_id = ew.work_id WHERE ew.engineer_id = ? AND w.completion_date IS NOT NULL ORDER BY w.completion_date DESC LIMIT 1", (engineer_id,))
@@ -591,7 +553,7 @@ def handle_avg_work_size(conn, params: dict) -> float:
 
 def handle_threshold_aggregate(conn, params: dict) -> float:
     client_id = find_client_id(conn, params.get("client_name"))
-    thresh = params.get("threshold_value") or params.get("target_value")
+    thresh = params.get("threshold_value")
     if not thresh:
         return 0
     if client_id:
@@ -616,7 +578,7 @@ def handle_gap_to_threshold(conn, params: dict) -> float:
     client_id = find_client_id(conn, params.get("client_name"))
     if not client_id:
         return 0
-    target = params.get("target_value") or params.get("threshold_value")
+    target = params.get("target_value")
     if not target:
         return 0
     curr = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND contract_value IS NOT NULL", (client_id,)).fetchone()[0] or 0
@@ -647,30 +609,7 @@ def handle_general_aggregate(conn, params: dict) -> float:
     return res if res else 0
 
 
-def handle_role_split(conn, params: dict) -> float:
-    client_id = find_client_id(conn, params.get("client_name"))
-    if not client_id:
-        return 0
-    role_val = "prime" if "prime" in params.get("qlow", "") else "subcontractor"
-    cur = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND LOWER(role) LIKE ?", (client_id, f"%{role_val}%"))
-    res = cur.fetchone()[0]
-    return res if res else 0
-
-
-def handle_doc_filtered_aggregate(conn, params: dict) -> float:
-    client_id = find_client_id(conn, params.get("client_name"))
-    if not client_id:
-        return 0
-    qlow = params.get("qlow", "")
-    grading = "excellent" if "excellent" in qlow else ("satisfactory" if "satisfactory" in qlow else ("good" if "good" in qlow else ""))
-    if not grading:
-        grading = "satisfactory"
-    cur = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND LOWER(performance_grading) LIKE ?", (client_id, f"%{grading}%"))
-    res = cur.fetchone()[0]
-    return res if res else 0
-
-
-SHAPE_HANDLERS = {
+HANDLERS = {
     'outstanding_balance': handle_outstanding_balance,
     'category_difference': handle_category_difference,
     'collection_percent': handle_collection_percent,
@@ -688,89 +627,48 @@ SHAPE_HANDLERS = {
     'gap_to_threshold': handle_gap_to_threshold,
     'temporal_chain': handle_temporal_chain,
     'general_aggregate': handle_general_aggregate,
-    'role_split': handle_role_split,
-    'doc_filtered_aggregate': handle_doc_filtered_aggregate,
 }
 
 
-def answer_question(conn, question_text: str, qid: str = None) -> float:
-    """Answer a single question using the deterministic pipeline."""
-    params = parse_question(conn, question_text)
-    shape = params.get("question_shape", "other")
-    
-    handler = SHAPE_HANDLERS.get(shape)
-    if handler:
-        try:
-            answer = handler(conn, params)
-            return format_as_answer(answer)
-        except Exception:
-            return 0
-    return 0
-
-
-def answer_all_questions(questions_path: str, output_path: str = None):
-    """Answer all questions from a JSON file and optionally write CSV or JSONL output."""
-    with open(questions_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
-    questions = data.get("questions", data) if isinstance(data, dict) else data
+def main():
     conn = sqlite3.connect(str(DB_PATH))
     
-    print(f"Answering {len(questions)} questions from {questions_path}...")
+    with open('BITS-Validation-Dataset/questions.json', 'r', encoding='utf-8') as f:
+        qdata = json.load(f)
+    questions = qdata.get("questions", qdata)
     
-    results = []
-    correct = 0
-    total_with_expected = 0
-    
+    shapes = Counter()
+    zeros = Counter()
+
     for q in questions:
-        qid = q["qid"]
-        question_text = q["question"]
-        expected = q.get("answer") or q.get("answer_gold")
+        qid = q['qid']
+        qtext = q['question']
+        params = parse_question(conn, qtext)
+        shape = params.get("question_shape", "other")
+        shapes[shape] += 1
         
-        answer = answer_question(conn, question_text, qid)
-        results.append({"qid": qid, "answer": answer})
+        h = HANDLERS.get(shape)
+        ans = 0
+        if h:
+            try:
+                ans = h(conn, params)
+            except Exception as e:
+                ans = 0
         
-        if expected is not None:
-            total_with_expected += 1
-            if answer == expected:
-                correct += 1
-    
+        if ans == 0 or ans == 0.0:
+            zeros[shape] += 1
+
     conn.close()
-    
-    if total_with_expected > 0:
-        print(f"Sample Accuracy: {correct}/{total_with_expected} ({correct/total_with_expected:.1%})")
-    
-    if output_path:
-        out_p = Path(output_path)
-        if out_p.suffix.lower() == '.csv':
-            import csv
-            with open(output_path, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.writer(f)
-                writer.writerow(["question_id", "answer"])
-                for r in results:
-                    writer.writerow([r["qid"], r["answer"]])
-        else:
-            with open(output_path, 'w', encoding='utf-8') as f:
-                for r in results:
-                    f.write(json.dumps(r) + "\n")
-        print(f"Submission written to: {output_path}")
-    
-    return results
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Answer questions")
-    parser.add_argument("--questions", default=str(SAMPLE_QUESTIONS_PATH),
-                       help="Path to questions JSON file")
-    parser.add_argument("--output", default=str(PROJECT_ROOT / "submission.csv"),
-                       help="Path to write submission file (CSV or JSONL)")
-    args = parser.parse_args()
-    
-    if not DB_PATH.exists():
-        print(f"ERROR: Database not found at {DB_PATH}")
-        sys.exit(1)
-    
-    answer_all_questions(args.questions, args.output)
+    print("\n=== PARSE & ANSWER STATISTICS ===")
+    print(f"Total questions: {len(questions)}")
+    total_answered = 0
+    for s, c in shapes.most_common():
+        z = zeros[s]
+        non_z = c - z
+        total_answered += non_z
+        print(f"  {s:24s}: {c:3d} total | {non_z:3d} answered ({non_z/c:.1%}) | {z:3d} zeros")
+    print(f"\nOVERALL ANSWERED: {total_answered} / {len(questions)} ({total_answered/len(questions):.1%})")
 
 
 if __name__ == "__main__":

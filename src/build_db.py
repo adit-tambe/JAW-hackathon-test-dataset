@@ -158,6 +158,20 @@ CREATE TABLE IF NOT EXISTS bank_statements (
     doc_id          TEXT
 );
 
+-- Accounts receivable ageing
+CREATE TABLE IF NOT EXISTS receivables (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    invoice_no      TEXT,
+    client_name     TEXT,
+    client_id       INTEGER REFERENCES clients(client_id),
+    invoice_date    TEXT,
+    invoiced        REAL,
+    status          TEXT,
+    received        REAL,
+    outstanding     REAL,
+    doc_id          TEXT
+);
+
 -- Raw document metadata
 CREATE TABLE IF NOT EXISTS doc_metadata (
     doc_id          TEXT PRIMARY KEY,
@@ -722,6 +736,24 @@ def load_workbook_data(conn):
                                   str(date) if date else None))
                         except (ValueError, TypeError):
                             pass
+
+        elif doc_type == "receivables_ageing":
+            for sheet_name, sheet_data in data.get("sheets", {}).items():
+                if sheet_name == "Notes":
+                    continue
+                for row in sheet_data.get("data", []):
+                    if isinstance(row, dict) and row.get("Client"):
+                        cname = row.get("Client").strip()
+                        c_row = conn.execute("SELECT client_id FROM clients WHERE LOWER(client_name) = LOWER(?) OR client_name LIKE ?", (cname, f"%{cname}%")).fetchone()
+                        client_id = c_row[0] if c_row else None
+                        inv = float(row.get("Invoiced (INR)") or 0)
+                        rec = float(row.get("Received (INR)") or 0)
+                        out = float(row.get("Outstanding (INR)") or 0)
+                        conn.execute("""
+                            INSERT INTO receivables
+                                (invoice_no, client_name, client_id, invoice_date, invoiced, status, received, outstanding, doc_id)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (row.get("Invoice No"), cname, client_id, row.get("Invoice Date"), inv, row.get("Status"), rec, out, doc_id))
         
         conn.execute(
             "INSERT OR REPLACE INTO doc_metadata VALUES (?, ?, ?, 0)",

@@ -6,6 +6,9 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+import warnings
+warnings.filterwarnings("ignore")
+
 # Load .env file if it exists
 load_dotenv()
 
