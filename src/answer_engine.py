@@ -694,18 +694,29 @@ SHAPE_HANDLERS = {
 
 
 def answer_question(conn, question_text: str, qid: str = None) -> float:
-    """Answer a single question using the deterministic pipeline."""
+    """Answer a single question using the deterministic pipeline, with LLM fallback for zeros."""
     params = parse_question(conn, question_text)
     shape = params.get("question_shape", "other")
     
+    answer = 0
     handler = SHAPE_HANDLERS.get(shape)
     if handler:
         try:
             answer = handler(conn, params)
-            return format_as_answer(answer)
         except Exception:
-            return 0
-    return 0
+            answer = 0
+
+    # Fallback to Few-Shot LLM Text-to-SQL for unhandled or zero answers
+    if answer == 0 or shape == "other":
+        try:
+            from src.llm_fallback import execute_llm_fallback
+            fallback_ans = execute_llm_fallback(conn, question_text)
+            if fallback_ans != 0:
+                return format_as_answer(fallback_ans)
+        except Exception as e:
+            pass
+
+    return format_as_answer(answer)
 
 
 def answer_all_questions(questions_path: str, output_path: str = None):
