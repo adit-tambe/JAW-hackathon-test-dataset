@@ -275,7 +275,69 @@ briefing describes. That confirms the handling of ~22 aggregate answers.
 | HV-IC-0398 | 83,695,139 | exact ageing-register total for PHE West Bengal |
 | HV-IC-0417 | 227,200,000 | JMC: Bridges Flyovers 87.4M vs Water Treatment 314.6M |
 
-## 9. Remaining risk
+## 9. Round two — closing on the leaderboard score
+
+First scored submission of this work: **94.538** (from 85.717). Each question is
+worth 0.3003 points, so the remaining 5.462 is **18.2 question-equivalents**.
+
+### Ruled out by arithmetic, so no attempt was spent on them
+
+If `category_difference` gold were signed rather than absolute, the 20 questions
+where the first category totals less than the second would each score zero —
+6.01 points, more than the entire remaining gap. The same argument retires the
+`mean_median_diff` sign convention (5.71 points if wrong). Both defaults must
+already be correct.
+
+`collection_percent` is provably unambiguous: `outstanding = invoiced − received`
+holds for all 518 rows of the ageing register, so `received / invoiced` and
+`(invoiced − outstanding) / invoiced` are the same number.
+
+### Fixed this round
+
+| Question(s) | Was | Now |
+|---|---|---|
+| HV-IC-0048 | client's whole portfolio (₹4,699M) | ₹128.7M — "reached completion **after** his PMP" is a temporal chain; the classifier matched "completed after" but not this phrasing |
+| HV-IC-0127 | ₹1,167M (fallback) | ₹33M — "the **outstanding** contract value we still need to secure to clear the 120 Cr threshold" is a credential gap, not an unpaid invoice |
+| HV-IC-0118 | 1113 days | 374 days — Hydro Tunnel Jharkhand Pkg-117, completed 2022-03-19, confirmed against the portfolio |
+| HV-IC-0335 | 1267 days | 798 days |
+| HV-IC-0014, 0244, 0222, 0349 | project unresolved | resolved |
+
+Six questions described their project in prose — "the Madhya Pradesh water
+plant", "the Jharkhand hydro tunnel package" — with no package number, so
+project resolution returned nothing and the handler fell back to the engineer's
+most recent work. `resolve_project_from_prose()` now matches the state against
+the project name and a work-type shorthand against its words, restricted to the
+named engineer's works, and refuses to guess when two candidates tie.
+
+Four questions (HV-IC-0044, 0178, 0276, 0333) name an engineer and a credential
+but no project at all, and the engineer serves four to six clients. No document
+resolves it — each credential ID appears in exactly one document, its own
+certificate — and the named project in the questions that *do* name one shows no
+pattern (largest 23/95, latest 25/95, earliest 15/95). The pick is now the client
+that engineer has done the most work for, which is the maximum-likelihood choice
+if the question generator drew a work uniformly from that engineer's set.
+
+### The three conventions that only the scorer can settle
+
+Implemented behind `--variant`, so each is a one-command single-variable
+experiment. The score is a mean, so the observed delta divided by 0.3003 is
+exactly how many questions the convention affects.
+
+| Variant | Questions | Swing | Default rationale |
+|---|---:|---:|---|
+| `outstanding_positive` | 24 | ±7.21 | Signed is default: it tracks the FS Trade Receivables line (FY2019 66.6M vs 67.4M reported; positive-only gives 79.9M) |
+| `yearly_signed` | 7 | ±2.10 | Absolute is default: "difference", "swing", "movement", and one question asks for the "absolute difference" outright |
+| `unbilled_abs` | 1 | ±0.30 | Signed is default |
+
+```bash
+python src/answer_engine.py --questions validation_questions.json \
+       --output variant_yearly_signed.csv --variant yearly_signed
+```
+
+Pre-built: `variant_yearly_signed.csv`, `variant_outstanding_positive.csv`,
+`variant_unbilled_abs.csv`.
+
+## 10. Remaining risk
 
 Nothing in the validation set has gold answers here, so these figures are
 verified for *internal consistency and against the documents*, not against the

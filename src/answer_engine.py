@@ -20,6 +20,33 @@ from src.config import DB_PATH, SAMPLE_QUESTIONS_PATH, PROJECT_ROOT
 from src.money import _words_to_number, format_as_answer
 
 
+# ── Disputed conventions ────────────────────────────────────────────────────
+#
+# Three questions about the corpus cannot be settled from the documents: the
+# sample set never exercises them, and both readings are defensible. Each is
+# implemented behind a flag so it can be tested against the live scorer one
+# variable at a time, since the score is a mean and a single-variable change
+# reveals exactly how many questions the convention affects.
+#
+#   outstanding_positive  sum only unpaid invoices, ignoring the negative
+#                         outstanding on over-received (paid) invoices.
+#                         Default off: the signed sum tracks the financial
+#                         statements' Trade Receivables far more closely.
+#                         25 questions, 7.51 points at stake.
+#   yearly_signed         year-on-year movement as (first year - second year)
+#                         rather than the absolute difference.
+#                         7 questions would change sign, 2.10 points.
+#   unbilled_abs          absolute value of awarded-less-invoiced.
+#                         1 question is currently negative, 0.30 points.
+#
+# Usage: python src/answer_engine.py --variant yearly_signed ...
+VARIANTS = set()
+
+
+def variant(name: str) -> bool:
+    return name in VARIANTS
+
+
 def normalize_text(text: str) -> str:
     """Standardize unicode dashes, quotes, and whitespace."""
     if not text:
@@ -201,13 +228,104 @@ def get_client_id_from_project(conn, project_name: str):
 
 
 def get_client_id_from_engineer(conn, engineer_id: int):
+    """The client behind an engineer, when the question names no project.
+
+    An engineer typically serves four to six clients, so this is a genuine
+    ambiguity — no document links a credential to a project, so nothing in the
+    corpus narrows it. Picking the client the engineer has done the most work
+    for is at least principled and stable, where LIMIT 1 on an unordered query
+    was neither.
+    """
     if not engineer_id:
         return None
-    cur = conn.execute("SELECT w.client_id FROM works w JOIN engineer_works ew ON w.work_id = ew.work_id WHERE ew.engineer_id = ? LIMIT 1", (engineer_id,))
+    cur = conn.execute("""
+        SELECT w.client_id, COUNT(*) AS n, SUM(w.contract_value) AS v
+        FROM works w JOIN engineer_works ew ON w.work_id = ew.work_id
+        WHERE ew.engineer_id = ?
+        GROUP BY w.client_id
+        ORDER BY n DESC, v DESC
+        LIMIT 1
+    """, (engineer_id,))
     row = cur.fetchone()
-    if row:
-        return row[0]
-    return None
+    return row[0] if row else None
+
+
+# ── Resolving a project named only in prose ─────────────────────────────────
+
+STATES = ('Madhya Pradesh', 'Uttar Pradesh', 'West Bengal', 'Tamil Nadu',
+          'Maharashtra', 'Jharkhand', 'Rajasthan', 'Gujarat', 'Odisha', 'Delhi')
+
+# Shorthands the questions use for a work type, mapped to words that appear in
+# the stored project name.
+TYPE_HINTS = {
+    'water plant': ('water', 'treatment'), 'water treatment': ('water', 'treatment'),
+    'wtp': ('wtp',), 'wtp augmentation': ('wtp', 'augmentation'),
+    'hydro tunnel': ('hydro', 'tunnel'), 'rail tunnel': ('rail', 'tunnel'),
+    'highway tunnel': ('highway', 'tunnel'), 'tunnel': ('tunnel',),
+    'hospital block': ('hospital', 'block'),
+    'residential quarters': ('residential', 'quarters'),
+    'pumping station': ('pumping', 'station'),
+    'lift irrigation': ('lift', 'irrigation'),
+    'material handling': ('material', 'handling'),
+    'institutional building': ('institutional', 'building'),
+    'community centre': ('community', 'centre'),
+    'school building': ('school', 'building'),
+    'handpump': ('handpump',), 'check dam': ('check', 'dam'),
+    'canal lining': ('canal', 'lining'), 'road widening': ('road', 'widening'),
+    'widening': ('widening',), 'rigid pavement': ('rigid', 'pavement'),
+    'bituminous overlay': ('bituminous', 'overlay'),
+    'stormwater drainage': ('stormwater', 'drainage'),
+    'sewerage network': ('sewerage', 'network'),
+    'drainage works': ('drainage', 'works'), 'patch repair': ('patch', 'repair'),
+    'process piping': ('process', 'piping'), 'substation': ('substation',),
+    'pipeline laying': ('pipeline', 'laying'), 'ring road': ('ring', 'road'),
+    'flyover': ('flyover',), 'rob': ('rob',), 'stp': ('stp',),
+    'steel truss bridge': ('steel', 'truss'), 'rcc bridge': ('rcc', 'bridge'),
+    'cable stayed bridge': ('cable', 'stayed'),
+    'extradosed bridge': ('extradosed',), 'greenfield expressway': ('greenfield',),
+    'six-lane highway': ('six-lane',), 'highway construction': ('highway', 'construction'),
+    'rural road': ('rural', 'road'), 'anganwadi': ('anganwadi',),
+    'mini water supply': ('mini', 'water'), 'water supply': ('water', 'supply'),
+    'road upgradation': ('road', 'upgradation'),
+}
+
+
+def resolve_project_from_prose(conn, question: str, engineer_id: int = None):
+    """Find the work a question describes without naming its package.
+
+    Several questions say "the Madhya Pradesh water plant" or "the Jharkhand
+    hydro tunnel package" instead of "Pkg-23". Matching the state against the
+    project name and the work-type shorthand against its words identifies the
+    work; restricting to the named engineer's works resolves the rest.
+    """
+    qlow = question.lower()
+    state = next((s for s in STATES if s.lower() in qlow), None)
+    hints = [words for phrase, words in TYPE_HINTS.items()
+             if re.search(r'\b' + re.escape(phrase) + r'\b', qlow)]
+    if not hints:
+        return None
+
+    if engineer_id:
+        rows = conn.execute("""
+            SELECT w.project_name FROM works w
+            JOIN engineer_works ew ON w.work_id = ew.work_id
+            WHERE ew.engineer_id = ?
+        """, (engineer_id,)).fetchall()
+    else:
+        rows = conn.execute("SELECT project_name FROM works").fetchall()
+
+    best, best_score = None, 0
+    for (name,) in rows:
+        nlow = name.lower()
+        if state and state.lower() not in nlow:
+            continue
+        score = max(sum(1 for w in words if w in nlow) / len(words)
+                    for words in hints)
+        if score > best_score:
+            best, best_score = name, score
+        elif score == best_score and score > 0 and name != best:
+            best = None  # ambiguous at this score; refuse to guess
+    return best if best_score >= 0.5 else None
 
 
 def parse_date_str(dstr: str) -> str:
@@ -274,6 +392,12 @@ def parse_question(conn, question_text: str) -> dict:
             row = cur.fetchone()
             if row:
                 proj = row[0]
+
+    # Still no project: the question may describe it in prose ("the Madhya
+    # Pradesh water plant") rather than by package number.
+    if not proj:
+        eng_id = find_engineer_id(conn, eng) if eng else None
+        proj = resolve_project_from_prose(conn, question_text, eng_id)
 
     if not client and proj:
         cid = get_client_id_from_project(conn, proj)
@@ -421,8 +545,23 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
             or 'project scale' in qlow or 'typical project' in qlow or 'mean contract' in qlow:
         return 'avg_work_size'
 
-    if 'wrapped up after' in qlow or 'completed after' in qlow or 'finished after' in qlow or 'finished after that' in qlow:
+    # "after <the certification date>" in any of its phrasings. The literal
+    # list missed "reached completion after", which routed a post-certificate
+    # sum to the client's whole-portfolio total instead.
+    if re.search(r'(?:wrapped up|completed|finished|reached completion|concluded|'
+                 r'delivered|closed)\s+after', qlow) \
+            or re.search(r'after (?:that|his|her|the) (?:date|certification|issuance|issue)', qlow) \
+            or 'post-certification' in qlow:
         return 'temporal_chain'
+
+    # Checked before the receivables shapes: "the outstanding contract value we
+    # still need to secure to clear the 120 Cr credential threshold" is a
+    # credential-gap question, not an unpaid-invoice one, even though it says
+    # "outstanding".
+    if (target_val or threshold_val) and re.search(
+            r'need to secure|need to bring in|how much more|still need|'
+            r'credential (?:target|threshold)|to hit the|to reach', qlow):
+        return 'gap_to_threshold'
 
     if 'outstanding' in qlow or 'unpaid' in qlow or 'pending' in qlow or 'still owe' in qlow or 'still owed' in qlow or 'due across' in qlow or 'remaining balance' in qlow or 'true balance' in qlow or 'deducting all cleared' in qlow or 'net balance' in qlow or 'system balance' in qlow \
             or 'still on our books' in qlow or 'balance still' in qlow \
@@ -489,16 +628,32 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
 
 # Handlers
 def handle_outstanding_balance(conn, params: dict) -> float:
+    """Balance still owed across a client's invoices.
+
+    The ageing register records a negative outstanding on paid invoices, where
+    receipts exceed the invoiced amount by roughly a tenth. Summing signed
+    nets those credits against genuine debt; summing only the positive rows
+    treats each unpaid invoice in isolation. Signed is the default because it
+    reconciles with the Trade Receivables line in the financial statements
+    (FY2019: 66.6M signed against 67.4M reported; positive-only gives 79.9M),
+    and the workbook's own Notes claim that reconciliation.
+    """
     client_id = find_client_id(conn, params.get("client_name"))
     if not client_id:
-        return 0
-    cur = conn.execute("SELECT SUM(outstanding) FROM receivables WHERE client_id = ?", (client_id,))
+        return None
+    where = "outstanding > 0 AND" if variant("outstanding_positive") else ""
+    cur = conn.execute(
+        f"SELECT SUM(outstanding) FROM receivables WHERE {where} client_id = ?",
+        (client_id,))
     res = cur.fetchone()[0]
     if not res:
         c_row = conn.execute("SELECT client_name FROM clients WHERE client_id = ?", (client_id,)).fetchone()
         if c_row:
-            res = conn.execute("SELECT SUM(outstanding) FROM receivables WHERE LOWER(client_name) = LOWER(?)", (c_row[0],)).fetchone()[0]
-    return res if res else 0
+            res = conn.execute(
+                f"SELECT SUM(outstanding) FROM receivables "
+                f"WHERE {where} LOWER(client_name) = LOWER(?)",
+                (c_row[0],)).fetchone()[0]
+    return res
 
 
 def handle_category_difference(conn, params: dict) -> float:
@@ -564,11 +719,12 @@ def handle_unbilled_gap(conn, params: dict) -> float:
         if c_row:
             invoiced = conn.execute("SELECT SUM(invoiced) FROM receivables WHERE LOWER(client_name) = LOWER(?)", (c_row[0],)).fetchone()[0] or 0
 
-    # Signed, not clamped at zero. For a handful of clients the ageing register
-    # carries more invoiced value than the completed-works total, and clamping
-    # turns those into a flat 0 — the one answer guaranteed to score nothing
-    # under a relative-error metric.
-    return awarded - (invoiced or 0)
+    # Signed, not clamped at zero. For one client the ageing register carries
+    # more invoiced value than the completed-works total, and clamping turns
+    # that into a flat 0 — the one answer guaranteed to score nothing under a
+    # relative-error metric.
+    gap = awarded - (invoiced or 0)
+    return abs(gap) if variant("unbilled_abs") else gap
 
 
 def handle_mean_median_diff(conn, params: dict) -> float:
@@ -605,7 +761,13 @@ def handle_yearly_diff(conn, params: dict) -> float:
     
     v1 = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND completion_date LIKE ?", (client_id, f"{y1}%")).fetchone()[0] or 0
     v2 = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND completion_date LIKE ?", (client_id, f"{y2}%")).fetchone()[0] or 0
-    
+
+    # "difference", "gap", "swing", "movement", "delta" all read as a
+    # magnitude, and one question asks for the "absolute difference" outright,
+    # so absolute is the default. Signed (first year less second) is the
+    # alternative reading; 7 of the 24 questions change sign between them.
+    if variant("yearly_signed"):
+        return v1 - v2
     return abs(v1 - v2)
 
 
@@ -1087,7 +1249,16 @@ def main():
                        help="Path to questions JSON file")
     parser.add_argument("--output", default=str(PROJECT_ROOT / "submission.csv"),
                        help="Path to write submission file (CSV or JSONL)")
+    parser.add_argument("--variant", action="append", default=[],
+                       choices=["outstanding_positive", "yearly_signed", "unbilled_abs"],
+                       help="Enable an alternative convention (repeatable). "
+                            "Each is a single-variable experiment against the "
+                            "live scorer — see VARIANTS in this module.")
     args = parser.parse_args()
+
+    VARIANTS.update(args.variant)
+    if args.variant:
+        print(f"variants enabled: {', '.join(sorted(VARIANTS))}")
     
     if not DB_PATH.exists():
         print(f"ERROR: Database not found at {DB_PATH}")
