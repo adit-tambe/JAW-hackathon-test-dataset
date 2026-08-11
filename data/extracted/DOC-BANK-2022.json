@@ -1,6 +1,1376 @@
 {
   "_doc_id": "DOC-BANK-2022",
   "_doc_type": "bank_statement",
-  "content_summary": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2022–23\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2022-04-01\nOpening balance b/f\n941,141,144\n2022-04-02\nReceipt against invoice (rcpt #103)\n27,246,080\n968,387,224\n2022-04-03\nReceipt against invoice (rcpt #351)\n45,556,772\n1,013,943,996\n2022-04-06\nReceipt against invoice (rcpt #312)\n62,507,089\n1,076,451,085\n2022-04-07\nTDS deposited (20220",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\bank_statement\\DOC-BANK-2022.pdf"
+  "fiscal_year": 2022,
+  "bank_name": "Kalinga National Bank",
+  "account_no": "00417 2210 9944",
+  "transactions": [
+    {
+      "date": "2022-04-01",
+      "particulars": "Opening balance b/f",
+      "amount": null,
+      "direction": null,
+      "balance": 941141144.0
+    },
+    {
+      "date": "2022-04-02",
+      "particulars": "Receipt against invoice (rcpt #103)",
+      "amount": 27246080.0,
+      "direction": "deposit",
+      "balance": 968387224.0
+    },
+    {
+      "date": "2022-04-03",
+      "particulars": "Receipt against invoice (rcpt #351)",
+      "amount": 45556772.0,
+      "direction": "deposit",
+      "balance": 1013943996.0
+    },
+    {
+      "date": "2022-04-06",
+      "particulars": "Receipt against invoice (rcpt #312)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1076451085.0
+    },
+    {
+      "date": "2022-04-07",
+      "particulars": "TDS deposited (202203)",
+      "amount": 2185277.0,
+      "direction": "withdrawal",
+      "balance": 1074265808.0
+    },
+    {
+      "date": "2022-04-11",
+      "particulars": "Receipt against invoice (rcpt #113)",
+      "amount": 40944316.0,
+      "direction": "deposit",
+      "balance": 1115210124.0
+    },
+    {
+      "date": "2022-04-11",
+      "particulars": "Vendor payment #75",
+      "amount": 14872988.0,
+      "direction": "withdrawal",
+      "balance": 1100337136.0
+    },
+    {
+      "date": "2022-04-17",
+      "particulars": "Receipt against invoice (rcpt #298)",
+      "amount": 64300767.0,
+      "direction": "deposit",
+      "balance": 1164637903.0
+    },
+    {
+      "date": "2022-04-20",
+      "particulars": "Vendor payment #27",
+      "amount": 48083887.0,
+      "direction": "withdrawal",
+      "balance": 1116554016.0
+    },
+    {
+      "date": "2022-04-21",
+      "particulars": "Vendor payment #325",
+      "amount": 33356138.0,
+      "direction": "withdrawal",
+      "balance": 1083197878.0
+    },
+    {
+      "date": "2022-04-22",
+      "particulars": "Receipt against invoice (rcpt #327)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1146829118.0
+    },
+    {
+      "date": "2022-04-23",
+      "particulars": "Vendor payment #271",
+      "amount": 56735953.0,
+      "direction": "withdrawal",
+      "balance": 1090093165.0
+    },
+    {
+      "date": "2022-04-28",
+      "particulars": "Receipt against invoice (rcpt #314)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1152600254.0
+    },
+    {
+      "date": "2022-04-28",
+      "particulars": "Monthly salaries & site overheads (202204)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1070983410.0
+    },
+    {
+      "date": "2022-04-30",
+      "particulars": "Vendor payment #328",
+      "amount": 9818025.0,
+      "direction": "withdrawal",
+      "balance": 1061165385.0
+    },
+    {
+      "date": "2022-05-01",
+      "particulars": "Receipt against invoice (rcpt #397)",
+      "amount": 4461631.0,
+      "direction": "deposit",
+      "balance": 1065627016.0
+    },
+    {
+      "date": "2022-05-06",
+      "particulars": "Receipt against invoice (rcpt #26)",
+      "amount": 15702599.0,
+      "direction": "deposit",
+      "balance": 1081329615.0
+    },
+    {
+      "date": "2022-05-06",
+      "particulars": "Vendor payment #16",
+      "amount": 43905552.0,
+      "direction": "withdrawal",
+      "balance": 1037424063.0
+    },
+    {
+      "date": "2022-05-06",
+      "particulars": "Vendor payment #62",
+      "amount": 25253151.0,
+      "direction": "withdrawal",
+      "balance": 1012170912.0
+    },
+    {
+      "date": "2022-05-07",
+      "particulars": "Receipt against invoice (rcpt #329)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1075802152.0
+    },
+    {
+      "date": "2022-05-07",
+      "particulars": "TDS deposited (202204)",
+      "amount": 2808049.0,
+      "direction": "withdrawal",
+      "balance": 1072994103.0
+    },
+    {
+      "date": "2022-05-10",
+      "particulars": "Receipt against invoice (rcpt #50)",
+      "amount": 11297394.0,
+      "direction": "deposit",
+      "balance": 1084291497.0
+    },
+    {
+      "date": "2022-05-12",
+      "particulars": "Receipt against invoice (rcpt #130)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1106624755.0
+    },
+    {
+      "date": "2022-05-15",
+      "particulars": "Vendor payment #50",
+      "amount": 12139745.0,
+      "direction": "withdrawal",
+      "balance": 1094485010.0
+    },
+    {
+      "date": "2022-05-17",
+      "particulars": "Receipt against invoice (rcpt #401)",
+      "amount": 6841488.0,
+      "direction": "deposit",
+      "balance": 1101326498.0
+    },
+    {
+      "date": "2022-05-27",
+      "particulars": "Receipt against invoice (rcpt #31)",
+      "amount": 45445081.0,
+      "direction": "deposit",
+      "balance": 1146771579.0
+    },
+    {
+      "date": "2022-05-28",
+      "particulars": "Monthly salaries & site overheads (202205)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1065154735.0
+    },
+    {
+      "date": "2022-05-31",
+      "particulars": "Receipt against invoice (rcpt #73)",
+      "amount": 26079176.0,
+      "direction": "deposit",
+      "balance": 1091233911.0
+    },
+    {
+      "date": "2022-06-04",
+      "particulars": "Receipt against invoice (rcpt #127)",
+      "amount": 14763237.0,
+      "direction": "deposit",
+      "balance": 1105997148.0
+    },
+    {
+      "date": "2022-06-06",
+      "particulars": "Receipt against invoice (rcpt #328)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1169628388.0
+    },
+    {
+      "date": "2022-06-07",
+      "particulars": "TDS deposited (202205)",
+      "amount": 1401696.0,
+      "direction": "withdrawal",
+      "balance": 1168226692.0
+    },
+    {
+      "date": "2022-06-19",
+      "particulars": "Receipt against invoice (rcpt #339)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1243079146.0
+    },
+    {
+      "date": "2022-06-19",
+      "particulars": "Vendor payment #42",
+      "amount": 2133240.0,
+      "direction": "withdrawal",
+      "balance": 1240945906.0
+    },
+    {
+      "date": "2022-06-21",
+      "particulars": "Vendor payment #45",
+      "amount": 11640346.0,
+      "direction": "withdrawal",
+      "balance": 1229305560.0
+    },
+    {
+      "date": "2022-06-22",
+      "particulars": "Vendor payment #112",
+      "amount": 31409483.0,
+      "direction": "withdrawal",
+      "balance": 1197896077.0
+    },
+    {
+      "date": "2022-06-23",
+      "particulars": "Receipt against invoice (rcpt #299)",
+      "amount": 64300767.0,
+      "direction": "deposit",
+      "balance": 1262196844.0
+    },
+    {
+      "date": "2022-06-24",
+      "particulars": "Receipt against invoice (rcpt #114)",
+      "amount": 40944316.0,
+      "direction": "deposit",
+      "balance": 1303141160.0
+    },
+    {
+      "date": "2022-06-26",
+      "particulars": "Vendor payment #310",
+      "amount": 12681395.0,
+      "direction": "withdrawal",
+      "balance": 1290459765.0
+    },
+    {
+      "date": "2022-06-27",
+      "particulars": "Receipt against invoice (rcpt #131)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1312793023.0
+    },
+    {
+      "date": "2022-06-28",
+      "particulars": "Monthly salaries & site overheads (202206)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1231176179.0
+    },
+    {
+      "date": "2022-07-03",
+      "particulars": "Receipt against invoice (rcpt #88)",
+      "amount": 11756544.0,
+      "direction": "deposit",
+      "balance": 1242932723.0
+    },
+    {
+      "date": "2022-07-04",
+      "particulars": "Receipt against invoice (rcpt #310)",
+      "amount": 35597690.0,
+      "direction": "deposit",
+      "balance": 1278530413.0
+    },
+    {
+      "date": "2022-07-05",
+      "particulars": "Vendor payment #307",
+      "amount": 51639723.0,
+      "direction": "withdrawal",
+      "balance": 1226890690.0
+    },
+    {
+      "date": "2022-07-07",
+      "particulars": "Receipt against invoice (rcpt #107)",
+      "amount": 15896010.0,
+      "direction": "deposit",
+      "balance": 1242786700.0
+    },
+    {
+      "date": "2022-07-07",
+      "particulars": "TDS deposited (202206)",
+      "amount": 997661.0,
+      "direction": "withdrawal",
+      "balance": 1241789039.0
+    },
+    {
+      "date": "2022-07-08",
+      "particulars": "Vendor payment #37",
+      "amount": 28114631.0,
+      "direction": "withdrawal",
+      "balance": 1213674408.0
+    },
+    {
+      "date": "2022-07-10",
+      "particulars": "Receipt against invoice (rcpt #340)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1288526862.0
+    },
+    {
+      "date": "2022-07-14",
+      "particulars": "Vendor payment #19",
+      "amount": 55189204.0,
+      "direction": "withdrawal",
+      "balance": 1233337658.0
+    },
+    {
+      "date": "2022-07-19",
+      "particulars": "Receipt against invoice (rcpt #64)",
+      "amount": 49491841.0,
+      "direction": "deposit",
+      "balance": 1282829499.0
+    },
+    {
+      "date": "2022-07-23",
+      "particulars": "Vendor payment #49",
+      "amount": 23433926.0,
+      "direction": "withdrawal",
+      "balance": 1259395573.0
+    },
+    {
+      "date": "2022-07-24",
+      "particulars": "Receipt against invoice (rcpt #120)",
+      "amount": 17614545.0,
+      "direction": "deposit",
+      "balance": 1277010118.0
+    },
+    {
+      "date": "2022-07-24",
+      "particulars": "Receipt against invoice (rcpt #330)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1340641358.0
+    },
+    {
+      "date": "2022-07-24",
+      "particulars": "Vendor payment #313",
+      "amount": 28729004.0,
+      "direction": "withdrawal",
+      "balance": 1311912354.0
+    },
+    {
+      "date": "2022-07-27",
+      "particulars": "Vendor payment #319",
+      "amount": 17498078.0,
+      "direction": "withdrawal",
+      "balance": 1294414276.0
+    },
+    {
+      "date": "2022-07-28",
+      "particulars": "Monthly salaries & site overheads (202207)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1212797432.0
+    },
+    {
+      "date": "2022-07-31",
+      "particulars": "Receipt against invoice (rcpt #123)",
+      "amount": 31870335.0,
+      "direction": "deposit",
+      "balance": 1244667767.0
+    },
+    {
+      "date": "2022-08-06",
+      "particulars": "Vendor payment #22",
+      "amount": 30216723.0,
+      "direction": "withdrawal",
+      "balance": 1214451044.0
+    },
+    {
+      "date": "2022-08-07",
+      "particulars": "TDS deposited (202207)",
+      "amount": 3527664.0,
+      "direction": "withdrawal",
+      "balance": 1210923380.0
+    },
+    {
+      "date": "2022-08-08",
+      "particulars": "Receipt against invoice (rcpt #402)",
+      "amount": 6841488.0,
+      "direction": "deposit",
+      "balance": 1217764868.0
+    },
+    {
+      "date": "2022-08-08",
+      "particulars": "Vendor payment #109",
+      "amount": 38037834.0,
+      "direction": "withdrawal",
+      "balance": 1179727034.0
+    },
+    {
+      "date": "2022-08-09",
+      "particulars": "Receipt against invoice (rcpt #101)",
+      "amount": 44093023.0,
+      "direction": "deposit",
+      "balance": 1223820057.0
+    },
+    {
+      "date": "2022-08-09",
+      "particulars": "Receipt against invoice (rcpt #132)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1246153315.0
+    },
+    {
+      "date": "2022-08-09",
+      "particulars": "Vendor payment #133",
+      "amount": 1813722.0,
+      "direction": "withdrawal",
+      "balance": 1244339593.0
+    },
+    {
+      "date": "2022-08-10",
+      "particulars": "Receipt against invoice (rcpt #96)",
+      "amount": 29070912.0,
+      "direction": "deposit",
+      "balance": 1273410505.0
+    },
+    {
+      "date": "2022-08-10",
+      "particulars": "Vendor payment #23",
+      "amount": 31754799.0,
+      "direction": "withdrawal",
+      "balance": 1241655706.0
+    },
+    {
+      "date": "2022-08-12",
+      "particulars": "Vendor payment #38",
+      "amount": 41610338.0,
+      "direction": "withdrawal",
+      "balance": 1200045368.0
+    },
+    {
+      "date": "2022-08-15",
+      "particulars": "Vendor payment #103",
+      "amount": 27065252.0,
+      "direction": "withdrawal",
+      "balance": 1172980116.0
+    },
+    {
+      "date": "2022-08-15",
+      "particulars": "Vendor payment #282",
+      "amount": 47967578.0,
+      "direction": "withdrawal",
+      "balance": 1125012538.0
+    },
+    {
+      "date": "2022-08-16",
+      "particulars": "Receipt against invoice (rcpt #352)",
+      "amount": 45556772.0,
+      "direction": "deposit",
+      "balance": 1170569310.0
+    },
+    {
+      "date": "2022-08-19",
+      "particulars": "Vendor payment #116",
+      "amount": 9345396.0,
+      "direction": "withdrawal",
+      "balance": 1161223914.0
+    },
+    {
+      "date": "2022-08-20",
+      "particulars": "Receipt against invoice (rcpt #60)",
+      "amount": 31072578.0,
+      "direction": "deposit",
+      "balance": 1192296492.0
+    },
+    {
+      "date": "2022-08-22",
+      "particulars": "Vendor payment #340",
+      "amount": 36611460.0,
+      "direction": "withdrawal",
+      "balance": 1155685032.0
+    },
+    {
+      "date": "2022-08-26",
+      "particulars": "Receipt against invoice (rcpt #353)",
+      "amount": 45556772.0,
+      "direction": "deposit",
+      "balance": 1201241804.0
+    },
+    {
+      "date": "2022-08-28",
+      "particulars": "Monthly salaries & site overheads (202208)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1119624960.0
+    },
+    {
+      "date": "2022-08-29",
+      "particulars": "Receipt against invoice (rcpt #129)",
+      "amount": 7381618.0,
+      "direction": "deposit",
+      "balance": 1127006578.0
+    },
+    {
+      "date": "2022-08-30",
+      "particulars": "Receipt against invoice (rcpt #128)",
+      "amount": 14763237.0,
+      "direction": "deposit",
+      "balance": 1141769815.0
+    },
+    {
+      "date": "2022-09-02",
+      "particulars": "Receipt against invoice (rcpt #331)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1205401055.0
+    },
+    {
+      "date": "2022-09-02",
+      "particulars": "Vendor payment #105",
+      "amount": 49367302.0,
+      "direction": "withdrawal",
+      "balance": 1156033753.0
+    },
+    {
+      "date": "2022-09-04",
+      "particulars": "Vendor payment #330",
+      "amount": 16577526.0,
+      "direction": "withdrawal",
+      "balance": 1139456227.0
+    },
+    {
+      "date": "2022-09-05",
+      "particulars": "Receipt against invoice (rcpt #360)",
+      "amount": 27643193.0,
+      "direction": "deposit",
+      "balance": 1167099420.0
+    },
+    {
+      "date": "2022-09-07",
+      "particulars": "TDS deposited (202208)",
+      "amount": 4559015.0,
+      "direction": "withdrawal",
+      "balance": 1162540405.0
+    },
+    {
+      "date": "2022-09-08",
+      "particulars": "Receipt against invoice (rcpt #315)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1225047494.0
+    },
+    {
+      "date": "2022-09-11",
+      "particulars": "Receipt against invoice (rcpt #316)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1287554583.0
+    },
+    {
+      "date": "2022-09-12",
+      "particulars": "Vendor payment #320",
+      "amount": 37460451.0,
+      "direction": "withdrawal",
+      "balance": 1250094132.0
+    },
+    {
+      "date": "2022-09-17",
+      "particulars": "Receipt against invoice (rcpt #137)",
+      "amount": 13349817.0,
+      "direction": "deposit",
+      "balance": 1263443949.0
+    },
+    {
+      "date": "2022-09-19",
+      "particulars": "Receipt against invoice (rcpt #104)",
+      "amount": 27246080.0,
+      "direction": "deposit",
+      "balance": 1290690029.0
+    },
+    {
+      "date": "2022-09-20",
+      "particulars": "Receipt against invoice (rcpt #341)",
+      "amount": 37426226.0,
+      "direction": "deposit",
+      "balance": 1328116255.0
+    },
+    {
+      "date": "2022-09-20",
+      "particulars": "Vendor payment #110",
+      "amount": 7381841.0,
+      "direction": "withdrawal",
+      "balance": 1320734414.0
+    },
+    {
+      "date": "2022-09-21",
+      "particulars": "Vendor payment #119",
+      "amount": 6284137.0,
+      "direction": "withdrawal",
+      "balance": 1314450277.0
+    },
+    {
+      "date": "2022-09-22",
+      "particulars": "Receipt against invoice (rcpt #317)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1376957366.0
+    },
+    {
+      "date": "2022-09-22",
+      "particulars": "Vendor payment #63",
+      "amount": 30998958.0,
+      "direction": "withdrawal",
+      "balance": 1345958408.0
+    },
+    {
+      "date": "2022-09-25",
+      "particulars": "Receipt against invoice (rcpt #54)",
+      "amount": 20472860.0,
+      "direction": "deposit",
+      "balance": 1366431268.0
+    },
+    {
+      "date": "2022-09-26",
+      "particulars": "Receipt against invoice (rcpt #111)",
+      "amount": 46399014.0,
+      "direction": "deposit",
+      "balance": 1412830282.0
+    },
+    {
+      "date": "2022-09-26",
+      "particulars": "Receipt against invoice (rcpt #300)",
+      "amount": 64300767.0,
+      "direction": "deposit",
+      "balance": 1477131049.0
+    },
+    {
+      "date": "2022-09-28",
+      "particulars": "Monthly salaries & site overheads (202209)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1395514205.0
+    },
+    {
+      "date": "2022-09-29",
+      "particulars": "Receipt against invoice (rcpt #288)",
+      "amount": 54704163.0,
+      "direction": "deposit",
+      "balance": 1450218368.0
+    },
+    {
+      "date": "2022-09-30",
+      "particulars": "Vendor payment #322",
+      "amount": 55035744.0,
+      "direction": "withdrawal",
+      "balance": 1395182624.0
+    },
+    {
+      "date": "2022-10-01",
+      "particulars": "Plant & machinery additions FY2022",
+      "amount": 88600000.0,
+      "direction": "withdrawal",
+      "balance": 1306582624.0
+    },
+    {
+      "date": "2022-10-01",
+      "particulars": "Receipt against invoice (rcpt #74)",
+      "amount": 26079176.0,
+      "direction": "deposit",
+      "balance": 1332661800.0
+    },
+    {
+      "date": "2022-10-01",
+      "particulars": "Receipt against invoice (rcpt #289)",
+      "amount": 27352081.0,
+      "direction": "deposit",
+      "balance": 1360013881.0
+    },
+    {
+      "date": "2022-10-02",
+      "particulars": "Vendor payment #134",
+      "amount": 21674254.0,
+      "direction": "withdrawal",
+      "balance": 1338339627.0
+    },
+    {
+      "date": "2022-10-07",
+      "particulars": "Vendor payment #339",
+      "amount": 53428977.0,
+      "direction": "withdrawal",
+      "balance": 1284910650.0
+    },
+    {
+      "date": "2022-10-07",
+      "particulars": "TDS deposited (202209)",
+      "amount": 3501824.0,
+      "direction": "withdrawal",
+      "balance": 1281408826.0
+    },
+    {
+      "date": "2022-10-08",
+      "particulars": "Vendor payment #335",
+      "amount": 28545167.0,
+      "direction": "withdrawal",
+      "balance": 1252863659.0
+    },
+    {
+      "date": "2022-10-10",
+      "particulars": "Vendor payment #290",
+      "amount": 28650264.0,
+      "direction": "withdrawal",
+      "balance": 1224213395.0
+    },
+    {
+      "date": "2022-10-14",
+      "particulars": "Receipt against invoice (rcpt #342)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1299065849.0
+    },
+    {
+      "date": "2022-10-16",
+      "particulars": "Receipt against invoice (rcpt #361)",
+      "amount": 55286386.0,
+      "direction": "deposit",
+      "balance": 1354352235.0
+    },
+    {
+      "date": "2022-10-19",
+      "particulars": "Receipt against invoice (rcpt #333)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1417983475.0
+    },
+    {
+      "date": "2022-10-21",
+      "particulars": "Vendor payment #329",
+      "amount": 36880983.0,
+      "direction": "withdrawal",
+      "balance": 1381102492.0
+    },
+    {
+      "date": "2022-10-23",
+      "particulars": "Receipt against invoice (rcpt #124)",
+      "amount": 31870335.0,
+      "direction": "deposit",
+      "balance": 1412972827.0
+    },
+    {
+      "date": "2022-10-23",
+      "particulars": "Vendor payment #106",
+      "amount": 21217259.0,
+      "direction": "withdrawal",
+      "balance": 1391755568.0
+    },
+    {
+      "date": "2022-10-24",
+      "particulars": "Vendor payment #333",
+      "amount": 44013686.0,
+      "direction": "withdrawal",
+      "balance": 1347741882.0
+    },
+    {
+      "date": "2022-10-25",
+      "particulars": "Receipt against invoice (rcpt #409)",
+      "amount": 9501067.0,
+      "direction": "deposit",
+      "balance": 1357242949.0
+    },
+    {
+      "date": "2022-10-26",
+      "particulars": "Receipt against invoice (rcpt #141)",
+      "amount": 11324268.0,
+      "direction": "deposit",
+      "balance": 1368567217.0
+    },
+    {
+      "date": "2022-10-26",
+      "particulars": "Vendor payment #317",
+      "amount": 16863108.0,
+      "direction": "withdrawal",
+      "balance": 1351704109.0
+    },
+    {
+      "date": "2022-10-28",
+      "particulars": "Monthly salaries & site overheads (202210)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1270087265.0
+    },
+    {
+      "date": "2022-10-30",
+      "particulars": "Receipt against invoice (rcpt #332)",
+      "amount": 31815619.0,
+      "direction": "deposit",
+      "balance": 1301902884.0
+    },
+    {
+      "date": "2022-11-02",
+      "particulars": "Receipt against invoice (rcpt #133)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1324236142.0
+    },
+    {
+      "date": "2022-11-07",
+      "particulars": "TDS deposited (202210)",
+      "amount": 4332303.0,
+      "direction": "withdrawal",
+      "balance": 1319903839.0
+    },
+    {
+      "date": "2022-11-08",
+      "particulars": "Receipt against invoice (rcpt #408)",
+      "amount": 9501067.0,
+      "direction": "deposit",
+      "balance": 1329404906.0
+    },
+    {
+      "date": "2022-11-10",
+      "particulars": "Receipt against invoice (rcpt #354)",
+      "amount": 45556772.0,
+      "direction": "deposit",
+      "balance": 1374961678.0
+    },
+    {
+      "date": "2022-11-13",
+      "particulars": "Vendor payment #334",
+      "amount": 23331854.0,
+      "direction": "withdrawal",
+      "balance": 1351629824.0
+    },
+    {
+      "date": "2022-11-15",
+      "particulars": "Receipt against invoice (rcpt #102)",
+      "amount": 44093023.0,
+      "direction": "deposit",
+      "balance": 1395722847.0
+    },
+    {
+      "date": "2022-11-17",
+      "particulars": "Receipt against invoice (rcpt #334)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1459354087.0
+    },
+    {
+      "date": "2022-11-20",
+      "particulars": "Vendor payment #332",
+      "amount": 33555053.0,
+      "direction": "withdrawal",
+      "balance": 1425799034.0
+    },
+    {
+      "date": "2022-11-23",
+      "particulars": "Receipt against invoice (rcpt #161)",
+      "amount": 56172523.0,
+      "direction": "deposit",
+      "balance": 1481971557.0
+    },
+    {
+      "date": "2022-11-24",
+      "particulars": "Vendor payment #64",
+      "amount": 31350503.0,
+      "direction": "withdrawal",
+      "balance": 1450621054.0
+    },
+    {
+      "date": "2022-11-25",
+      "particulars": "Receipt against invoice (rcpt #134)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1472954312.0
+    },
+    {
+      "date": "2022-11-28",
+      "particulars": "Monthly salaries & site overheads (202211)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1391337468.0
+    },
+    {
+      "date": "2022-11-30",
+      "particulars": "Vendor payment #287",
+      "amount": 47732109.0,
+      "direction": "withdrawal",
+      "balance": 1343605359.0
+    },
+    {
+      "date": "2022-12-02",
+      "particulars": "Receipt against invoice (rcpt #115)",
+      "amount": 40944316.0,
+      "direction": "deposit",
+      "balance": 1384549675.0
+    },
+    {
+      "date": "2022-12-03",
+      "particulars": "Vendor payment #124",
+      "amount": 31376753.0,
+      "direction": "withdrawal",
+      "balance": 1353172922.0
+    },
+    {
+      "date": "2022-12-07",
+      "particulars": "Receipt against invoice (rcpt #153)",
+      "amount": 26003715.0,
+      "direction": "deposit",
+      "balance": 1379176637.0
+    },
+    {
+      "date": "2022-12-07",
+      "particulars": "TDS deposited (202211)",
+      "amount": 2344300.0,
+      "direction": "withdrawal",
+      "balance": 1376832337.0
+    },
+    {
+      "date": "2022-12-11",
+      "particulars": "Receipt against invoice (rcpt #121)",
+      "amount": 17614545.0,
+      "direction": "deposit",
+      "balance": 1394446882.0
+    },
+    {
+      "date": "2022-12-14",
+      "particulars": "Receipt against invoice (rcpt #138)",
+      "amount": 6674908.0,
+      "direction": "deposit",
+      "balance": 1401121790.0
+    },
+    {
+      "date": "2022-12-15",
+      "particulars": "Vendor payment #268",
+      "amount": 52540155.0,
+      "direction": "withdrawal",
+      "balance": 1348581635.0
+    },
+    {
+      "date": "2022-12-16",
+      "particulars": "Receipt against invoice (rcpt #343)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1423434089.0
+    },
+    {
+      "date": "2022-12-19",
+      "particulars": "Receipt against invoice (rcpt #318)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1485941178.0
+    },
+    {
+      "date": "2022-12-28",
+      "particulars": "Monthly salaries & site overheads (202212)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1404324334.0
+    },
+    {
+      "date": "2022-12-29",
+      "particulars": "Vendor payment #131",
+      "amount": 16691764.0,
+      "direction": "withdrawal",
+      "balance": 1387632570.0
+    },
+    {
+      "date": "2023-01-01",
+      "particulars": "Vendor payment #82",
+      "amount": 35019200.0,
+      "direction": "withdrawal",
+      "balance": 1352613370.0
+    },
+    {
+      "date": "2023-01-02",
+      "particulars": "Vendor payment #118",
+      "amount": 1677142.0,
+      "direction": "withdrawal",
+      "balance": 1350936228.0
+    },
+    {
+      "date": "2023-01-03",
+      "particulars": "Receipt against invoice (rcpt #108)",
+      "amount": 31792019.0,
+      "direction": "deposit",
+      "balance": 1382728247.0
+    },
+    {
+      "date": "2023-01-03",
+      "particulars": "Vendor payment #123",
+      "amount": 15888241.0,
+      "direction": "withdrawal",
+      "balance": 1366840006.0
+    },
+    {
+      "date": "2023-01-07",
+      "particulars": "Vendor payment #121",
+      "amount": 41447092.0,
+      "direction": "withdrawal",
+      "balance": 1325392914.0
+    },
+    {
+      "date": "2023-01-07",
+      "particulars": "TDS deposited (202212)",
+      "amount": 1734631.0,
+      "direction": "withdrawal",
+      "balance": 1323658283.0
+    },
+    {
+      "date": "2023-01-08",
+      "particulars": "Vendor payment #40",
+      "amount": 35629357.0,
+      "direction": "withdrawal",
+      "balance": 1288028926.0
+    },
+    {
+      "date": "2023-01-10",
+      "particulars": "Receipt against invoice (rcpt #406)",
+      "amount": 9062500.0,
+      "direction": "deposit",
+      "balance": 1297091426.0
+    },
+    {
+      "date": "2023-01-12",
+      "particulars": "Receipt against invoice (rcpt #70)",
+      "amount": 11822370.0,
+      "direction": "deposit",
+      "balance": 1308913796.0
+    },
+    {
+      "date": "2023-01-13",
+      "particulars": "Vendor payment #342",
+      "amount": 35493279.0,
+      "direction": "withdrawal",
+      "balance": 1273420517.0
+    },
+    {
+      "date": "2023-01-14",
+      "particulars": "Vendor payment #276",
+      "amount": 22999103.0,
+      "direction": "withdrawal",
+      "balance": 1250421414.0
+    },
+    {
+      "date": "2023-01-15",
+      "particulars": "Receipt against invoice (rcpt #55)",
+      "amount": 40945720.0,
+      "direction": "deposit",
+      "balance": 1291367134.0
+    },
+    {
+      "date": "2023-01-18",
+      "particulars": "Receipt against invoice (rcpt #125)",
+      "amount": 31870335.0,
+      "direction": "deposit",
+      "balance": 1323237469.0
+    },
+    {
+      "date": "2023-01-20",
+      "particulars": "Vendor payment #316",
+      "amount": 46237437.0,
+      "direction": "withdrawal",
+      "balance": 1277000032.0
+    },
+    {
+      "date": "2023-01-21",
+      "particulars": "Receipt against invoice (rcpt #147)",
+      "amount": 43964367.0,
+      "direction": "deposit",
+      "balance": 1320964399.0
+    },
+    {
+      "date": "2023-01-21",
+      "particulars": "Receipt against invoice (rcpt #410)",
+      "amount": 9501067.0,
+      "direction": "deposit",
+      "balance": 1330465466.0
+    },
+    {
+      "date": "2023-01-25",
+      "particulars": "Receipt against invoice (rcpt #395)",
+      "amount": 3660846.0,
+      "direction": "deposit",
+      "balance": 1334126312.0
+    },
+    {
+      "date": "2023-01-27",
+      "particulars": "Vendor payment #289",
+      "amount": 26405653.0,
+      "direction": "withdrawal",
+      "balance": 1307720659.0
+    },
+    {
+      "date": "2023-01-28",
+      "particulars": "Monthly salaries & site overheads (202201)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1226103815.0
+    },
+    {
+      "date": "2023-01-29",
+      "particulars": "Receipt against invoice (rcpt #169)",
+      "amount": 28195045.0,
+      "direction": "deposit",
+      "balance": 1254298860.0
+    },
+    {
+      "date": "2023-01-29",
+      "particulars": "Vendor payment #343",
+      "amount": 17517172.0,
+      "direction": "withdrawal",
+      "balance": 1236781688.0
+    },
+    {
+      "date": "2023-02-03",
+      "particulars": "Receipt against invoice (rcpt #335)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1300412928.0
+    },
+    {
+      "date": "2023-02-03",
+      "particulars": "Vendor payment #308",
+      "amount": 5626726.0,
+      "direction": "withdrawal",
+      "balance": 1294786202.0
+    },
+    {
+      "date": "2023-02-06",
+      "particulars": "Vendor payment #55",
+      "amount": 57607854.0,
+      "direction": "withdrawal",
+      "balance": 1237178348.0
+    },
+    {
+      "date": "2023-02-06",
+      "particulars": "Vendor payment #311",
+      "amount": 9992348.0,
+      "direction": "withdrawal",
+      "balance": 1227186000.0
+    },
+    {
+      "date": "2023-02-07",
+      "particulars": "Receipt against invoice (rcpt #355)",
+      "amount": 45556772.0,
+      "direction": "deposit",
+      "balance": 1272742772.0
+    },
+    {
+      "date": "2023-02-07",
+      "particulars": "TDS deposited (202301)",
+      "amount": 4798509.0,
+      "direction": "withdrawal",
+      "balance": 1267944263.0
+    },
+    {
+      "date": "2023-02-08",
+      "particulars": "Vendor payment #93",
+      "amount": 19589421.0,
+      "direction": "withdrawal",
+      "balance": 1248354842.0
+    },
+    {
+      "date": "2023-02-08",
+      "particulars": "Vendor payment #331",
+      "amount": 42613878.0,
+      "direction": "withdrawal",
+      "balance": 1205740964.0
+    },
+    {
+      "date": "2023-02-15",
+      "particulars": "Receipt against invoice (rcpt #116)",
+      "amount": 40944316.0,
+      "direction": "deposit",
+      "balance": 1246685280.0
+    },
+    {
+      "date": "2023-02-18",
+      "particulars": "Receipt against invoice (rcpt #344)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1321537734.0
+    },
+    {
+      "date": "2023-02-18",
+      "particulars": "Vendor payment #284",
+      "amount": 56940995.0,
+      "direction": "withdrawal",
+      "balance": 1264596739.0
+    },
+    {
+      "date": "2023-02-20",
+      "particulars": "Vendor payment #132",
+      "amount": 33986856.0,
+      "direction": "withdrawal",
+      "balance": 1230609883.0
+    },
+    {
+      "date": "2023-02-28",
+      "particulars": "Monthly salaries & site overheads (202202)",
+      "amount": 81616844.0,
+      "direction": "withdrawal",
+      "balance": 1148993039.0
+    },
+    {
+      "date": "2023-03-01",
+      "particulars": "Receipt against invoice (rcpt #398)",
+      "amount": 4461631.0,
+      "direction": "deposit",
+      "balance": 1153454670.0
+    },
+    {
+      "date": "2023-03-04",
+      "particulars": "Receipt against invoice (rcpt #301)",
+      "amount": 64300767.0,
+      "direction": "deposit",
+      "balance": 1217755437.0
+    },
+    {
+      "date": "2023-03-04",
+      "particulars": "Vendor payment #150",
+      "amount": 20130249.0,
+      "direction": "withdrawal",
+      "balance": 1197625188.0
+    },
+    {
+      "date": "2023-03-06",
+      "particulars": "Receipt against invoice (rcpt #403)",
+      "amount": 8219903.0,
+      "direction": "deposit",
+      "balance": 1205845091.0
+    },
+    {
+      "date": "2023-03-07",
+      "particulars": "Receipt against invoice (rcpt #363)",
+      "amount": 27643193.0,
+      "direction": "deposit",
+      "balance": 1233488284.0
+    },
+    {
+      "date": "2023-03-07",
+      "particulars": "TDS deposited (202302)",
+      "amount": 3902722.0,
+      "direction": "withdrawal",
+      "balance": 1229585562.0
+    },
+    {
+      "date": "2023-03-09",
+      "particulars": "Receipt against invoice (rcpt #142)",
+      "amount": 11324268.0,
+      "direction": "deposit",
+      "balance": 1240909830.0
+    },
+    {
+      "date": "2023-03-10",
+      "particulars": "Vendor payment #120",
+      "amount": 54006302.0,
+      "direction": "withdrawal",
+      "balance": 1186903528.0
+    },
+    {
+      "date": "2023-03-12",
+      "particulars": "Vendor payment #318",
+      "amount": 35515535.0,
+      "direction": "withdrawal",
+      "balance": 1151387993.0
+    },
+    {
+      "date": "2023-03-13",
+      "particulars": "Receipt against invoice (rcpt #156)",
+      "amount": 13764789.0,
+      "direction": "deposit",
+      "balance": 1165152782.0
+    },
+    {
+      "date": "2023-03-15",
+      "particulars": "Receipt against invoice (rcpt #319)",
+      "amount": 62507089.0,
+      "direction": "deposit",
+      "balance": 1227659871.0
+    },
+    {
+      "date": "2023-03-18",
+      "particulars": "Receipt against invoice (rcpt #336)",
+      "amount": 63631240.0,
+      "direction": "deposit",
+      "balance": 1291291111.0
+    },
+    {
+      "date": "2023-03-18",
+      "particulars": "Receipt against invoice (rcpt #362)",
+      "amount": 55286386.0,
+      "direction": "deposit",
+      "balance": 1346577497.0
+    },
+    {
+      "date": "2023-03-18",
+      "particulars": "Vendor payment #279",
+      "amount": 9506757.0,
+      "direction": "withdrawal",
+      "balance": 1337070740.0
+    },
+    {
+      "date": "2023-03-19",
+      "particulars": "Receipt against invoice (rcpt #154)",
+      "amount": 26003715.0,
+      "direction": "deposit",
+      "balance": 1363074455.0
+    },
+    {
+      "date": "2023-03-24",
+      "particulars": "Receipt against invoice (rcpt #345)",
+      "amount": 74852454.0,
+      "direction": "deposit",
+      "balance": 1437926909.0
+    },
+    {
+      "date": "2023-03-28",
+      "particulars": "Receipt against invoice (rcpt #135)",
+      "amount": 22333258.0,
+      "direction": "deposit",
+      "balance": 1460260167.0
+    },
+    {
+      "date": "2023-03-28",
+      "particulars": "Monthly salaries & site overheads (202203)",
+      "amount": 81616855.0,
+      "direction": "withdrawal",
+      "balance": 1378643312.0
+    },
+    {
+      "date": "2023-03-31",
+      "particulars": "Receipt against invoice (rcpt #75)",
+      "amount": 26079176.0,
+      "direction": "deposit",
+      "balance": 1404722488.0
+    },
+    {
+      "date": "2023-03-31",
+      "particulars": "Vendor payment #146 Closing balance Computer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.",
+      "amount": 1370838442.0,
+      "direction": "withdrawal",
+      "balance": 1370838442.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\bank_statement\\DOC-BANK-2022.pdf",
+  "_text": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2022–23\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2022-04-01\nOpening balance b/f\n941,141,144\n2022-04-02\nReceipt against invoice (rcpt #103)\n27,246,080\n968,387,224\n2022-04-03\nReceipt against invoice (rcpt #351)\n45,556,772\n1,013,943,996\n2022-04-06\nReceipt against invoice (rcpt #312)\n62,507,089\n1,076,451,085\n2022-04-07\nTDS deposited (202203)\n2,185,277\n1,074,265,808\n2022-04-11\nReceipt against invoice (rcpt #113)\n40,944,316\n1,115,210,124\n2022-04-11\nVendor payment #75\n14,872,988\n1,100,337,136\n2022-04-17\nReceipt against invoice (rcpt #298)\n64,300,767\n1,164,637,903\n2022-04-20\nVendor payment #27\n48,083,887\n1,116,554,016\n2022-04-21\nVendor payment #325\n33,356,138\n1,083,197,878\n2022-04-22\nReceipt against invoice (rcpt #327)\n63,631,240\n1,146,829,118\n2022-04-23\nVendor payment #271\n56,735,953\n1,090,093,165\n2022-04-28\nReceipt against invoice (rcpt #314)\n62,507,089\n1,152,600,254\n2022-04-28\nMonthly salaries & site overheads (202204)\n81,616,844\n1,070,983,410\n2022-04-30\nVendor payment #328\n9,818,025\n1,061,165,385\n2022-05-01\nReceipt against invoice (rcpt #397)\n4,461,631\n1,065,627,016\n2022-05-06\nReceipt against invoice (rcpt #26)\n15,702,599\n1,081,329,615\n2022-05-06\nVendor payment #16\n43,905,552\n1,037,424,063\n2022-05-06\nVendor payment #62\n25,253,151\n1,012,170,912\n2022-05-07\nReceipt against invoice (rcpt #329)\n63,631,240\n1,075,802,152\n2022-05-07\nTDS deposited (202204)\n2,808,049\n1,072,994,103\n2022-05-10\nReceipt against invoice (rcpt #50)\n11,297,394\n1,084,291,497\n2022-05-12\nReceipt against invoice (rcpt #130)\n22,333,258\n1,106,624,755\n2022-05-15\nVendor payment #50\n12,139,745\n1,094,485,010\n2022-05-17\nReceipt against invoice (rcpt #401)\n6,841,488\n1,101,326,498\n2022-05-27\nReceipt against invoice (rcpt #31)\n45,445,081\n1,146,771,579\n2022-05-28\nMonthly salaries & site overheads (202205)\n81,616,844\n1,065,154,735\n2022-05-31\nReceipt against invoice (rcpt #73)\n26,079,176\n1,091,233,911\nDOC-BANK-2022\nPage 1 of 7\n\n2022-06-04\nReceipt against invoice (rcpt #127)\n14,763,237\n1,105,997,148\n2022-06-06\nReceipt against invoice (rcpt #328)\n63,631,240\n1,169,628,388\n2022-06-07\nTDS deposited (202205)\n1,401,696\n1,168,226,692\n2022-06-19\nReceipt against invoice (rcpt #339)\n74,852,454\n1,243,079,146\n2022-06-19\nVendor payment #42\n2,133,240\n1,240,945,906\n2022-06-21\nVendor payment #45\n11,640,346\n1,229,305,560\n2022-06-22\nVendor payment #112\n31,409,483\n1,197,896,077\n2022-06-23\nReceipt against invoice (rcpt #299)\n64,300,767\n1,262,196,844\n2022-06-24\nReceipt against invoice (rcpt #114)\n40,944,316\n1,303,141,160\n2022-06-26\nVendor payment #310\n12,681,395\n1,290,459,765\n2022-06-27\nReceipt against invoice (rcpt #131)\n22,333,258\n1,312,793,023\n2022-06-28\nMonthly salaries & site overheads (202206)\n81,616,844\n1,231,176,179\n2022-07-03\nReceipt against invoice (rcpt #88)\n11,756,544\n1,242,932,723\n2022-07-04\nReceipt against invoice (rcpt #310)\n35,597,690\n1,278,530,413\n2022-07-05\nVendor payment #307\n51,639,723\n1,226,890,690\n2022-07-07\nReceipt against invoice (rcpt #107)\n15,896,010\n1,242,786,700\n2022-07-07\nTDS deposited (202206)\n997,661\n1,241,789,039\n2022-07-08\nVendor payment #37\n28,114,631\n1,213,674,408\n2022-07-10\nReceipt against invoice (rcpt #340)\n74,852,454\n1,288,526,862\n2022-07-14\nVendor payment #19\n55,189,204\n1,233,337,658\n2022-07-19\nReceipt against invoice (rcpt #64)\n49,491,841\n1,282,829,499\n2022-07-23\nVendor payment #49\n23,433,926\n1,259,395,573\n2022-07-24\nReceipt against invoice (rcpt #120)\n17,614,545\n1,277,010,118\n2022-07-24\nReceipt against invoice (rcpt #330)\n63,631,240\n1,340,641,358\n2022-07-24\nVendor payment #313\n28,729,004\n1,311,912,354\n2022-07-27\nVendor payment #319\n17,498,078\n1,294,414,276\n2022-07-28\nMonthly salaries & site overheads (202207)\n81,616,844\n1,212,797,432\n2022-07-31\nReceipt against invoice (rcpt #123)\n31,870,335\n1,244,667,767\n2022-08-06\nVendor payment #22\n30,216,723\n1,214,451,044\n2022-08-07\nTDS deposited (202207)\n3,527,664\n1,210,923,380\n2022-08-08\nReceipt against invoice (rcpt #402)\n6,841,488\n1,217,764,868\n2022-08-08\nVendor payment #109\n38,037,834\n1,179,727,034\n2022-08-09\nReceipt against invoice (rcpt #101)\n44,093,023\n1,223,820,057\nDOC-BANK-2022\nPage 2 of 7\n\n2022-08-09\nReceipt against invoice (rcpt #132)\n22,333,258\n1,246,153,315\n2022-08-09\nVendor payment #133\n1,813,722\n1,244,339,593\n2022-08-10\nReceipt against invoice (rcpt #96)\n29,070,912\n1,273,410,505\n2022-08-10\nVendor payment #23\n31,754,799\n1,241,655,706\n2022-08-12\nVendor payment #38\n41,610,338\n1,200,045,368\n2022-08-15\nVendor payment #103\n27,065,252\n1,172,980,116\n2022-08-15\nVendor payment #282\n47,967,578\n1,125,012,538\n2022-08-16\nReceipt against invoice (rcpt #352)\n45,556,772\n1,170,569,310\n2022-08-19\nVendor payment #116\n9,345,396\n1,161,223,914\n2022-08-20\nReceipt against invoice (rcpt #60)\n31,072,578\n1,192,296,492\n2022-08-22\nVendor payment #340\n36,611,460\n1,155,685,032\n2022-08-26\nReceipt against invoice (rcpt #353)\n45,556,772\n1,201,241,804\n2022-08-28\nMonthly salaries & site overheads (202208)\n81,616,844\n1,119,624,960\n2022-08-29\nReceipt against invoice (rcpt #129)\n7,381,618\n1,127,006,578\n2022-08-30\nReceipt against invoice (rcpt #128)\n14,763,237\n1,141,769,815\n2022-09-02\nReceipt against invoice (rcpt #331)\n63,631,240\n1,205,401,055\n2022-09-02\nVendor payment #105\n49,367,302\n1,156,033,753\n2022-09-04\nVendor payment #330\n16,577,526\n1,139,456,227\n2022-09-05\nReceipt against invoice (rcpt #360)\n27,643,193\n1,167,099,420\n2022-09-07\nTDS deposited (202208)\n4,559,015\n1,162,540,405\n2022-09-08\nReceipt against invoice (rcpt #315)\n62,507,089\n1,225,047,494\n2022-09-11\nReceipt against invoice (rcpt #316)\n62,507,089\n1,287,554,583\n2022-09-12\nVendor payment #320\n37,460,451\n1,250,094,132\n2022-09-17\nReceipt against invoice (rcpt #137)\n13,349,817\n1,263,443,949\n2022-09-19\nReceipt against invoice (rcpt #104)\n27,246,080\n1,290,690,029\n2022-09-20\nReceipt against invoice (rcpt #341)\n37,426,226\n1,328,116,255\n2022-09-20\nVendor payment #110\n7,381,841\n1,320,734,414\n2022-09-21\nVendor payment #119\n6,284,137\n1,314,450,277\n2022-09-22\nReceipt against invoice (rcpt #317)\n62,507,089\n1,376,957,366\n2022-09-22\nVendor payment #63\n30,998,958\n1,345,958,408\n2022-09-25\nReceipt against invoice (rcpt #54)\n20,472,860\n1,366,431,268\n2022-09-26\nReceipt against invoice (rcpt #111)\n46,399,014\n1,412,830,282\n2022-09-26\nReceipt against invoice (rcpt #300)\n64,300,767\n1,477,131,049\nDOC-BANK-2022\nPage 3 of 7\n\n2022-09-28\nMonthly salaries & site overheads (202209)\n81,616,844\n1,395,514,205\n2022-09-29\nReceipt against invoice (rcpt #288)\n54,704,163\n1,450,218,368\n2022-09-30\nVendor payment #322\n55,035,744\n1,395,182,624\n2022-10-01\nPlant & machinery additions FY2022\n88,600,000\n1,306,582,624\n2022-10-01\nReceipt against invoice (rcpt #74)\n26,079,176\n1,332,661,800\n2022-10-01\nReceipt against invoice (rcpt #289)\n27,352,081\n1,360,013,881\n2022-10-02\nVendor payment #134\n21,674,254\n1,338,339,627\n2022-10-07\nVendor payment #339\n53,428,977\n1,284,910,650\n2022-10-07\nTDS deposited (202209)\n3,501,824\n1,281,408,826\n2022-10-08\nVendor payment #335\n28,545,167\n1,252,863,659\n2022-10-10\nVendor payment #290\n28,650,264\n1,224,213,395\n2022-10-14\nReceipt against invoice (rcpt #342)\n74,852,454\n1,299,065,849\n2022-10-16\nReceipt against invoice (rcpt #361)\n55,286,386\n1,354,352,235\n2022-10-19\nReceipt against invoice (rcpt #333)\n63,631,240\n1,417,983,475\n2022-10-21\nVendor payment #329\n36,880,983\n1,381,102,492\n2022-10-23\nReceipt against invoice (rcpt #124)\n31,870,335\n1,412,972,827\n2022-10-23\nVendor payment #106\n21,217,259\n1,391,755,568\n2022-10-24\nVendor payment #333\n44,013,686\n1,347,741,882\n2022-10-25\nReceipt against invoice (rcpt #409)\n9,501,067\n1,357,242,949\n2022-10-26\nReceipt against invoice (rcpt #141)\n11,324,268\n1,368,567,217\n2022-10-26\nVendor payment #317\n16,863,108\n1,351,704,109\n2022-10-28\nMonthly salaries & site overheads (202210)\n81,616,844\n1,270,087,265\n2022-10-30\nReceipt against invoice (rcpt #332)\n31,815,619\n1,301,902,884\n2022-11-02\nReceipt against invoice (rcpt #133)\n22,333,258\n1,324,236,142\n2022-11-07\nTDS deposited (202210)\n4,332,303\n1,319,903,839\n2022-11-08\nReceipt against invoice (rcpt #408)\n9,501,067\n1,329,404,906\n2022-11-10\nReceipt against invoice (rcpt #354)\n45,556,772\n1,374,961,678\n2022-11-13\nVendor payment #334\n23,331,854\n1,351,629,824\n2022-11-15\nReceipt against invoice (rcpt #102)\n44,093,023\n1,395,722,847\n2022-11-17\nReceipt against invoice (rcpt #334)\n63,631,240\n1,459,354,087\n2022-11-20\nVendor payment #332\n33,555,053\n1,425,799,034\n2022-11-23\nReceipt against invoice (rcpt #161)\n56,172,523\n1,481,971,557\n2022-11-24\nVendor payment #64\n31,350,503\n1,450,621,054\nDOC-BANK-2022\nPage 4 of 7\n\n2022-11-25\nReceipt against invoice (rcpt #134)\n22,333,258\n1,472,954,312\n2022-11-28\nMonthly salaries & site overheads (202211)\n81,616,844\n1,391,337,468\n2022-11-30\nVendor payment #287\n47,732,109\n1,343,605,359\n2022-12-02\nReceipt against invoice (rcpt #115)\n40,944,316\n1,384,549,675\n2022-12-03\nVendor payment #124\n31,376,753\n1,353,172,922\n2022-12-07\nReceipt against invoice (rcpt #153)\n26,003,715\n1,379,176,637\n2022-12-07\nTDS deposited (202211)\n2,344,300\n1,376,832,337\n2022-12-11\nReceipt against invoice (rcpt #121)\n17,614,545\n1,394,446,882\n2022-12-14\nReceipt against invoice (rcpt #138)\n6,674,908\n1,401,121,790\n2022-12-15\nVendor payment #268\n52,540,155\n1,348,581,635\n2022-12-16\nReceipt against invoice (rcpt #343)\n74,852,454\n1,423,434,089\n2022-12-19\nReceipt against invoice (rcpt #318)\n62,507,089\n1,485,941,178\n2022-12-28\nMonthly salaries & site overheads (202212)\n81,616,844\n1,404,324,334\n2022-12-29\nVendor payment #131\n16,691,764\n1,387,632,570\n2023-01-01\nVendor payment #82\n35,019,200\n1,352,613,370\n2023-01-02\nVendor payment #118\n1,677,142\n1,350,936,228\n2023-01-03\nReceipt against invoice (rcpt #108)\n31,792,019\n1,382,728,247\n2023-01-03\nVendor payment #123\n15,888,241\n1,366,840,006\n2023-01-07\nVendor payment #121\n41,447,092\n1,325,392,914\n2023-01-07\nTDS deposited (202212)\n1,734,631\n1,323,658,283\n2023-01-08\nVendor payment #40\n35,629,357\n1,288,028,926\n2023-01-10\nReceipt against invoice (rcpt #406)\n9,062,500\n1,297,091,426\n2023-01-12\nReceipt against invoice (rcpt #70)\n11,822,370\n1,308,913,796\n2023-01-13\nVendor payment #342\n35,493,279\n1,273,420,517\n2023-01-14\nVendor payment #276\n22,999,103\n1,250,421,414\n2023-01-15\nReceipt against invoice (rcpt #55)\n40,945,720\n1,291,367,134\n2023-01-18\nReceipt against invoice (rcpt #125)\n31,870,335\n1,323,237,469\n2023-01-20\nVendor payment #316\n46,237,437\n1,277,000,032\n2023-01-21\nReceipt against invoice (rcpt #147)\n43,964,367\n1,320,964,399\n2023-01-21\nReceipt against invoice (rcpt #410)\n9,501,067\n1,330,465,466\n2023-01-25\nReceipt against invoice (rcpt #395)\n3,660,846\n1,334,126,312\n2023-01-27\nVendor payment #289\n26,405,653\n1,307,720,659\n2023-01-28\nMonthly salaries & site overheads (202201)\n81,616,844\n1,226,103,815\nDOC-BANK-2022\nPage 5 of 7\n\n2023-01-29\nReceipt against invoice (rcpt #169)\n28,195,045\n1,254,298,860\n2023-01-29\nVendor payment #343\n17,517,172\n1,236,781,688\n2023-02-03\nReceipt against invoice (rcpt #335)\n63,631,240\n1,300,412,928\n2023-02-03\nVendor payment #308\n5,626,726\n1,294,786,202\n2023-02-06\nVendor payment #55\n57,607,854\n1,237,178,348\n2023-02-06\nVendor payment #311\n9,992,348\n1,227,186,000\n2023-02-07\nReceipt against invoice (rcpt #355)\n45,556,772\n1,272,742,772\n2023-02-07\nTDS deposited (202301)\n4,798,509\n1,267,944,263\n2023-02-08\nVendor payment #93\n19,589,421\n1,248,354,842\n2023-02-08\nVendor payment #331\n42,613,878\n1,205,740,964\n2023-02-15\nReceipt against invoice (rcpt #116)\n40,944,316\n1,246,685,280\n2023-02-18\nReceipt against invoice (rcpt #344)\n74,852,454\n1,321,537,734\n2023-02-18\nVendor payment #284\n56,940,995\n1,264,596,739\n2023-02-20\nVendor payment #132\n33,986,856\n1,230,609,883\n2023-02-28\nMonthly salaries & site overheads (202202)\n81,616,844\n1,148,993,039\n2023-03-01\nReceipt against invoice (rcpt #398)\n4,461,631\n1,153,454,670\n2023-03-04\nReceipt against invoice (rcpt #301)\n64,300,767\n1,217,755,437\n2023-03-04\nVendor payment #150\n20,130,249\n1,197,625,188\n2023-03-06\nReceipt against invoice (rcpt #403)\n8,219,903\n1,205,845,091\n2023-03-07\nReceipt against invoice (rcpt #363)\n27,643,193\n1,233,488,284\n2023-03-07\nTDS deposited (202302)\n3,902,722\n1,229,585,562\n2023-03-09\nReceipt against invoice (rcpt #142)\n11,324,268\n1,240,909,830\n2023-03-10\nVendor payment #120\n54,006,302\n1,186,903,528\n2023-03-12\nVendor payment #318\n35,515,535\n1,151,387,993\n2023-03-13\nReceipt against invoice (rcpt #156)\n13,764,789\n1,165,152,782\n2023-03-15\nReceipt against invoice (rcpt #319)\n62,507,089\n1,227,659,871\n2023-03-18\nReceipt against invoice (rcpt #336)\n63,631,240\n1,291,291,111\n2023-03-18\nReceipt against invoice (rcpt #362)\n55,286,386\n1,346,577,497\n2023-03-18\nVendor payment #279\n9,506,757\n1,337,070,740\n2023-03-19\nReceipt against invoice (rcpt #154)\n26,003,715\n1,363,074,455\n2023-03-24\nReceipt against invoice (rcpt #345)\n74,852,454\n1,437,926,909\n2023-03-28\nReceipt against invoice (rcpt #135)\n22,333,258\n1,460,260,167\n2023-03-28\nMonthly salaries & site overheads (202203)\n81,616,855\n1,378,643,312\nDOC-BANK-2022\nPage 6 of 7\n\n2023-03-31\nReceipt against invoice (rcpt #75)\n26,079,176\n1,404,722,488\n2023-03-31\nVendor payment #146\n33,884,046\n1,370,838,442\nClosing balance\n1,370,838,442\nComputer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.\nDOC-BANK-2022\nPage 7 of 7\n"
 }

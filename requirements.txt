@@ -1,6 +1,9 @@
-google-generativeai
-pdfplumber
-openpyxl
-pandas
-tqdm
-python-dotenv
+pymupdf                # PDF text extraction (the offline extraction path)
+openpyxl               # Excel workbook parsing
+pandas                 # Data manipulation
+tqdm                   # Progress bars
+python-dotenv          # .env loading
+
+# Optional — only needed for the Gemini-based extraction path in
+# src/extract_pdfs.py. The default pipeline runs fully offline without it.
+# google-generativeai

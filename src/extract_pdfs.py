@@ -24,8 +24,15 @@ import sys
 import time
 from pathlib import Path
 
-import google.generativeai as genai
 from tqdm import tqdm
+
+# The offline extractor (extract_local_fast.py) imports load_document_index
+# from this module, so the Gemini client must stay optional: the local path
+# needs no API key and no network.
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -36,8 +43,11 @@ from src.config import (
 
 
 # ── Configure Gemini ────────────────────────────────────────────────────────
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel(GEMINI_MODEL)
+if genai is not None:
+    genai.configure(api_key=GEMINI_API_KEY)
+    model = genai.GenerativeModel(GEMINI_MODEL)
+else:
+    model = None
 
 
 # ── Document-type-specific extraction prompts ───────────────────────────────

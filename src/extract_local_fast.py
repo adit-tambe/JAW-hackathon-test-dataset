@@ -20,6 +20,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import DOCUMENTS_DIR, EXTRACTED_DIR, PROJECT_ROOT
 from src.money import parse_indian_money
 from src.extract_pdfs import load_document_index
+from src.extract_records import (
+    extract_financial_statement, extract_ledger_book, extract_bank_statement,
+    extract_ra_bill, extract_final_ra_bill, extract_tender_dossier,
+    extract_iso_certificate, extract_compliance_matrix, extract_annual_report,
+)
 
 
 # ── Date Parsing ────────────────────────────────────────────────────────────
@@ -309,71 +314,124 @@ def extract_ref(text: str, doc_id: str, raw_text: str = None) -> dict:
     }
 
 
+def _field_below(text: str, label: str) -> str:
+    """Read a label/value pair where the value is on the following line.
+
+    These certificates are laid out as a two-column table that extracts to
+    alternating label and value lines. Flattening the page first would run
+    every value into the next label, which is why the raw text is matched.
+    """
+    m = re.search(rf'^\s*{label}\s*\n\s*([^\n]+)', text, re.M | re.I)
+    return m.group(1).strip() if m else None
+
+
 def extract_pcert(text: str, doc_id: str) -> dict:
-    flat = re.sub(r'\s+', ' ', text)
-    
-    person_m = re.search(r'This is to certify that\s+([^\n,]+)', flat)
-    person_name = person_m.group(1).strip() if person_m else "Unknown"
-    
-    type_m = re.search(r'Credential Type\s+([^\n]+)', flat) or \
-             re.search(r'(PMP|Six Sigma Black Belt|Six Sigma Green Belt)', flat)
-    cert_type = type_m.group(1).strip() if type_m else "Unknown"
-    
-    id_m = re.search(r'Credential ID\s+([^\n]+)', flat) or \
-           re.search(r'Credential ID:\s*([^\n]+)', flat)
-    cert_id = id_m.group(1).strip() if id_m else None
-    
-    issue_m = re.search(r'Date of Issue\s+([^\n]+)', flat) or \
-              re.search(r'Issued:\s*([^\n]+)', flat)
-    issue_date = parse_date(issue_m.group(1).strip()) if issue_m else None
-    
-    expiry_m = re.search(r'Valid Through\s+([^\n]+)', flat)
-    expiry_date = parse_date(expiry_m.group(1).strip()) if expiry_m else None
-    
+    """Extract a personnel credential.
+
+    The holder's name is the line after "This is to certify that"; the line
+    after that is the employee ID, so the match must stop at the newline.
+    """
+    # Two layouts are in use: a tabular one ("This is to certify that" with
+    # Credential Type / Credential ID / Date of Issue rows) and a citation
+    # style ("This credential is conferred upon" with Certificate No. /
+    # Issued). Both are tried for every field.
+    person_m = (re.search(r'This is to certify that\s*\n\s*([^\n]+)', text)
+                or re.search(r'This credential is conferred upon\s*\n\s*([^\n]+)', text))
+    person_name = person_m.group(1).strip() if person_m else None
+    if not person_name:
+        # Signature block fallback: the name sits above "Credential Holder".
+        alt = re.search(r'^\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*\n\s*Credential Holder',
+                        text, re.M)
+        person_name = alt.group(1).strip() if alt else "Unknown"
+    person_name = re.sub(r'^(?:Mr|Ms|Mrs|Dr)\.?\s+', '', person_name).strip()
+
+    cert_type = _field_below(text, 'Credential Type')
+    if not cert_type:
+        # The citation layout prints the credential on its own line and
+        # sometimes as a heading such as "PMP CERTIFICATION".
+        m = re.search(r'\b(Six Sigma Black Belt|Six Sigma Green Belt|Lean Six Sigma|PMP|'
+                      r'FIDIC|NEBOSH|PRINCE2)\b', text, re.I)
+        cert_type = m.group(1) if m else "Unknown"
+    cert_type = re.sub(r'\s+CERTIFICATION$', '', cert_type, flags=re.I).strip()
+
+    cert_id = (_field_below(text, 'Credential ID')
+               or _field_below(text, r'Certificate No\.?'))
+    if not cert_id:
+        m = re.search(r'(?:Credential|Certificate)\s+(?:ID|No\.?):\s*(\S+)', text, re.I)
+        cert_id = m.group(1) if m else None
+
+    issue_raw = (_field_below(text, 'Date of Issue') or _field_below(text, 'Issued'))
+    if not issue_raw:
+        m = re.search(r'Issued:\s*(\S+)', text)
+        issue_raw = m.group(1) if m else None
+
+    expiry_raw = _field_below(text, 'Valid Through')
+    employment = _field_below(text, 'Employment Status')
+    qualification = _field_below(text, 'Highest Qualification')
+    emp_id = re.search(r'Employee ID:\s*(\S+)', text)
+
+    exp_raw = _field_below(text, 'Years of Experience') or ''
+    exp_m = re.search(r'(\d+)', exp_raw)
+
+    issuing = _field_below(text, 'Issuing Authority')
+
     return {
         "_doc_id": doc_id,
         "_doc_type": "personnel_certificate",
         "person_name": person_name,
+        "employee_id": emp_id.group(1) if emp_id else None,
         "cert_type": cert_type,
         "cert_id": cert_id,
-        "issue_date": issue_date,
-        "expiry_date": expiry_date,
-        "issuing_body": "PMI" if "PMP" in cert_type else "ASQ"
+        "issue_date": parse_date(issue_raw) if issue_raw else None,
+        "expiry_date": parse_date(expiry_raw) if expiry_raw else None,
+        "employment_status": employment,
+        "years_of_experience": int(exp_m.group(1)) if exp_m else None,
+        "qualification": qualification,
+        "issuing_body": issuing or ("PMI" if "PMP" in (cert_type or "") else "ASQ"),
     }
 
 
+def _cv_field(text: str, label: str) -> str:
+    """Read a CV header field. Labels and values sit on their own lines, so
+    flattening the page first would run the value into the next label."""
+    m = re.search(rf'^\s*{re.escape(label)}\s*\n\s*([^\n]+)', text, re.M)
+    return m.group(1).strip() if m else None
+
+
 def extract_cv(text: str, doc_id: str) -> dict:
-    flat = re.sub(r'\s+', ' ', text)
-    
-    name_m = re.search(r'Name\s+([^\n]+)', flat)
-    person_name = name_m.group(1).strip() if name_m else "Unknown"
-    
-    desig_m = re.search(r'Designation\s+([^\n]+)', flat)
-    desig = desig_m.group(1).strip() if desig_m else None
-    
-    exp_m = re.search(r'Total Experience\s+(\d+)', flat)
+    """Extract fields from an engineer CV.
+
+    The CVs deliberately carry no project list — section 4 says assignments
+    "are evidenced by the company's project records and client completion
+    certificates" — so engineer-to-work links come from the certificates, not
+    from here. What the CV uniquely holds is the personnel profile.
+    """
+    person_name = _cv_field(text, 'Name') or "Unknown"
+    desig = _cv_field(text, 'Designation')
+    emp_id = _cv_field(text, 'Employee ID')
+    unit = _cv_field(text, 'Business Unit')
+    qual = _cv_field(text, 'Qualification')
+    joined = _cv_field(text, 'Date of Joining')
+    wage_group = _cv_field(text, 'Wage Group')
+
+    exp_raw = _cv_field(text, 'Total Experience') or ''
+    exp_m = re.search(r'(\d+)', exp_raw)
     years_exp = int(exp_m.group(1)) if exp_m else None
-    
-    projects = []
-    proj_blocks = re.findall(r'Project Name\s+([^\n]+)', re.sub(r'\s+', ' ', text))
-    for p_name in proj_blocks:
-        projects.append({
-            "project_name": p_name.strip(),
-            "client_name": None,
-            "role_on_project": desig or "Project Lead",
-            "contract_value": None,
-            "completion_date": None
-        })
-    
+
     return {
         "_doc_id": doc_id,
         "_doc_type": "cv",
         "person_name": person_name,
+        "employee_id": emp_id,
         "current_designation": desig,
+        "business_unit": unit,
         "years_of_experience": years_exp,
+        "qualification": qual,
+        "date_of_joining": parse_date(joined) if joined else None,
+        "wage_group": wage_group,
         "qualifications": [],
         "certifications": [],
-        "projects_led": projects
+        "projects_led": []
     }
 
 
@@ -429,6 +487,16 @@ EXTRACTORS = {
     "personnel_certificate": extract_pcert,
     "cv": extract_cv,
     "performance_bond": extract_bond,
+    # The financial and commercial families — see extract_records.py.
+    "financial_statement": extract_financial_statement,
+    "general_ledger_book": extract_ledger_book,
+    "bank_statement": extract_bank_statement,
+    "ra_bill": extract_ra_bill,
+    "final_ra_bill": extract_final_ra_bill,
+    "tender_dossier": extract_tender_dossier,
+    "iso_certificate": extract_iso_certificate,
+    "compliance_matrix": extract_compliance_matrix,
+    "annual_report": extract_annual_report,
 }
 
 
@@ -461,6 +529,9 @@ def run_fast_extraction():
                                            lambda t, d: extract_generic(t, d, doc_type))
                 data = extractor(raw_text, doc_id)
             data["_source_file"] = str(filepath)
+            # Keep the full text so the answer engine can fall back to reading
+            # a figure straight out of a document when no typed field holds it.
+            data["_text"] = raw_text
             
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)

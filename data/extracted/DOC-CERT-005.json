@@ -1,6 +1,12 @@
 {
   "_doc_id": "DOC-CERT-005",
   "_doc_type": "iso_certificate",
-  "content_summary": "NABL\nAccredited Certification Body · IAF Member\nCertificate of Registration\nCertificate No: ORG-1005\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the requirements of\nNABL Accreditation\nScope of Registration\nEngineering, Procurement & Construction (EPC) of infrastructure projects including water supply, sewerage\n& drainage, roads & highways, bridges, bu",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\iso_certificate\\DOC-CERT-005.pdf"
+  "cert_number": "ORG-1005",
+  "cert_type": null,
+  "certification_body": "NABL",
+  "valid_from": "2023-03-16",
+  "valid_to": "2028-10-04",
+  "scope": "Engineering, Procurement & Construction (EPC) of infrastructure projects including water supply, sewerage & drainage, roads & highways, bridges, buildings, industrial structures, and related civil engineering works.",
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\iso_certificate\\DOC-CERT-005.pdf",
+  "_text": "NABL\nAccredited Certification Body · IAF Member\nCertificate of Registration\nCertificate No: ORG-1005\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the requirements of\nNABL Accreditation\nScope of Registration\nEngineering, Procurement & Construction (EPC) of infrastructure projects including water supply, sewerage\n& drainage, roads & highways, bridges, buildings, industrial structures, and related civil engineering works.\nInitial Certification Date\n2023-03-16\nValid Until\n2028-10-04\nCertification Body\nNABL\nIAF Accreditation\nYes — IAF MLA Signatory\nDOC-CERT-005\nPage 1 of 2\n\nSchedule of Audits\nAudit Type\nDate\nLead Auditor\nFindings\nInitial Certification\n2023-03-16\nDr. R. Mehta\n0 major, 2 minor NCs — closed\nSurveillance Audit 1\n2024-03-15\nDr. R. Mehta\n0 major, 1 minor NC — closed\nSurveillance Audit 2\n2025-02-20\nMr. S. Kapoor\n0 major, 0 minor NCs\nRe-certification\n2028-01-10\nTBD\nScheduled\nConditions\nThis certificate remains the property of NABL and must be returned on demand.\nThe certificate is valid only when the annual surveillance audit fees are paid and audits are\nconducted.\nAny change in the scope of registration must be communicated to the certification body.\nUse of the certificate in a misleading manner shall result in immediate suspension.\nThis certificate was issued in accordance with the procedures of NABL and is subject to the terms and conditions of the certification\nagreement dated 2023-03-16.\nDr. R. Mehta\nPrincipal Auditor\nNABL \n1. \n2. \n3. \n4. \nDOC-CERT-005\nPage 2 of 2\n"
 }

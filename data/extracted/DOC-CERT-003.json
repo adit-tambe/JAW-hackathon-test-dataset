@@ -1,6 +1,12 @@
 {
   "_doc_id": "DOC-CERT-003",
   "_doc_type": "iso_certificate",
-  "content_summary": "Bureau Veritas\nAccredited Certification Body · IAF Member\nCERTIFICATE OF REGISTRATION\nCertificate No: ORG-1003\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the requirements of\nISO 45001:2018\nSCOPE OF REGISTRATION\nEngineering, Procurement & Construction (EPC) of infrastructure projects including water supply, sewerage & drainage, roads &\nhighways, bridg",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\iso_certificate\\DOC-CERT-003.pdf"
+  "cert_number": "ORG-1003",
+  "cert_type": "ISO45001:2018",
+  "certification_body": "Bureau Veritas",
+  "valid_from": "2022-07-16",
+  "valid_to": "2028-09-16",
+  "scope": null,
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\iso_certificate\\DOC-CERT-003.pdf",
+  "_text": "Bureau Veritas\nAccredited Certification Body · IAF Member\nCERTIFICATE OF REGISTRATION\nCertificate No: ORG-1003\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the requirements of\nISO 45001:2018\nSCOPE OF REGISTRATION\nEngineering, Procurement & Construction (EPC) of infrastructure projects including water supply, sewerage & drainage, roads &\nhighways, bridges, buildings, industrial structures, and related civil engineering works.\nInitial Certification Date\n2022-07-16\nValid Until\n2028-09-16\nCertification Body\nBureau Veritas\nIAF Accreditation\nYes — IAF MLA Signatory\nDOC-CERT-003\nPage 1 of 2\n\nSCHEDULE OF AUDITS\nAudit Type\nDate\nLead Auditor\nFindings\nInitial Certification\n2022-07-16\nDr. R. Mehta\n0 major, 2 minor NCs — closed\nSurveillance Audit 1\n2024-03-15\nDr. R. Mehta\n0 major, 1 minor NC — closed\nSurveillance Audit 2\n2025-02-20\nMr. S. Kapoor\n0 major, 0 minor NCs\nRe-certification\n2028-01-10\nTBD\nScheduled\nCONDITIONS\nThis certificate remains the property of Bureau Veritas and must be returned on demand.\nThe certificate is valid only when the annual surveillance audit fees are paid and audits are conducted.\nAny change in the scope of registration must be communicated to the certification body.\nUse of the certificate in a misleading manner shall result in immediate suspension.\nThis certificate was issued in accordance with the procedures of Bureau Veritas and is subject to the terms and conditions of the certification agreement dated\n2022-07-16.\nDr. R. Mehta\nPrincipal Auditor\nBureau Veritas \n1. \n2. \n3. \n4. \nDOC-CERT-003\nPage 2 of 2\n"
 }

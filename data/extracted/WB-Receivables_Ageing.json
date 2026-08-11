@@ -1,7 +1,7 @@
 {
   "_doc_id": "WB-Receivables_Ageing",
   "_doc_type": "receivables_ageing",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\workbooks\\Receivables_Ageing.xlsx",
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\workbooks\\Receivables_Ageing.xlsx",
   "sheets": {
     "AR Ageing": {
       "headers": [

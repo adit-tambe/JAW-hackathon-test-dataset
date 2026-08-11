@@ -1,6 +1,143 @@
 {
   "_doc_id": "DOC-FS-2024",
   "_doc_type": "financial_statement",
-  "content_summary": "National Infrastructure Corp. Ltd.\nAudited Financial Results · CIN U45201WB2005PLC904417 · PAN NAICC4417O\nSTATEMENT OF PROFIT AND LOSS (EXTRACT)\nFor the financial year ended 31st March 2025\nStatement No: FS-2024-006\nCurrency: INR (All amounts in Lakhs unless stated)\nA. REVENUE FROM OPERATIONS\nParticulars\nCurrent Year (FY2024-25)\nPrevious Year (FY2023-24)\nContract Revenue (EPC)\n23,196\n19,717\nOther Operating Revenue\n696\n580\nTotal Revenue from Operations (A)\n23,892\n20,297\nB. EXPENSES\nParticulars\nCu",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\financial_statement\\DOC-FS-2024.pdf"
+  "fiscal_year": 2024,
+  "statement_no": "FS-2024-006",
+  "source_unit": "lakh",
+  "line_items": [
+    {
+      "section": "revenue",
+      "particulars": "Contract Revenue (EPC)",
+      "current_year": 2319600000,
+      "previous_year": 1971700000
+    },
+    {
+      "section": "revenue",
+      "particulars": "Other Operating Revenue",
+      "current_year": 69600000,
+      "previous_year": 58000000
+    },
+    {
+      "section": "revenue",
+      "particulars": "Total Revenue from Operations (A)",
+      "current_year": 2389200000,
+      "previous_year": 2029700000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Cost of Materials Consumed",
+      "current_year": 974200000,
+      "previous_year": 927900000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Sub-contracting & Labour",
+      "current_year": 417500000,
+      "previous_year": 394300000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Employee Benefit Expenses",
+      "current_year": 278400000,
+      "previous_year": 255200000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Depreciation & Amortisation",
+      "current_year": 69600000,
+      "previous_year": 64900000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Other Expenses",
+      "current_year": 185600000,
+      "previous_year": 174000000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Total Expenses (B)",
+      "current_year": 1925300000,
+      "previous_year": 1816300000
+    },
+    {
+      "section": "profit",
+      "particulars": "Profit Before Tax",
+      "current_year": -50700000,
+      "previous_year": null
+    },
+    {
+      "section": "profit",
+      "particulars": "Tax Expense (current + deferred)",
+      "current_year": -11700000,
+      "previous_year": null
+    },
+    {
+      "section": "profit",
+      "particulars": "Profit After Tax",
+      "current_year": -39000000,
+      "previous_year": null
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Shareholders' Funds — Paid-up Capital",
+      "current_year": 347900000,
+      "previous_year": 324700000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Reserves & Surplus",
+      "current_year": -97600000,
+      "previous_year": -78100000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Liabilities — Long-term Borrowings",
+      "current_year": 185600000,
+      "previous_year": 162400000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Liabilities — Trade Payables",
+      "current_year": 278400000,
+      "previous_year": 232000000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Liabilities — Other Current Liabilities",
+      "current_year": 139200000,
+      "previous_year": 116000000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Assets — Property, Plant & Equipment",
+      "current_year": 232000000,
+      "previous_year": 208800000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Assets — Intangible Assets",
+      "current_year": 23200000,
+      "previous_year": 23200000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Inventories",
+      "current_year": 116000000,
+      "previous_year": 92800000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Trade Receivables",
+      "current_year": 324700000,
+      "previous_year": 278400000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Cash & Bank Balances",
+      "current_year": 92800000,
+      "previous_year": 81200000
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\financial_statement\\DOC-FS-2024.pdf",
+  "_text": "National Infrastructure Corp. Ltd.\nAudited Financial Results · CIN U45201WB2005PLC904417 · PAN NAICC4417O\nSTATEMENT OF PROFIT AND LOSS (EXTRACT)\nFor the financial year ended 31st March 2025\nStatement No: FS-2024-006\nCurrency: INR (All amounts in Lakhs unless stated)\nA. REVENUE FROM OPERATIONS\nParticulars\nCurrent Year (FY2024-25)\nPrevious Year (FY2023-24)\nContract Revenue (EPC)\n23,196\n19,717\nOther Operating Revenue\n696\n580\nTotal Revenue from Operations (A)\n23,892\n20,297\nB. EXPENSES\nParticulars\nCurrent Year\nPrevious Year\nCost of Materials Consumed\n9,742\n9,279\nSub-contracting & Labour\n4,175\n3,943\nEmployee Benefit Expenses\n2,784\n2,552\nDepreciation & Amortisation\n696\n649\nOther Expenses\n1,856\n1,740\nTotal Expenses (B)\n19,253\n18,163\nC. PROFIT BEFORE TAX (A - B)\nProfit Before Tax\n-507\nTax Expense (current + deferred)\n-117\nProfit After Tax\n-390\nDOC-FS-2024\nPage 1 of 3\n\nD. BALANCE SHEET EXTRACT (AS AT 31ST MARCH 2025)\nParticulars\nCurrent Year\nPrevious Year\nEQUITY AND LIABILITIES\nShareholders' Funds — Paid-up Capital\n3,479\n3,247\nReserves & Surplus\n-976\n-781\nNon-Current Liabilities — Long-term Borrowings\n1,856\n1,624\nCurrent Liabilities — Trade Payables\n2,784\n2,320\nCurrent Liabilities — Other Current Liabilities\n1,392\n1,160\nASSETS\nNon-Current Assets — Property, Plant & Equipment\n2,320\n2,088\nNon-Current Assets — Intangible Assets\n232\n232\nCurrent Assets — Inventories\n1,160\n928\nCurrent Assets — Trade Receivables\n3,247\n2,784\nCurrent Assets — Cash & Bank Balances\n928\n812\nDOC-FS-2024\nPage 2 of 3\n\nE. NOTES TO ACCOUNTS\nNote 1 — Basis of Preparation: These financial statements have been prepared in accordance with\nIndian Accounting Standards (Ind AS) as notified under the Companies Act, 2013. The financial\nstatements have been prepared on a historical cost basis except for certain financial instruments\nmeasured at fair value.\nNote 2 — Revenue Recognition: Revenue from construction contracts is recognised over time using\nthe input method (costs incurred to date relative to total estimated costs) in accordance with Ind AS\n115 — Revenue from Contracts with Customers.\nNote 3 — Going Concern: Based on the Company's financial position, including the order book of\napproximately 580 Cr and positive net worth, the management is satisfied that the Company is a going\nconcern and there is no material uncertainty.\nNote 4 — Bank Solvency: The Company maintains satisfactory banking relationships. Bank solvency\ncertificate status: Sufficient.\nF. AUDITOR'S REPORT (EXTRACT)\nWe have audited the accompanying financial statements of National Infrastructure Corp. Ltd. which\ncomprise the Balance Sheet as at 31st March 2025, the Statement of Profit and Loss for the year then\nended, and notes to the financial statements.\nOpinion: In our opinion and to the best of our information and according to the explanations given to\nus, the aforesaid financial statements give a true and fair view in conformity with Ind AS of the state\nof affairs of the Company as at 31st March 2025, and of its profit and cash flows for the year then\nended.\nFor CA Meera Ghosh\nChartered Accountants\nFirms Registration No: 123456W\nC O N F I D E N T I A L — F O R A U T H O R I S E D U S E O N LY\nCA Meera Ghosh\nPartner — Membership No. 12345\nCA Meera Ghosh, Chartered Accountants\nDate: 31/03/2026\nPlace: New Delhi \nFor and on behalf of the Board\nNational Infrastructure Corp. Ltd.\nDirector \nDOC-FS-2024\nPage 3 of 3\n"
 }

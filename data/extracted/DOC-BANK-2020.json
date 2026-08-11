@@ -1,6 +1,718 @@
 {
   "_doc_id": "DOC-BANK-2020",
   "_doc_type": "bank_statement",
-  "content_summary": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2020–21\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2020-04-01\nOpening balance b/f\n448,303,968\n2020-04-07\nTDS deposited (202003)\n555,820\n447,748,148\n2020-04-13\nReceipt against invoice (rcpt #32)\n29,525,036\n477,273,184\n2020-04-14\nReceipt against invoice (rcpt #42)\n34,985,220\n512,258,404\n2020-04-21\nVendor payment #34\n10,159,925\n502,098,479\n",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\bank_statement\\DOC-BANK-2020.pdf"
+  "fiscal_year": 2020,
+  "bank_name": "Kalinga National Bank",
+  "account_no": "00417 2210 9944",
+  "transactions": [
+    {
+      "date": "2020-04-01",
+      "particulars": "Opening balance b/f",
+      "amount": null,
+      "direction": null,
+      "balance": 448303968.0
+    },
+    {
+      "date": "2020-04-07",
+      "particulars": "TDS deposited (202003)",
+      "amount": 555820.0,
+      "direction": "withdrawal",
+      "balance": 447748148.0
+    },
+    {
+      "date": "2020-04-13",
+      "particulars": "Receipt against invoice (rcpt #32)",
+      "amount": 29525036.0,
+      "direction": "deposit",
+      "balance": 477273184.0
+    },
+    {
+      "date": "2020-04-14",
+      "particulars": "Receipt against invoice (rcpt #42)",
+      "amount": 34985220.0,
+      "direction": "deposit",
+      "balance": 512258404.0
+    },
+    {
+      "date": "2020-04-21",
+      "particulars": "Vendor payment #34",
+      "amount": 10159925.0,
+      "direction": "withdrawal",
+      "balance": 502098479.0
+    },
+    {
+      "date": "2020-04-28",
+      "particulars": "Monthly salaries & site overheads (202004)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 497081148.0
+    },
+    {
+      "date": "2020-05-02",
+      "particulars": "Receipt against invoice (rcpt #1)",
+      "amount": 15445291.0,
+      "direction": "deposit",
+      "balance": 512526439.0
+    },
+    {
+      "date": "2020-05-07",
+      "particulars": "TDS deposited (202004)",
+      "amount": 175171.0,
+      "direction": "withdrawal",
+      "balance": 512351268.0
+    },
+    {
+      "date": "2020-05-19",
+      "particulars": "Receipt against invoice (rcpt #8)",
+      "amount": 22320149.0,
+      "direction": "deposit",
+      "balance": 534671417.0
+    },
+    {
+      "date": "2020-05-21",
+      "particulars": "Receipt against invoice (rcpt #27)",
+      "amount": 45445081.0,
+      "direction": "deposit",
+      "balance": 580116498.0
+    },
+    {
+      "date": "2020-05-28",
+      "particulars": "Monthly salaries & site overheads (202005)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 575099167.0
+    },
+    {
+      "date": "2020-06-02",
+      "particulars": "Vendor payment #60",
+      "amount": 35193932.0,
+      "direction": "withdrawal",
+      "balance": 539905235.0
+    },
+    {
+      "date": "2020-06-24",
+      "particulars": "Receipt against invoice (rcpt #14)",
+      "amount": 16401411.0,
+      "direction": "deposit",
+      "balance": 556306646.0
+    },
+    {
+      "date": "2020-06-24",
+      "particulars": "Vendor payment #28",
+      "amount": 21253844.0,
+      "direction": "withdrawal",
+      "balance": 535052802.0
+    },
+    {
+      "date": "2020-06-28",
+      "particulars": "Monthly salaries & site overheads (202006)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 530035471.0
+    },
+    {
+      "date": "2020-07-02",
+      "particulars": "Receipt against invoice (rcpt #33)",
+      "amount": 14762517.0,
+      "direction": "deposit",
+      "balance": 544797988.0
+    },
+    {
+      "date": "2020-07-07",
+      "particulars": "TDS deposited (202006)",
+      "amount": 973236.0,
+      "direction": "withdrawal",
+      "balance": 543824752.0
+    },
+    {
+      "date": "2020-07-14",
+      "particulars": "Receipt against invoice (rcpt #24)",
+      "amount": 7851299.0,
+      "direction": "deposit",
+      "balance": 551676051.0
+    },
+    {
+      "date": "2020-07-28",
+      "particulars": "Monthly salaries & site overheads (202007)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 546658720.0
+    },
+    {
+      "date": "2020-07-29",
+      "particulars": "Vendor payment #31",
+      "amount": 40204552.0,
+      "direction": "withdrawal",
+      "balance": 506454168.0
+    },
+    {
+      "date": "2020-08-05",
+      "particulars": "Receipt against invoice (rcpt #12)",
+      "amount": 49005060.0,
+      "direction": "deposit",
+      "balance": 555459228.0
+    },
+    {
+      "date": "2020-08-07",
+      "particulars": "TDS deposited (202007)",
+      "amount": 693181.0,
+      "direction": "withdrawal",
+      "balance": 554766047.0
+    },
+    {
+      "date": "2020-08-08",
+      "particulars": "Vendor payment #54",
+      "amount": 26549124.0,
+      "direction": "withdrawal",
+      "balance": 528216923.0
+    },
+    {
+      "date": "2020-08-09",
+      "particulars": "Vendor payment #35",
+      "amount": 4548827.0,
+      "direction": "withdrawal",
+      "balance": 523668096.0
+    },
+    {
+      "date": "2020-08-10",
+      "particulars": "Receipt against invoice (rcpt #18)",
+      "amount": 40808246.0,
+      "direction": "deposit",
+      "balance": 564476342.0
+    },
+    {
+      "date": "2020-08-14",
+      "particulars": "Receipt against invoice (rcpt #9)",
+      "amount": 22320149.0,
+      "direction": "deposit",
+      "balance": 586796491.0
+    },
+    {
+      "date": "2020-08-22",
+      "particulars": "Receipt against invoice (rcpt #19)",
+      "amount": 40808246.0,
+      "direction": "deposit",
+      "balance": 627604737.0
+    },
+    {
+      "date": "2020-08-24",
+      "particulars": "Receipt against invoice (rcpt #36)",
+      "amount": 45331314.0,
+      "direction": "deposit",
+      "balance": 672936051.0
+    },
+    {
+      "date": "2020-08-28",
+      "particulars": "Receipt against invoice (rcpt #34)",
+      "amount": 29525036.0,
+      "direction": "deposit",
+      "balance": 702461087.0
+    },
+    {
+      "date": "2020-08-28",
+      "particulars": "Monthly salaries & site overheads (202008)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 697443756.0
+    },
+    {
+      "date": "2020-09-01",
+      "particulars": "Vendor payment #10",
+      "amount": 44381708.0,
+      "direction": "withdrawal",
+      "balance": 653062048.0
+    },
+    {
+      "date": "2020-09-07",
+      "particulars": "TDS deposited (202008)",
+      "amount": 536171.0,
+      "direction": "withdrawal",
+      "balance": 652525877.0
+    },
+    {
+      "date": "2020-09-08",
+      "particulars": "Vendor payment #9",
+      "amount": 28197867.0,
+      "direction": "withdrawal",
+      "balance": 624328010.0
+    },
+    {
+      "date": "2020-09-14",
+      "particulars": "Receipt against invoice (rcpt #37)",
+      "amount": 45331314.0,
+      "direction": "deposit",
+      "balance": 669659324.0
+    },
+    {
+      "date": "2020-09-20",
+      "particulars": "Receipt against invoice (rcpt #20)",
+      "amount": 20404123.0,
+      "direction": "deposit",
+      "balance": 690063447.0
+    },
+    {
+      "date": "2020-09-24",
+      "particulars": "Receipt against invoice (rcpt #65)",
+      "amount": 50275475.0,
+      "direction": "deposit",
+      "balance": 740338922.0
+    },
+    {
+      "date": "2020-09-25",
+      "particulars": "Vendor payment #25",
+      "amount": 1591412.0,
+      "direction": "withdrawal",
+      "balance": 738747510.0
+    },
+    {
+      "date": "2020-09-25",
+      "particulars": "Vendor payment #41",
+      "amount": 40099749.0,
+      "direction": "withdrawal",
+      "balance": 698647761.0
+    },
+    {
+      "date": "2020-09-26",
+      "particulars": "Vendor payment #15",
+      "amount": 23057412.0,
+      "direction": "withdrawal",
+      "balance": 675590349.0
+    },
+    {
+      "date": "2020-09-28",
+      "particulars": "Monthly salaries & site overheads (202009)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 670573018.0
+    },
+    {
+      "date": "2020-10-01",
+      "particulars": "Plant & machinery additions FY2020",
+      "amount": 111500000.0,
+      "direction": "withdrawal",
+      "balance": 559073018.0
+    },
+    {
+      "date": "2020-10-07",
+      "particulars": "Receipt against invoice (rcpt #43)",
+      "amount": 34985220.0,
+      "direction": "deposit",
+      "balance": 594058238.0
+    },
+    {
+      "date": "2020-10-07",
+      "particulars": "TDS deposited (202009)",
+      "amount": 2367724.0,
+      "direction": "withdrawal",
+      "balance": 591690514.0
+    },
+    {
+      "date": "2020-10-08",
+      "particulars": "Receipt against invoice (rcpt #303)",
+      "amount": 71195382.0,
+      "direction": "deposit",
+      "balance": 662885896.0
+    },
+    {
+      "date": "2020-10-10",
+      "particulars": "Vendor payment #80",
+      "amount": 20300888.0,
+      "direction": "withdrawal",
+      "balance": 642585008.0
+    },
+    {
+      "date": "2020-10-19",
+      "particulars": "Vendor payment #88",
+      "amount": 42816362.0,
+      "direction": "withdrawal",
+      "balance": 599768646.0
+    },
+    {
+      "date": "2020-10-21",
+      "particulars": "Vendor payment #72",
+      "amount": 9656752.0,
+      "direction": "withdrawal",
+      "balance": 590111894.0
+    },
+    {
+      "date": "2020-10-28",
+      "particulars": "Vendor payment #17",
+      "amount": 5976714.0,
+      "direction": "withdrawal",
+      "balance": 584135180.0
+    },
+    {
+      "date": "2020-10-28",
+      "particulars": "Vendor payment #90",
+      "amount": 37977044.0,
+      "direction": "withdrawal",
+      "balance": 546158136.0
+    },
+    {
+      "date": "2020-10-28",
+      "particulars": "Monthly salaries & site overheads (202010)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 541140805.0
+    },
+    {
+      "date": "2020-11-02",
+      "particulars": "Vendor payment #46",
+      "amount": 41571654.0,
+      "direction": "withdrawal",
+      "balance": 499569151.0
+    },
+    {
+      "date": "2020-11-04",
+      "particulars": "Vendor payment #32",
+      "amount": 24524718.0,
+      "direction": "withdrawal",
+      "balance": 475044433.0
+    },
+    {
+      "date": "2020-11-06",
+      "particulars": "Vendor payment #52",
+      "amount": 34423827.0,
+      "direction": "withdrawal",
+      "balance": 440620606.0
+    },
+    {
+      "date": "2020-11-07",
+      "particulars": "TDS deposited (202010)",
+      "amount": 2012545.0,
+      "direction": "withdrawal",
+      "balance": 438608061.0
+    },
+    {
+      "date": "2020-11-09",
+      "particulars": "Vendor payment #13",
+      "amount": 3539441.0,
+      "direction": "withdrawal",
+      "balance": 435068620.0
+    },
+    {
+      "date": "2020-11-17",
+      "particulars": "Vendor payment #18",
+      "amount": 19922029.0,
+      "direction": "withdrawal",
+      "balance": 415146591.0
+    },
+    {
+      "date": "2020-11-21",
+      "particulars": "Vendor payment #77",
+      "amount": 32232921.0,
+      "direction": "withdrawal",
+      "balance": 382913670.0
+    },
+    {
+      "date": "2020-11-22",
+      "particulars": "Vendor payment #11",
+      "amount": 25974770.0,
+      "direction": "withdrawal",
+      "balance": 356938900.0
+    },
+    {
+      "date": "2020-11-23",
+      "particulars": "Receipt against invoice (rcpt #28)",
+      "amount": 45445081.0,
+      "direction": "deposit",
+      "balance": 402383981.0
+    },
+    {
+      "date": "2020-11-28",
+      "particulars": "Monthly salaries & site overheads (202011)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 397366650.0
+    },
+    {
+      "date": "2020-12-05",
+      "particulars": "Vendor payment #92",
+      "amount": 38885472.0,
+      "direction": "withdrawal",
+      "balance": 358481178.0
+    },
+    {
+      "date": "2020-12-07",
+      "particulars": "Vendor payment #6",
+      "amount": 2453782.0,
+      "direction": "withdrawal",
+      "balance": 356027396.0
+    },
+    {
+      "date": "2020-12-07",
+      "particulars": "TDS deposited (202011)",
+      "amount": 3141192.0,
+      "direction": "withdrawal",
+      "balance": 352886204.0
+    },
+    {
+      "date": "2020-12-08",
+      "particulars": "Vendor payment #87",
+      "amount": 12277402.0,
+      "direction": "withdrawal",
+      "balance": 340608802.0
+    },
+    {
+      "date": "2020-12-15",
+      "particulars": "Receipt against invoice (rcpt #89)",
+      "amount": 16571810.0,
+      "direction": "deposit",
+      "balance": 357180612.0
+    },
+    {
+      "date": "2020-12-15",
+      "particulars": "Vendor payment #71",
+      "amount": 1684809.0,
+      "direction": "withdrawal",
+      "balance": 355495803.0
+    },
+    {
+      "date": "2020-12-16",
+      "particulars": "Receipt against invoice (rcpt #44)",
+      "amount": 34985220.0,
+      "direction": "deposit",
+      "balance": 390481023.0
+    },
+    {
+      "date": "2020-12-20",
+      "particulars": "Vendor payment #70",
+      "amount": 55877055.0,
+      "direction": "withdrawal",
+      "balance": 334603968.0
+    },
+    {
+      "date": "2020-12-25",
+      "particulars": "Vendor payment #43",
+      "amount": 48762625.0,
+      "direction": "withdrawal",
+      "balance": 285841343.0
+    },
+    {
+      "date": "2020-12-28",
+      "particulars": "Monthly salaries & site overheads (202012)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 280824012.0
+    },
+    {
+      "date": "2020-12-29",
+      "particulars": "Vendor payment #98",
+      "amount": 50585298.0,
+      "direction": "withdrawal",
+      "balance": 230238714.0
+    },
+    {
+      "date": "2021-01-01",
+      "particulars": "Vendor payment #67",
+      "amount": 41367618.0,
+      "direction": "withdrawal",
+      "balance": 188871096.0
+    },
+    {
+      "date": "2021-01-02",
+      "particulars": "Receipt against invoice (rcpt #38)",
+      "amount": 22665657.0,
+      "direction": "deposit",
+      "balance": 211536753.0
+    },
+    {
+      "date": "2021-01-07",
+      "particulars": "TDS deposited (202012)",
+      "amount": 3629763.0,
+      "direction": "withdrawal",
+      "balance": 207906990.0
+    },
+    {
+      "date": "2021-01-08",
+      "particulars": "Vendor payment #68",
+      "amount": 3887633.0,
+      "direction": "withdrawal",
+      "balance": 204019357.0
+    },
+    {
+      "date": "2021-01-10",
+      "particulars": "Vendor payment #69",
+      "amount": 5441364.0,
+      "direction": "withdrawal",
+      "balance": 198577993.0
+    },
+    {
+      "date": "2021-01-11",
+      "particulars": "Receipt against invoice (rcpt #15)",
+      "amount": 32802821.0,
+      "direction": "deposit",
+      "balance": 231380814.0
+    },
+    {
+      "date": "2021-01-11",
+      "particulars": "Receipt against invoice (rcpt #21)",
+      "amount": 40808246.0,
+      "direction": "deposit",
+      "balance": 272189060.0
+    },
+    {
+      "date": "2021-01-15",
+      "particulars": "Vendor payment #7",
+      "amount": 15034230.0,
+      "direction": "withdrawal",
+      "balance": 257154830.0
+    },
+    {
+      "date": "2021-01-21",
+      "particulars": "Receipt against invoice (rcpt #51)",
+      "amount": 40945720.0,
+      "direction": "deposit",
+      "balance": 298100550.0
+    },
+    {
+      "date": "2021-01-22",
+      "particulars": "Vendor payment #94",
+      "amount": 39394738.0,
+      "direction": "withdrawal",
+      "balance": 258705812.0
+    },
+    {
+      "date": "2021-01-24",
+      "particulars": "Receipt against invoice (rcpt #304)",
+      "amount": 71195382.0,
+      "direction": "deposit",
+      "balance": 329901194.0
+    },
+    {
+      "date": "2021-01-26",
+      "particulars": "Receipt against invoice (rcpt #2)",
+      "amount": 15445291.0,
+      "direction": "deposit",
+      "balance": 345346485.0
+    },
+    {
+      "date": "2021-01-28",
+      "particulars": "Monthly salaries & site overheads (202001)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 340329154.0
+    },
+    {
+      "date": "2021-01-30",
+      "particulars": "Receipt against invoice (rcpt #79)",
+      "amount": 20697935.0,
+      "direction": "deposit",
+      "balance": 361027089.0
+    },
+    {
+      "date": "2021-02-07",
+      "particulars": "TDS deposited (202101)",
+      "amount": 1812507.0,
+      "direction": "withdrawal",
+      "balance": 359214582.0
+    },
+    {
+      "date": "2021-02-12",
+      "particulars": "Receipt against invoice (rcpt #291)",
+      "amount": 32150383.0,
+      "direction": "deposit",
+      "balance": 391364965.0
+    },
+    {
+      "date": "2021-02-16",
+      "particulars": "Vendor payment #86",
+      "amount": 37287106.0,
+      "direction": "withdrawal",
+      "balance": 354077859.0
+    },
+    {
+      "date": "2021-02-23",
+      "particulars": "Vendor payment #21",
+      "amount": 53880977.0,
+      "direction": "withdrawal",
+      "balance": 300196882.0
+    },
+    {
+      "date": "2021-02-28",
+      "particulars": "Monthly salaries & site overheads (202002)",
+      "amount": 5017331.0,
+      "direction": "withdrawal",
+      "balance": 295179551.0
+    },
+    {
+      "date": "2021-03-02",
+      "particulars": "Receipt against invoice (rcpt #97)",
+      "amount": 44093023.0,
+      "direction": "deposit",
+      "balance": 339272574.0
+    },
+    {
+      "date": "2021-03-03",
+      "particulars": "Receipt against invoice (rcpt #76)",
+      "amount": 28152333.0,
+      "direction": "deposit",
+      "balance": 367424907.0
+    },
+    {
+      "date": "2021-03-04",
+      "particulars": "Receipt against invoice (rcpt #56)",
+      "amount": 31072578.0,
+      "direction": "deposit",
+      "balance": 398497485.0
+    },
+    {
+      "date": "2021-03-07",
+      "particulars": "TDS deposited (202102)",
+      "amount": 1571863.0,
+      "direction": "withdrawal",
+      "balance": 396925622.0
+    },
+    {
+      "date": "2021-03-11",
+      "particulars": "Receipt against invoice (rcpt #85)",
+      "amount": 11756544.0,
+      "direction": "deposit",
+      "balance": 408682166.0
+    },
+    {
+      "date": "2021-03-11",
+      "particulars": "Receipt against invoice (rcpt #93)",
+      "amount": 29070912.0,
+      "direction": "deposit",
+      "balance": 437753078.0
+    },
+    {
+      "date": "2021-03-13",
+      "particulars": "Receipt against invoice (rcpt #80)",
+      "amount": 20697935.0,
+      "direction": "deposit",
+      "balance": 458451013.0
+    },
+    {
+      "date": "2021-03-14",
+      "particulars": "Receipt against invoice (rcpt #90)",
+      "amount": 16571810.0,
+      "direction": "deposit",
+      "balance": 475022823.0
+    },
+    {
+      "date": "2021-03-17",
+      "particulars": "Vendor payment #84",
+      "amount": 53728189.0,
+      "direction": "withdrawal",
+      "balance": 421294634.0
+    },
+    {
+      "date": "2021-03-20",
+      "particulars": "Receipt against invoice (rcpt #13)",
+      "amount": 49005060.0,
+      "direction": "deposit",
+      "balance": 470299694.0
+    },
+    {
+      "date": "2021-03-28",
+      "particulars": "Monthly salaries & site overheads (202003) Closing balance Computer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.",
+      "amount": 465282353.0,
+      "direction": "withdrawal",
+      "balance": 465282353.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\bank_statement\\DOC-BANK-2020.pdf",
+  "_text": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2020–21\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2020-04-01\nOpening balance b/f\n448,303,968\n2020-04-07\nTDS deposited (202003)\n555,820\n447,748,148\n2020-04-13\nReceipt against invoice (rcpt #32)\n29,525,036\n477,273,184\n2020-04-14\nReceipt against invoice (rcpt #42)\n34,985,220\n512,258,404\n2020-04-21\nVendor payment #34\n10,159,925\n502,098,479\n2020-04-28\nMonthly salaries & site overheads (202004)\n5,017,331\n497,081,148\n2020-05-02\nReceipt against invoice (rcpt #1)\n15,445,291\n512,526,439\n2020-05-07\nTDS deposited (202004)\n175,171\n512,351,268\n2020-05-19\nReceipt against invoice (rcpt #8)\n22,320,149\n534,671,417\n2020-05-21\nReceipt against invoice (rcpt #27)\n45,445,081\n580,116,498\n2020-05-28\nMonthly salaries & site overheads (202005)\n5,017,331\n575,099,167\n2020-06-02\nVendor payment #60\n35,193,932\n539,905,235\n2020-06-24\nReceipt against invoice (rcpt #14)\n16,401,411\n556,306,646\n2020-06-24\nVendor payment #28\n21,253,844\n535,052,802\n2020-06-28\nMonthly salaries & site overheads (202006)\n5,017,331\n530,035,471\n2020-07-02\nReceipt against invoice (rcpt #33)\n14,762,517\n544,797,988\n2020-07-07\nTDS deposited (202006)\n973,236\n543,824,752\n2020-07-14\nReceipt against invoice (rcpt #24)\n7,851,299\n551,676,051\n2020-07-28\nMonthly salaries & site overheads (202007)\n5,017,331\n546,658,720\n2020-07-29\nVendor payment #31\n40,204,552\n506,454,168\n2020-08-05\nReceipt against invoice (rcpt #12)\n49,005,060\n555,459,228\n2020-08-07\nTDS deposited (202007)\n693,181\n554,766,047\n2020-08-08\nVendor payment #54\n26,549,124\n528,216,923\n2020-08-09\nVendor payment #35\n4,548,827\n523,668,096\n2020-08-10\nReceipt against invoice (rcpt #18)\n40,808,246\n564,476,342\n2020-08-14\nReceipt against invoice (rcpt #9)\n22,320,149\n586,796,491\n2020-08-22\nReceipt against invoice (rcpt #19)\n40,808,246\n627,604,737\n2020-08-24\nReceipt against invoice (rcpt #36)\n45,331,314\n672,936,051\nDOC-BANK-2020\nPage 1 of 4\n\n2020-08-28\nReceipt against invoice (rcpt #34)\n29,525,036\n702,461,087\n2020-08-28\nMonthly salaries & site overheads (202008)\n5,017,331\n697,443,756\n2020-09-01\nVendor payment #10\n44,381,708\n653,062,048\n2020-09-07\nTDS deposited (202008)\n536,171\n652,525,877\n2020-09-08\nVendor payment #9\n28,197,867\n624,328,010\n2020-09-14\nReceipt against invoice (rcpt #37)\n45,331,314\n669,659,324\n2020-09-20\nReceipt against invoice (rcpt #20)\n20,404,123\n690,063,447\n2020-09-24\nReceipt against invoice (rcpt #65)\n50,275,475\n740,338,922\n2020-09-25\nVendor payment #25\n1,591,412\n738,747,510\n2020-09-25\nVendor payment #41\n40,099,749\n698,647,761\n2020-09-26\nVendor payment #15\n23,057,412\n675,590,349\n2020-09-28\nMonthly salaries & site overheads (202009)\n5,017,331\n670,573,018\n2020-10-01\nPlant & machinery additions FY2020\n111,500,000\n559,073,018\n2020-10-07\nReceipt against invoice (rcpt #43)\n34,985,220\n594,058,238\n2020-10-07\nTDS deposited (202009)\n2,367,724\n591,690,514\n2020-10-08\nReceipt against invoice (rcpt #303)\n71,195,382\n662,885,896\n2020-10-10\nVendor payment #80\n20,300,888\n642,585,008\n2020-10-19\nVendor payment #88\n42,816,362\n599,768,646\n2020-10-21\nVendor payment #72\n9,656,752\n590,111,894\n2020-10-28\nVendor payment #17\n5,976,714\n584,135,180\n2020-10-28\nVendor payment #90\n37,977,044\n546,158,136\n2020-10-28\nMonthly salaries & site overheads (202010)\n5,017,331\n541,140,805\n2020-11-02\nVendor payment #46\n41,571,654\n499,569,151\n2020-11-04\nVendor payment #32\n24,524,718\n475,044,433\n2020-11-06\nVendor payment #52\n34,423,827\n440,620,606\n2020-11-07\nTDS deposited (202010)\n2,012,545\n438,608,061\n2020-11-09\nVendor payment #13\n3,539,441\n435,068,620\n2020-11-17\nVendor payment #18\n19,922,029\n415,146,591\n2020-11-21\nVendor payment #77\n32,232,921\n382,913,670\n2020-11-22\nVendor payment #11\n25,974,770\n356,938,900\n2020-11-23\nReceipt against invoice (rcpt #28)\n45,445,081\n402,383,981\n2020-11-28\nMonthly salaries & site overheads (202011)\n5,017,331\n397,366,650\n2020-12-05\nVendor payment #92\n38,885,472\n358,481,178\nDOC-BANK-2020\nPage 2 of 4\n\n2020-12-07\nVendor payment #6\n2,453,782\n356,027,396\n2020-12-07\nTDS deposited (202011)\n3,141,192\n352,886,204\n2020-12-08\nVendor payment #87\n12,277,402\n340,608,802\n2020-12-15\nReceipt against invoice (rcpt #89)\n16,571,810\n357,180,612\n2020-12-15\nVendor payment #71\n1,684,809\n355,495,803\n2020-12-16\nReceipt against invoice (rcpt #44)\n34,985,220\n390,481,023\n2020-12-20\nVendor payment #70\n55,877,055\n334,603,968\n2020-12-25\nVendor payment #43\n48,762,625\n285,841,343\n2020-12-28\nMonthly salaries & site overheads (202012)\n5,017,331\n280,824,012\n2020-12-29\nVendor payment #98\n50,585,298\n230,238,714\n2021-01-01\nVendor payment #67\n41,367,618\n188,871,096\n2021-01-02\nReceipt against invoice (rcpt #38)\n22,665,657\n211,536,753\n2021-01-07\nTDS deposited (202012)\n3,629,763\n207,906,990\n2021-01-08\nVendor payment #68\n3,887,633\n204,019,357\n2021-01-10\nVendor payment #69\n5,441,364\n198,577,993\n2021-01-11\nReceipt against invoice (rcpt #15)\n32,802,821\n231,380,814\n2021-01-11\nReceipt against invoice (rcpt #21)\n40,808,246\n272,189,060\n2021-01-15\nVendor payment #7\n15,034,230\n257,154,830\n2021-01-21\nReceipt against invoice (rcpt #51)\n40,945,720\n298,100,550\n2021-01-22\nVendor payment #94\n39,394,738\n258,705,812\n2021-01-24\nReceipt against invoice (rcpt #304)\n71,195,382\n329,901,194\n2021-01-26\nReceipt against invoice (rcpt #2)\n15,445,291\n345,346,485\n2021-01-28\nMonthly salaries & site overheads (202001)\n5,017,331\n340,329,154\n2021-01-30\nReceipt against invoice (rcpt #79)\n20,697,935\n361,027,089\n2021-02-07\nTDS deposited (202101)\n1,812,507\n359,214,582\n2021-02-12\nReceipt against invoice (rcpt #291)\n32,150,383\n391,364,965\n2021-02-16\nVendor payment #86\n37,287,106\n354,077,859\n2021-02-23\nVendor payment #21\n53,880,977\n300,196,882\n2021-02-28\nMonthly salaries & site overheads (202002)\n5,017,331\n295,179,551\n2021-03-02\nReceipt against invoice (rcpt #97)\n44,093,023\n339,272,574\n2021-03-03\nReceipt against invoice (rcpt #76)\n28,152,333\n367,424,907\n2021-03-04\nReceipt against invoice (rcpt #56)\n31,072,578\n398,497,485\n2021-03-07\nTDS deposited (202102)\n1,571,863\n396,925,622\nDOC-BANK-2020\nPage 3 of 4\n\n2021-03-11\nReceipt against invoice (rcpt #85)\n11,756,544\n408,682,166\n2021-03-11\nReceipt against invoice (rcpt #93)\n29,070,912\n437,753,078\n2021-03-13\nReceipt against invoice (rcpt #80)\n20,697,935\n458,451,013\n2021-03-14\nReceipt against invoice (rcpt #90)\n16,571,810\n475,022,823\n2021-03-17\nVendor payment #84\n53,728,189\n421,294,634\n2021-03-20\nReceipt against invoice (rcpt #13)\n49,005,060\n470,299,694\n2021-03-28\nMonthly salaries & site overheads (202003)\n5,017,341\n465,282,353\nClosing balance\n465,282,353\nComputer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.\nDOC-BANK-2020\nPage 4 of 4\n"
 }

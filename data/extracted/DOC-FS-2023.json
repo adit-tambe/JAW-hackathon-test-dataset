@@ -1,6 +1,143 @@
 {
   "_doc_id": "DOC-FS-2023",
   "_doc_type": "financial_statement",
-  "content_summary": "NATIONAL INFRASTRUCTURE CORP. LTD.\nAudited Financial Results · CIN U45201WB2005PLC904417 · PAN NAICC4417O\nSTATEMENT OF PROFIT AND LOSS (EXTRACT)\nFor the financial year ended 31st March 2024\nStatement No: FS-2023-005\nCurrency: INR (All amounts in Lakhs unless stated)\nA. REVENUE FROM OPERATIONS\nPARTICULARS\nCURRENT YEAR\n(FY2023-24)\nPREVIOUS YEAR\n(FY2022-23)\nContract Revenue (EPC)\n24,103\n20,488\nOther Operating Revenue\n723\n603\nTotal Revenue from Operations\n(A)\n24,826\n21,090\nB. EXPENSES\nPARTICULARS\nCU",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\financial_statement\\DOC-FS-2023.pdf"
+  "fiscal_year": 2023,
+  "statement_no": "FS-2023-005",
+  "source_unit": "lakh",
+  "line_items": [
+    {
+      "section": "revenue",
+      "particulars": "Contract Revenue (EPC)",
+      "current_year": 2410300000,
+      "previous_year": 2048800000
+    },
+    {
+      "section": "revenue",
+      "particulars": "Other Operating Revenue",
+      "current_year": 72300000,
+      "previous_year": 60300000
+    },
+    {
+      "section": "revenue",
+      "particulars": "(A)",
+      "current_year": 2482600000,
+      "previous_year": 2109000000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Cost of Materials Consumed",
+      "current_year": 1012300000,
+      "previous_year": 964100000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Sub-contracting & Labour",
+      "current_year": 433900000,
+      "previous_year": 409800000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Employee Benefit Expenses",
+      "current_year": 289200000,
+      "previous_year": 265100000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Depreciation & Amortisation",
+      "current_year": 72300000,
+      "previous_year": 67500000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Other Expenses",
+      "current_year": 192800000,
+      "previous_year": 180800000
+    },
+    {
+      "section": "expenses",
+      "particulars": "Total Expenses (B)",
+      "current_year": 2000600000,
+      "previous_year": 1887300000
+    },
+    {
+      "section": "profit",
+      "particulars": "Profit Before Tax",
+      "current_year": 97900000,
+      "previous_year": null
+    },
+    {
+      "section": "profit",
+      "particulars": "deferred)",
+      "current_year": 22600000,
+      "previous_year": null
+    },
+    {
+      "section": "profit",
+      "particulars": "Profit After Tax",
+      "current_year": 75300000,
+      "previous_year": null
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Shareholders' Funds — Paid-up Capital",
+      "current_year": 361500000,
+      "previous_year": 337400000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Reserves & Surplus",
+      "current_year": 188300000,
+      "previous_year": 150700000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Liabilities — Long-term Borrowings",
+      "current_year": 192800000,
+      "previous_year": 168700000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Liabilities — Trade Payables",
+      "current_year": 289200000,
+      "previous_year": 241000000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Liabilities — Other Current Liabilities",
+      "current_year": 144600000,
+      "previous_year": 120500000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Assets — Property, Plant & Equipment",
+      "current_year": 241000000,
+      "previous_year": 216900000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Non-Current Assets — Intangible Assets",
+      "current_year": 24100000,
+      "previous_year": 24100000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Inventories",
+      "current_year": 120500000,
+      "previous_year": 96400000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Trade Receivables",
+      "current_year": 337400000,
+      "previous_year": 289200000
+    },
+    {
+      "section": "balance_sheet",
+      "particulars": "Current Assets — Cash & Bank Balances",
+      "current_year": 96400000,
+      "previous_year": 84400000
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\financial_statement\\DOC-FS-2023.pdf",
+  "_text": "NATIONAL INFRASTRUCTURE CORP. LTD.\nAudited Financial Results · CIN U45201WB2005PLC904417 · PAN NAICC4417O\nSTATEMENT OF PROFIT AND LOSS (EXTRACT)\nFor the financial year ended 31st March 2024\nStatement No: FS-2023-005\nCurrency: INR (All amounts in Lakhs unless stated)\nA. REVENUE FROM OPERATIONS\nPARTICULARS\nCURRENT YEAR\n(FY2023-24)\nPREVIOUS YEAR\n(FY2022-23)\nContract Revenue (EPC)\n24,103\n20,488\nOther Operating Revenue\n723\n603\nTotal Revenue from Operations\n(A)\n24,826\n21,090\nB. EXPENSES\nPARTICULARS\nCURRENT YEAR\nPREVIOUS YEAR\nCost of Materials Consumed\n10,123\n9,641\nSub-contracting & Labour\n4,339\n4,098\nEmployee Benefit Expenses\n2,892\n2,651\nDepreciation & Amortisation\n723\n675\nOther Expenses\n1,928\n1,808\nTotal Expenses (B)\n20,006\n18,873\nC. PROFIT BEFORE TAX (A - B)\nProfit Before Tax\n979\nTax Expense (current +\ndeferred)\n226\nProfit After Tax\n753\nDOC-FS-2023\nPage 1 of 3\n\nD. BALANCE SHEET EXTRACT (AS AT 31ST MARCH 2024)\nPARTICULARS\nCURRENT YEAR\nPREVIOUS YEAR\nEQUITY AND LIABILITIES\nShareholders' Funds — Paid-up Capital\n3,615\n3,374\nReserves & Surplus\n1,883\n1,507\nNon-Current Liabilities — Long-term Borrowings\n1,928\n1,687\nCurrent Liabilities — Trade Payables\n2,892\n2,410\nCurrent Liabilities — Other Current Liabilities\n1,446\n1,205\nASSETS\nNon-Current Assets — Property, Plant & Equipment\n2,410\n2,169\nNon-Current Assets — Intangible Assets\n241\n241\nCurrent Assets — Inventories\n1,205\n964\nCurrent Assets — Trade Receivables\n3,374\n2,892\nCurrent Assets — Cash & Bank Balances\n964\n844\nDOC-FS-2023\nPage 2 of 3\n\nE. NOTES TO ACCOUNTS\nNote 1 — Basis of Preparation: These financial statements have been prepared in\naccordance with Indian Accounting Standards (Ind AS) as notified under the\nCompanies Act, 2013. The financial statements have been prepared on a historical\ncost basis except for certain financial instruments measured at fair value.\nNote 2 — Revenue Recognition: Revenue from construction contracts is recognised\nover time using the input method (costs incurred to date relative to total\nestimated costs) in accordance with Ind AS 115 — Revenue from Contracts with\nCustomers.\nNote 3 — Going Concern: Based on the Company's financial position, including the\norder book of approximately 603 Cr and positive net worth, the management is\nsatisfied that the Company is a going concern and there is no material\nuncertainty.\nNote 4 — Bank Solvency: \nThe Company maintains satisfactory banking\nrelationships. Bank solvency certificate status: Sufficient.\nF. AUDITOR'S REPORT (EXTRACT)\nWe have audited the accompanying financial statements of National Infrastructure\nCorp. Ltd. which comprise the Balance Sheet as at 31st March 2024, the Statement\nof Profit and Loss for the year then ended, and notes to the financial\nstatements.\nOpinion: In our opinion and to the best of our information and according to the\nexplanations given to us, the aforesaid financial statements give a true and\nfair view in conformity with Ind AS of the state of affairs of the Company as at\n31st March 2024, and of its profit and cash flows for the year then ended.\nFor CA Debasish Desai\nChartered Accountants\nFirms Registration No: 123456W\nC O N F I D E N T I A L — F O R A U T H O R I S E D U S E O N L Y\nCA Debasish Desai\nPartner — Membership No. 12345\nCA Debasish Desai, Chartered Accountants\nDate: 31/03/2026\nPlace: New Delhi \nFor and on behalf of the Board\nNational Infrastructure Corp. Ltd.\nDirector \nDOC-FS-2023\nPage 3 of 3\n"
 }

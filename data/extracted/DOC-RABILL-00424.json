@@ -1,6 +1,70 @@
 {
   "_doc_id": "DOC-RABILL-00424",
   "_doc_type": "ra_bill",
-  "content_summary": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 2\nContract #76 · Irrigation & Waterways Dept, Govt of Uttar Pradesh\nBill No: AR-2022-00424\nDate: January 29, 2022\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n1\nEarthwork in excavation & embankment\ncum\n292\n22822.942\n6,664,299\n2\nGranular sub-base (GSB)\ncum\n1,256\n6790.726\n8,529,152\n4\nDense bituminous macadam (DBM)\nMT\n6,537\n613.715\n4,011,855\n6\nRCC M30 for str",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\ra_bill\\DOC-RABILL-00424.pdf"
+  "contract_no": "76",
+  "client_name": "Irrigation & Waterways Dept, Govt of Uttar Pradesh",
+  "bill_no": "AR-2022-00424",
+  "bill_date": "2022-01-29",
+  "ra_number": 2,
+  "awarded_value": null,
+  "total_billed": null,
+  "period_start": null,
+  "period_end": null,
+  "value_of_work": 39273079.0,
+  "gst": 7069154.0,
+  "retention": -0.0,
+  "net_claimed": 46342233.0,
+  "cumulative": 78546158.0,
+  "items": [
+    {
+      "item_no": 1,
+      "description": "Earthwork in excavation & embankment",
+      "unit": "cum",
+      "rate": 292.0,
+      "quantity": 22822.942,
+      "amount": 6664299.0
+    },
+    {
+      "item_no": 2,
+      "description": "Granular sub-base (GSB)",
+      "unit": "cum",
+      "rate": 1256.0,
+      "quantity": 6790.726,
+      "amount": 8529152.0
+    },
+    {
+      "item_no": 4,
+      "description": "Dense bituminous macadam (DBM)",
+      "unit": "MT",
+      "rate": 6537.0,
+      "quantity": 613.715,
+      "amount": 4011855.0
+    },
+    {
+      "item_no": 6,
+      "description": "RCC M30 for structures",
+      "unit": "cum",
+      "rate": 7927.0,
+      "quantity": 1149.81,
+      "amount": 9114543.0
+    },
+    {
+      "item_no": 8,
+      "description": "RCC kerb & channel",
+      "unit": "rmt",
+      "rate": 393.0,
+      "quantity": 13823.969,
+      "amount": 5432820.0
+    },
+    {
+      "item_no": 9,
+      "description": "Road markings & signage",
+      "unit": "LS",
+      "rate": 43071660.0,
+      "quantity": 0.128,
+      "amount": 5520410.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\ra_bill\\DOC-RABILL-00424.pdf",
+  "_text": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 2\nContract #76 · Irrigation & Waterways Dept, Govt of Uttar Pradesh\nBill No: AR-2022-00424\nDate: January 29, 2022\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n1\nEarthwork in excavation & embankment\ncum\n292\n22822.942\n6,664,299\n2\nGranular sub-base (GSB)\ncum\n1,256\n6790.726\n8,529,152\n4\nDense bituminous macadam (DBM)\nMT\n6,537\n613.715\n4,011,855\n6\nRCC M30 for structures\ncum\n7,927\n1149.81\n9,114,543\n8\nRCC kerb & channel\nrmt\n393\n13823.969\n5,432,820\n9\nRoad markings & signage\nLS\n43,071,660\n0.128\n5,520,410\nValue of work done — this bill\n39,273,079\nAdd: GST @18%\n7,069,154\nLess: Retention @0.0%\n(0)\nNet claimed (before client TDS)\n46,342,233\ncumulAtive Position\nValue of work done up to previous\nbill\n39,273,079\nThis bill\n39,273,079\nCumulative up to & incl. RA 2\n78,546,158\nPrepared (Billing Engineer)\nChecked (Engineer-in-Charge)\nDOC-RABILL-00424\nPage 1 of 1\n"
 }

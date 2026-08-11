@@ -1,11 +1,16 @@
 {
   "_doc_id": "DOC-PCERT-023",
   "_doc_type": "personnel_certificate",
-  "person_name": "Unknown",
+  "person_name": "Meera Chatterjee",
+  "employee_id": null,
   "cert_type": "PMP",
-  "cert_id": null,
-  "issue_date": null,
-  "expiry_date": "15 Sep 2029 Registrar, PMI DOC-PCERT-023 Page 1 of 1",
+  "cert_id": "PMI-200023",
+  "issue_date": "2021-03-10",
+  "expiry_date": "2029-09-15",
+  "employment_status": null,
+  "years_of_experience": null,
+  "qualification": null,
   "issuing_body": "PMI",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\personnel_certificate\\DOC-PCERT-023.pdf"
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\personnel_certificate\\DOC-PCERT-023.pdf",
+  "_text": "PMI\nProfessional Certification Body\nPMP\nThis credential is conferred upon\nMeera Chatterjee\nof National Infrastructure Corp. Ltd.\nhaving satisfied the examination and experience requirements prescribed for the credential.\nCertificate No.\nPMI-200023\nIssued\n10 Mar 2021\nValid Through\n15 Sep 2029\nRegistrar, PMI\nDOC-PCERT-023\nPage 1 of 1\n"
 }

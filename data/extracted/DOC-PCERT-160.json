@@ -1,11 +1,16 @@
 {
   "_doc_id": "DOC-PCERT-160",
   "_doc_type": "personnel_certificate",
-  "person_name": "Unknown",
-  "cert_type": "Unknown",
-  "cert_id": null,
-  "issue_date": null,
-  "expiry_date": "01/01/2028 Registrar, ASQ DOC-PCERT-160 Page 1 of 1",
+  "person_name": "Asha Nair",
+  "employee_id": null,
+  "cert_type": "SIX SIGMA BLACK BELT",
+  "cert_id": "6S-500160",
+  "issue_date": "2023-01-01",
+  "expiry_date": "2028-01-01",
+  "employment_status": null,
+  "years_of_experience": null,
+  "qualification": null,
   "issuing_body": "ASQ",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\personnel_certificate\\DOC-PCERT-160.pdf"
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\personnel_certificate\\DOC-PCERT-160.pdf",
+  "_text": "ASQ\nProfessional Certification Body\nSIX SIGMA BLACK BELT\nThis credential is conferred upon\nAsha Nair\nof National Infrastructure Corp. Ltd.\nhaving satisfied the examination and experience requirements prescribed for the credential.\nCertificate No.\n6S-500160\nIssued\n01/01/2023\nValid Through\n01/01/2028\nRegistrar, ASQ\nDOC-PCERT-160\nPage 1 of 1\n"
 }

@@ -1,6 +1,12 @@
 {
   "_doc_id": "DOC-CERT-004",
   "_doc_type": "iso_certificate",
-  "content_summary": "CPWD\nAccredited Certification Body · IAF Member\nCERTIFICATE OF REGISTRATION\nCertificate No: ORG-1004\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the\nrequirements of\nCPWD Class I Registration\nSCOPE OF REGISTRATION\nEngineering,  Procurement  &  Construction  (EPC)  of  infrastructure  projects\nincluding  water  supply,  sewerage  &  drainage,  roads  & ",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\iso_certificate\\DOC-CERT-004.pdf"
+  "cert_number": "ORG-1004",
+  "cert_type": null,
+  "certification_body": "CPWD",
+  "valid_from": "2022-01-24",
+  "valid_to": "2028-12-16",
+  "scope": null,
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\iso_certificate\\DOC-CERT-004.pdf",
+  "_text": "CPWD\nAccredited Certification Body · IAF Member\nCERTIFICATE OF REGISTRATION\nCertificate No: ORG-1004\nPage 1 of 2\nThis is to certify that the management system of\nNational Infrastructure Corp. Ltd.\nSalt Lake, Kolkata, India\nhas been assessed by this certification body and found to conform to the\nrequirements of\nCPWD Class I Registration\nSCOPE OF REGISTRATION\nEngineering, Procurement & Construction (EPC) of infrastructure projects\nincluding water supply, sewerage & drainage, roads & highways, bridges,\nbuildings, industrial structures, and related civil engineering works.\nInitial Certification Date\n2022-01-24\nValid Until\n2028-12-16\nCertification Body\nCPWD\nIAF Accreditation\nYes — IAF MLA Signatory\nDOC-CERT-004\nPage 1 of 2\n\nSCHEDULE OF AUDITS\nAUDIT TYPE\nDATE\nLEAD AUDITOR\nFINDINGS\nInitial Certification\n2022-01-24\nDr. R. Mehta\n0 major, 2 minor NCs — closed\nSurveillance Audit 1\n2024-03-15\nDr. R. Mehta\n0 major, 1 minor NC — closed\nSurveillance Audit 2\n2025-02-20\nMr. S. Kapoor\n0 major, 0 minor NCs\nRe-certification\n2028-01-10\nTBD\nScheduled\nCONDITIONS\nThis certificate remains the property of CPWD and must be returned on\ndemand.\nThe certificate is valid only when the annual surveillance audit fees\nare paid and audits are conducted.\nAny change in the scope of registration must be communicated to the\ncertification body.\nUse of the certificate in a misleading manner shall result in immediate\nsuspension.\nThis certificate was issued in accordance with the procedures of CPWD and is subject to the terms\nand conditions of the certification agreement dated 2022-01-24.\nDr. R. Mehta\nPrincipal Auditor\nCPWD \n1. \n2. \n3. \n4. \nDOC-CERT-004\nPage 2 of 2\n"
 }

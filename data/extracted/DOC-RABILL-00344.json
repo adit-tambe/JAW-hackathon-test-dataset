@@ -1,6 +1,70 @@
 {
   "_doc_id": "DOC-RABILL-00344",
   "_doc_type": "ra_bill",
-  "content_summary": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 2\nContract #70 · Suvarna Projects Limited\nBill No: AR-2021-00344\nDate: March 10, 2021\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n3\nWet mix macadam (WMM)\ncum\n1,417\n6108.159\n8,655,261\n5\nBituminous concrete (BC)\nMT\n6,909\n978.09\n6,757,623\n6\nRCC M30 for structures\ncum\n8,306\n1223.235\n10,160,189\n7\nReinforcement steel Fe500\nMT\n76,838\n119.597\n9,189,582\n8\nRCC kerb",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\ra_bill\\DOC-RABILL-00344.pdf"
+  "contract_no": "70",
+  "client_name": "Suvarna Projects Limited",
+  "bill_no": "AR-2021-00344",
+  "bill_date": "2021-03-10",
+  "ra_number": 2,
+  "awarded_value": null,
+  "total_billed": null,
+  "period_start": null,
+  "period_end": null,
+  "value_of_work": 49283029.0,
+  "gst": 8870945.0,
+  "retention": -2464151.0,
+  "net_claimed": 55689823.0,
+  "cumulative": 98566058.0,
+  "items": [
+    {
+      "item_no": 3,
+      "description": "Wet mix macadam (WMM)",
+      "unit": "cum",
+      "rate": 1417.0,
+      "quantity": 6108.159,
+      "amount": 8655261.0
+    },
+    {
+      "item_no": 5,
+      "description": "Bituminous concrete (BC)",
+      "unit": "MT",
+      "rate": 6909.0,
+      "quantity": 978.09,
+      "amount": 6757623.0
+    },
+    {
+      "item_no": 6,
+      "description": "RCC M30 for structures",
+      "unit": "cum",
+      "rate": 8306.0,
+      "quantity": 1223.235,
+      "amount": 10160189.0
+    },
+    {
+      "item_no": 7,
+      "description": "Reinforcement steel Fe500",
+      "unit": "MT",
+      "rate": 76838.0,
+      "quantity": 119.597,
+      "amount": 9189582.0
+    },
+    {
+      "item_no": 8,
+      "description": "RCC kerb & channel",
+      "unit": "rmt",
+      "rate": 526.0,
+      "quantity": 17780.863,
+      "amount": 9352734.0
+    },
+    {
+      "item_no": 9,
+      "description": "Road markings & signage",
+      "unit": "LS",
+      "rate": 68855899.0,
+      "quantity": 0.075,
+      "amount": 5167640.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\ra_bill\\DOC-RABILL-00344.pdf",
+  "_text": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 2\nContract #70 · Suvarna Projects Limited\nBill No: AR-2021-00344\nDate: March 10, 2021\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n3\nWet mix macadam (WMM)\ncum\n1,417\n6108.159\n8,655,261\n5\nBituminous concrete (BC)\nMT\n6,909\n978.09\n6,757,623\n6\nRCC M30 for structures\ncum\n8,306\n1223.235\n10,160,189\n7\nReinforcement steel Fe500\nMT\n76,838\n119.597\n9,189,582\n8\nRCC kerb & channel\nrmt\n526\n17780.863\n9,352,734\n9\nRoad markings & signage\nLS\n68,855,899\n0.075\n5,167,640\nValue of work done — this bill\n49,283,029\nAdd: GST @18%\n8,870,945\nLess: Retention @5.0%\n(2,464,151)\nNet claimed (before client TDS)\n55,689,823\ncumulAtive Position\nValue of work done up to previous\nbill\n49,283,029\nThis bill\n49,283,029\nCumulative up to & incl. RA 2\n98,566,058\nPrepared (Billing Engineer)\nChecked (Engineer-in-Charge)\nDOC-RABILL-00344\nPage 1 of 1\n"
 }

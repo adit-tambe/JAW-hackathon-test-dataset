@@ -65,32 +65,62 @@ def run_pipeline(skip_extract=False):
     validate_database(conn)
     conn.close()
     
-    # ── Stage 3: Answer Questions ───────────────────────────────────────
-    banner("3/4 — Answering Sample Questions")
     from src.config import SAMPLE_QUESTIONS_PATH, PROJECT_ROOT
+
+    # ── Stage 3: Audit the database against an independent source ───────
+    # This runs before scoring on purpose: the sample questions exercise only
+    # a third of the clients, so they cannot catch a field that is wrong
+    # across the corpus. The credentials pack can.
+    banner("3/5 — Auditing the database (independent reconciliation)")
+    import subprocess
+    audit_path = PROJECT_ROOT / "audit.py"
+    if audit_path.exists():
+        result = subprocess.run([sys.executable, "-X", "utf8", str(audit_path)],
+                                capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+        print(result.stdout)
+        if result.returncode != 0:
+            print("  WARNING: audit reported problems — see above")
+    else:
+        print("  audit.py not found — skipping")
+
+    # ── Stage 4: Answer Questions ───────────────────────────────────────
+    banner("4/5 — Answering Sample Questions")
     from src.answer_engine import answer_all_questions
-    
-    output_path = str(PROJECT_ROOT / "submission.jsonl")
+
+    # Written to sample-specific names on purpose. submission.csv is the real
+    # deliverable, built from the validation questions, and must not be
+    # overwritten by a sample run.
+    output_path = str(PROJECT_ROOT / "sample_answers.jsonl")
     answer_all_questions(str(SAMPLE_QUESTIONS_PATH), output_path)
-    
-    # ── Stage 4: Score ──────────────────────────────────────────────────
-    banner("4/4 — Running Evaluation")
-    try:
-        eval_path = PROJECT_ROOT / "evaluate.py"
-        if eval_path.exists():
-            import subprocess
-            result = subprocess.run(
-                [sys.executable, str(eval_path),
-                 "--submission", output_path, "--per-question"],
-                capture_output=True, text=True, cwd=str(PROJECT_ROOT))
-            print(result.stdout)
-            if result.stderr:
-                print(result.stderr)
-        else:
-            print("  evaluate.py not found — skipping scoring")
-    except Exception as e:
-        print(f"  Evaluation error: {e}")
-    
+    answer_all_questions(str(SAMPLE_QUESTIONS_PATH),
+                         str(PROJECT_ROOT / "sample_answers.csv"))
+
+    # ── Stage 4b: the real deliverable, when the question set is present ─
+    validation = PROJECT_ROOT / "validation_questions.json"
+    if validation.exists():
+        print()
+        answer_all_questions(str(validation), str(PROJECT_ROOT / "submission.csv"))
+    else:
+        print("\n  validation_questions.json not present — submission.csv left "
+              "untouched")
+
+    # ── Stage 5: Score, under both metrics ──────────────────────────────
+    banner("5/5 — Running Evaluation")
+    for script, label in (("evaluate.py", "bundled scorer (banded)"),
+                          ("score_official.py", "official formula (continuous)")):
+        path = PROJECT_ROOT / script
+        if not path.exists():
+            print(f"  {script} not found — skipping")
+            continue
+        print(f"--- {label} ---")
+        result = subprocess.run(
+            [sys.executable, "-X", "utf8", str(path),
+             "--submission", output_path, "--per-question"],
+            capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr)
+
     # ── Done ────────────────────────────────────────────────────────────
     elapsed = time.time() - start
     print()

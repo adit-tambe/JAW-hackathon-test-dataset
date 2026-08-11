@@ -1,6 +1,70 @@
 {
   "_doc_id": "DOC-RABILL-00435",
   "_doc_type": "ra_bill",
-  "content_summary": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 3\nContract #77 · Mega Infrastructure Authority\nBill No: AR-2022-00435\nDate: October 18, 2022\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n1\nEarthwork in excavation & embankment\ncum\n314\n14495.678\n4,551,643\n3\nWet mix macadam (WMM)\ncum\n1,843\n4155.804\n7,659,146\n4\nDense bituminous macadam (DBM)\nMT\n5,586\n2138.983\n11,948,360\n5\nBituminous concrete (BC)\nMT\n6,529\n19",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\ra_bill\\DOC-RABILL-00435.pdf"
+  "contract_no": "77",
+  "client_name": "Mega Infrastructure Authority",
+  "bill_no": "AR-2022-00435",
+  "bill_date": "2022-10-18",
+  "ra_number": 3,
+  "awarded_value": null,
+  "total_billed": null,
+  "period_start": null,
+  "period_end": null,
+  "value_of_work": 49807555.0,
+  "gst": 8965359.0,
+  "retention": -2490377.0,
+  "net_claimed": 56282537.0,
+  "cumulative": 149422665.0,
+  "items": [
+    {
+      "item_no": 1,
+      "description": "Earthwork in excavation & embankment",
+      "unit": "cum",
+      "rate": 314.0,
+      "quantity": 14495.678,
+      "amount": 4551643.0
+    },
+    {
+      "item_no": 3,
+      "description": "Wet mix macadam (WMM)",
+      "unit": "cum",
+      "rate": 1843.0,
+      "quantity": 4155.804,
+      "amount": 7659146.0
+    },
+    {
+      "item_no": 4,
+      "description": "Dense bituminous macadam (DBM)",
+      "unit": "MT",
+      "rate": 5586.0,
+      "quantity": 2138.983,
+      "amount": 11948360.0
+    },
+    {
+      "item_no": 5,
+      "description": "Bituminous concrete (BC)",
+      "unit": "MT",
+      "rate": 6529.0,
+      "quantity": 1979.083,
+      "amount": 12921432.0
+    },
+    {
+      "item_no": 7,
+      "description": "Reinforcement steel Fe500",
+      "unit": "MT",
+      "rate": 67863.0,
+      "quantity": 117.016,
+      "amount": 7941063.0
+    },
+    {
+      "item_no": 8,
+      "description": "RCC kerb & channel",
+      "unit": "rmt",
+      "rate": 501.0,
+      "quantity": 9552.717,
+      "amount": 4785911.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\ra_bill\\DOC-RABILL-00435.pdf",
+  "_text": "National Infrastructure Corp. Ltd.\nGSTIN 19NAICC4417O1Z1 · Contractor's Bill\nRunning Account Bill — RA 3\nContract #77 · Mega Infrastructure Authority\nBill No: AR-2022-00435\nDate: October 18, 2022\nABstRAct of WoRk Done (this Bill)\nItem\nDescription\nUnit\nRate\nQty (this bill)\nAmount\n1\nEarthwork in excavation & embankment\ncum\n314\n14495.678\n4,551,643\n3\nWet mix macadam (WMM)\ncum\n1,843\n4155.804\n7,659,146\n4\nDense bituminous macadam (DBM)\nMT\n5,586\n2138.983\n11,948,360\n5\nBituminous concrete (BC)\nMT\n6,529\n1979.083\n12,921,432\n7\nReinforcement steel Fe500\nMT\n67,863\n117.016\n7,941,063\n8\nRCC kerb & channel\nrmt\n501\n9552.717\n4,785,911\nValue of work done — this bill\n49,807,555\nAdd: GST @18%\n8,965,359\nLess: Retention @5.0%\n(2,490,377)\nNet claimed (before client TDS)\n56,282,537\ncumulAtive Position\nValue of work done up to previous\nbill\n99,615,110\nThis bill\n49,807,555\nCumulative up to & incl. RA 3\n149,422,665\nPrepared (Billing Engineer)\nChecked (Engineer-in-Charge)\nDOC-RABILL-00435\nPage 1 of 1\n"
 }

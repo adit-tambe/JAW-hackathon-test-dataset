@@ -9,6 +9,7 @@ Usage:
     python src/build_db.py --validate   # Run validation queries after build
 """
 import argparse
+import collections
 import json
 import re
 import sqlite3
@@ -22,6 +23,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import EXTRACTED_DIR, DB_PATH
 from src.money import parse_indian_money
+from src.portfolio_index import parse_portfolio
 
 
 # ── Schema ──────────────────────────────────────────────────────────────────
@@ -53,7 +55,10 @@ CREATE TABLE IF NOT EXISTS works (
     has_performance_bond INTEGER DEFAULT 0,
     doc_cc_id            TEXT,
     doc_ccc_id           TEXT,
-    doc_ref_id           TEXT
+    doc_ref_id           TEXT,
+    pkg_no               INTEGER,
+    certificate_ref      TEXT,
+    client_office        INTEGER
 );
 
 -- Engineer <-> Work many-to-many
@@ -65,6 +70,18 @@ CREATE TABLE IF NOT EXISTS engineer_works (
 );
 
 -- Engineer certificates
+CREATE TABLE IF NOT EXISTS engineer_profiles (
+    engineer_id          INTEGER PRIMARY KEY REFERENCES engineers(engineer_id),
+    employee_id          TEXT,
+    designation          TEXT,
+    business_unit        TEXT,
+    years_of_experience  INTEGER,
+    qualification        TEXT,
+    date_of_joining      TEXT,
+    wage_group           TEXT,
+    doc_id               TEXT
+);
+
 CREATE TABLE IF NOT EXISTS engineer_certs (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     engineer_id     INTEGER REFERENCES engineers(engineer_id),
@@ -170,6 +187,106 @@ CREATE TABLE IF NOT EXISTS receivables (
     received        REAL,
     outstanding     REAL,
     doc_id          TEXT
+);
+
+-- Statement line items, normalised to rupees (statements are in Lakhs)
+CREATE TABLE IF NOT EXISTS statement_items (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    fiscal_year     INTEGER,
+    section         TEXT,
+    particulars     TEXT,
+    current_year    REAL,
+    previous_year   REAL,
+    doc_id          TEXT
+);
+
+-- Bank transactions
+CREATE TABLE IF NOT EXISTS bank_txns (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    fiscal_year     INTEGER,
+    date            TEXT,
+    particulars     TEXT,
+    amount          REAL,
+    direction       TEXT,
+    balance         REAL,
+    doc_id          TEXT
+);
+
+-- Running-account bills (interim and final)
+CREATE TABLE IF NOT EXISTS bills (
+    bill_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    doc_type        TEXT,
+    contract_no     TEXT,
+    client_name     TEXT,
+    client_id       INTEGER REFERENCES clients(client_id),
+    bill_no         TEXT,
+    bill_date       TEXT,
+    ra_number       INTEGER,
+    awarded_value   REAL,
+    total_billed    REAL,
+    period_start    TEXT,
+    period_end      TEXT,
+    value_of_work   REAL,
+    gst             REAL,
+    retention       REAL,
+    net_claimed     REAL,
+    cumulative      REAL,
+    doc_id          TEXT
+);
+
+-- BOQ lines carried by the bills (workbook BOQ lives in boq_items)
+CREATE TABLE IF NOT EXISTS bill_items (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    bill_id         INTEGER REFERENCES bills(bill_id),
+    item_no         INTEGER,
+    description     TEXT,
+    unit            TEXT,
+    rate            REAL,
+    quantity        REAL,
+    amount          REAL,
+    doc_id          TEXT
+);
+
+-- Tenders submitted
+CREATE TABLE IF NOT EXISTS tenders (
+    tender_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    tender_ref      TEXT,
+    client_name     TEXT,
+    client_id       INTEGER REFERENCES clients(client_id),
+    work_category   TEXT,
+    bid_value       REAL,
+    earnest_money   REAL,
+    submitted_date  TEXT,
+    relevant_works_cited INTEGER,
+    doc_id          TEXT
+);
+
+-- Bid compliance checklists
+CREATE TABLE IF NOT EXISTS compliance_items (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    tender_ref      TEXT,
+    work_category   TEXT,
+    item_no         INTEGER,
+    requirement     TEXT,
+    status          TEXT,
+    doc_id          TEXT
+);
+
+-- Annual report headline figures, one row per metric
+CREATE TABLE IF NOT EXISTS annual_figures (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    fiscal_year     INTEGER,
+    metric          TEXT,
+    segment         TEXT,
+    value           REAL,
+    doc_id          TEXT
+);
+
+-- Full document text, so a figure with no typed field is still reachable
+CREATE TABLE IF NOT EXISTS doc_text (
+    doc_id          TEXT PRIMARY KEY,
+    doc_type        TEXT,
+    text            TEXT
 );
 
 -- Raw document metadata
@@ -491,9 +608,21 @@ def load_cvs(conn):
         
         doc_id = data.get("_doc_id", json_file.stem)
         person_name = data.get("person_name", "Unknown")
-        
+
         engineer_id = get_or_create_engineer(conn, person_name)
-        
+
+        # The CV is the only source for the personnel profile.
+        conn.execute("""
+            INSERT OR REPLACE INTO engineer_profiles
+                (engineer_id, employee_id, designation, business_unit,
+                 years_of_experience, qualification, date_of_joining,
+                 wage_group, doc_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (engineer_id, data.get("employee_id"),
+              data.get("current_designation"), data.get("business_unit"),
+              data.get("years_of_experience"), data.get("qualification"),
+              data.get("date_of_joining"), data.get("wage_group"), doc_id))
+
         projects_led = data.get("projects_led", [])
         if isinstance(projects_led, list):
             for proj in projects_led:
@@ -764,6 +893,296 @@ def load_workbook_data(conn):
     return count
 
 
+# ── Financial and commercial record loaders ─────────────────────────────────
+
+def _each(pattern):
+    """Yield (doc_id, data) for every extracted JSON matching a glob."""
+    for json_file in sorted(EXTRACTED_DIR.glob(pattern)):
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if "_error" in data:
+            continue
+        yield data.get("_doc_id", json_file.stem), data
+
+
+def load_statement_items(conn):
+    """Load financial-statement line items (already normalised to rupees)."""
+    docs = rows = 0
+    for doc_id, data in _each("DOC-FS-*.json"):
+        for item in data.get("line_items", []):
+            conn.execute("""
+                INSERT INTO statement_items
+                    (fiscal_year, section, particulars, current_year,
+                     previous_year, doc_id)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (data.get("fiscal_year"), item.get("section"),
+                  item.get("particulars"), item.get("current_year"),
+                  item.get("previous_year"), doc_id))
+            rows += 1
+        docs += 1
+    print(f"  Loaded {docs} financial statements ({rows} line items)")
+    return rows
+
+
+def load_bank_txns(conn):
+    docs = rows = 0
+    for doc_id, data in _each("DOC-BANK-*.json"):
+        for t in data.get("transactions", []):
+            conn.execute("""
+                INSERT INTO bank_txns
+                    (fiscal_year, date, particulars, amount, direction,
+                     balance, doc_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (data.get("fiscal_year"), t.get("date"), t.get("particulars"),
+                  t.get("amount"), t.get("direction"), t.get("balance"), doc_id))
+            rows += 1
+        conn.execute("""
+            INSERT INTO bank_statements (year, bank_name, opening_balance,
+                                         closing_balance, doc_id)
+            VALUES (?, ?, ?, ?, ?)
+        """, (data.get("fiscal_year"), data.get("bank_name"),
+              (data.get("transactions") or [{}])[0].get("balance"),
+              (data.get("transactions") or [{}])[-1].get("balance"), doc_id))
+        docs += 1
+    print(f"  Loaded {docs} bank statements ({rows} transactions)")
+    return rows
+
+
+def load_ledger_entries(conn):
+    docs = rows = 0
+    for doc_id, data in _each("DOC-GLB-*.json"):
+        for e in data.get("entries", []):
+            conn.execute("""
+                INSERT INTO ledger_entries
+                    (year, date, description, project_name, entry_type,
+                     debit, credit, doc_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (data.get("fiscal_year"), e.get("date"), e.get("narration"),
+                  None, e.get("account_name"), e.get("amount"),
+                  e.get("balance"), doc_id))
+            rows += 1
+        docs += 1
+    print(f"  Loaded {docs} ledger books ({rows} postings)")
+    return rows
+
+
+def load_bills(conn):
+    docs = rows = 0
+    for pattern in ("DOC-RABILL-*.json", "DOC-FINBILL-*.json"):
+        for doc_id, data in _each(pattern):
+            client = data.get("client_name")
+            cur = conn.execute("""
+                INSERT INTO bills
+                    (doc_type, contract_no, client_name, client_id, bill_no,
+                     bill_date, ra_number, awarded_value, total_billed,
+                     period_start, period_end, value_of_work, gst, retention,
+                     net_claimed, cumulative, doc_id)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """, (data.get("_doc_type"), data.get("contract_no"), client,
+                  get_or_create_client(conn, client) if client else None,
+                  data.get("bill_no"), data.get("bill_date"),
+                  data.get("ra_number"), data.get("awarded_value"),
+                  data.get("total_billed"), data.get("period_start"),
+                  data.get("period_end"), data.get("value_of_work"),
+                  data.get("gst"), data.get("retention"),
+                  data.get("net_claimed"), data.get("cumulative"), doc_id))
+            bill_id = cur.lastrowid
+            for it in data.get("items", []):
+                conn.execute("""
+                    INSERT INTO bill_items
+                        (bill_id, item_no, description, unit, rate, quantity,
+                         amount, doc_id)
+                    VALUES (?,?,?,?,?,?,?,?)
+                """, (bill_id, it.get("item_no"), it.get("description"),
+                      it.get("unit"), it.get("rate"), it.get("quantity"),
+                      it.get("amount"), doc_id))
+                rows += 1
+            docs += 1
+    print(f"  Loaded {docs} bills ({rows} BOQ lines)")
+    return docs
+
+
+def load_tenders(conn):
+    count = 0
+    for doc_id, data in _each("DOC-DOSSIER-*.json"):
+        client = data.get("client_name")
+        conn.execute("""
+            INSERT INTO tenders
+                (tender_ref, client_name, client_id, work_category, bid_value,
+                 earnest_money, submitted_date, relevant_works_cited, doc_id)
+            VALUES (?,?,?,?,?,?,?,?,?)
+        """, (data.get("tender_ref"), client,
+              get_or_create_client(conn, client) if client else None,
+              data.get("work_category"), data.get("bid_value"),
+              data.get("earnest_money"), data.get("submitted_date"),
+              data.get("relevant_works_cited"), doc_id))
+        count += 1
+    print(f"  Loaded {count} tender dossiers")
+    return count
+
+
+def load_compliance(conn):
+    docs = rows = 0
+    for doc_id, data in _each("DOC-CM-*.json"):
+        for it in data.get("items", []):
+            conn.execute("""
+                INSERT INTO compliance_items
+                    (tender_ref, work_category, item_no, requirement, status, doc_id)
+                VALUES (?,?,?,?,?,?)
+            """, (data.get("tender_ref"), data.get("work_category"),
+                  it.get("item_no"), it.get("requirement"), it.get("status"),
+                  doc_id))
+            rows += 1
+        docs += 1
+    print(f"  Loaded {docs} compliance matrices ({rows} items)")
+    return rows
+
+
+def load_annual_reports(conn):
+    docs = rows = 0
+    for doc_id, data in _each("DOC-AR-*.json"):
+        fy = data.get("fiscal_year")
+        for metric in ("gross_billings", "gross_billings_prior", "net_revenue",
+                       "net_revenue_prior", "profit", "profit_prior",
+                       "contracts_in_execution", "order_book_value",
+                       "variation_value", "variation_orders"):
+            if data.get(metric) is not None:
+                conn.execute("""
+                    INSERT INTO annual_figures (fiscal_year, metric, segment,
+                                                value, doc_id)
+                    VALUES (?, ?, NULL, ?, ?)
+                """, (fy, metric, data[metric], doc_id))
+                rows += 1
+        for seg in data.get("segment_revenue", []):
+            conn.execute("""
+                INSERT INTO annual_figures (fiscal_year, metric, segment,
+                                            value, doc_id)
+                VALUES (?, 'segment_revenue', ?, ?, ?)
+            """, (fy, seg.get("segment"), seg.get("revenue"), doc_id))
+            rows += 1
+        docs += 1
+    print(f"  Loaded {docs} annual reports ({rows} figures)")
+    return rows
+
+
+def load_doc_text(conn):
+    """Store every document's full text for fallback retrieval."""
+    count = 0
+    for doc_id, data in _each("*.json"):
+        text = data.get("_text")
+        if not text:
+            continue
+        conn.execute("INSERT OR REPLACE INTO doc_text VALUES (?, ?, ?)",
+                     (doc_id, data.get("_doc_type"), text))
+        count += 1
+    print(f"  Stored full text for {count} documents")
+    return count
+
+
+# ── Reconciliation against the credentials pack ─────────────────────────────
+
+def reconcile_with_portfolio(conn):
+    """Reconcile the works table against DOC-PPP-001, the credentials pack.
+
+    The individual completion certificates state the role and the category in
+    prose that varies by issuing office, so reading them per-document is
+    lossy: a certificate that never says "JV Partner" is indistinguishable
+    from one that says nothing, and each office capitalises the category its
+    own way. The portfolio states both fields once, uniformly, for all 155
+    works, keyed by the package number in its certificate reference.
+
+    So the certificates remain the source for everything they state
+    unambiguously (value, dates, grading, supervising engineer) and the
+    portfolio settles role and category, fills any gap, and flags every
+    disagreement for inspection.
+    """
+    portfolio = parse_portfolio()
+    if not portfolio:
+        print("  WARNING: portfolio not parsed — skipping reconciliation")
+        return {}
+
+    stats = collections.Counter()
+    conflicts = []
+
+    rows = conn.execute(
+        "SELECT work_id, project_name, client_id, contract_value, "
+        "       completion_date, work_category, role FROM works").fetchall()
+
+    for work_id, project_name, client_id, value, comp_date, category, role in rows:
+        m = re.search(r"Pkg-(\d+)", project_name or "")
+        if not m:
+            stats["no_pkg_number"] += 1
+            continue
+        ref = portfolio.get(int(m.group(1)))
+        if not ref:
+            stats["not_in_portfolio"] += 1
+            continue
+        stats["matched"] += 1
+
+        updates = {"pkg_no": ref["pkg"],
+                   "certificate_ref": ref["certificate_ref"],
+                   "client_office": ref["client_office"]}
+
+        # Role and category: the portfolio is authoritative.
+        if ref["role"] and ref["role"] != role:
+            updates["role"] = ref["role"]
+            stats["role_corrected"] += 1
+        if ref["work_category"] and ref["work_category"] != category:
+            updates["work_category"] = ref["work_category"]
+            stats["category_normalised"] += 1
+
+        # Value and date: keep the certificate's reading, which is stated to
+        # the rupee, unless it is missing or materially disagrees.
+        if ref["contract_value"]:
+            if not value:
+                updates["contract_value"] = ref["contract_value"]
+                stats["value_filled"] += 1
+            elif abs(value - ref["contract_value"]) / ref["contract_value"] > 0.005:
+                conflicts.append(("value", project_name, value, ref["contract_value"]))
+                updates["contract_value"] = ref["contract_value"]
+                stats["value_corrected"] += 1
+        if ref["completion_date"]:
+            if not comp_date:
+                updates["completion_date"] = ref["completion_date"]
+                stats["date_filled"] += 1
+            elif comp_date != ref["completion_date"]:
+                conflicts.append(("date", project_name, comp_date, ref["completion_date"]))
+                updates["completion_date"] = ref["completion_date"]
+                stats["date_corrected"] += 1
+
+        if ref["client_name"]:
+            portfolio_client = get_or_create_client(conn, ref["client_name"])
+            if portfolio_client != client_id:
+                conflicts.append(("client", project_name, client_id, ref["client_name"]))
+                updates["client_id"] = portfolio_client
+                stats["client_corrected"] += 1
+
+        sets = ", ".join(f"{k} = ?" for k in updates)
+        conn.execute(f"UPDATE works SET {sets} WHERE work_id = ?",
+                     (*updates.values(), work_id))
+
+    # A client row can be orphaned if every one of its works was reassigned.
+    # Bills and tenders also name clients, so only rows referenced nowhere go.
+    conn.execute("""
+        DELETE FROM clients WHERE client_id NOT IN (
+            SELECT client_id FROM works   WHERE client_id IS NOT NULL
+            UNION SELECT client_id FROM bills   WHERE client_id IS NOT NULL
+            UNION SELECT client_id FROM tenders WHERE client_id IS NOT NULL
+        )
+    """)
+    conn.commit()
+
+    print(f"  Reconciled {stats['matched']}/{len(rows)} works against DOC-PPP-001")
+    for key in ("role_corrected", "category_normalised", "value_filled",
+                "value_corrected", "date_filled", "date_corrected",
+                "client_corrected", "no_pkg_number", "not_in_portfolio"):
+        if stats[key]:
+            print(f"    {key}: {stats[key]}")
+    for kind, name, was, now in conflicts[:10]:
+        print(f"    conflict [{kind}] {name}: certificate={was} portfolio={now}")
+    return stats
+
+
 # ── Validation ──────────────────────────────────────────────────────────────
 
 def validate_database(conn):
@@ -867,11 +1286,27 @@ def build_database():
     load_personnel_certificates(conn)
     load_cvs(conn)
     load_performance_bonds(conn)
-    load_financial_statements(conn)
-    load_ledger_books(conn)
+    # load_financial_statements / load_ledger_books are superseded by the
+    # typed loaders below (statement_items, ledger_entries), which read the
+    # real extracted structure rather than fields the extractors never emitted.
     load_iso_certificates(conn)
     load_workbook_data(conn)
-    
+
+    print("\nLoading financial and commercial records...")
+    load_statement_items(conn)
+    load_ledger_entries(conn)
+    load_bank_txns(conn)
+    load_bills(conn)
+    load_tenders(conn)
+    load_compliance(conn)
+    load_annual_reports(conn)
+    load_doc_text(conn)
+
+    conn.commit()
+
+    print("\nReconciling against the credentials pack...")
+    reconcile_with_portfolio(conn)
+
     conn.commit()
     print("\nDatabase built successfully!")
     

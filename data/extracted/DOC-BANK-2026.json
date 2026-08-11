@@ -1,6 +1,221 @@
 {
   "_doc_id": "DOC-BANK-2026",
   "_doc_type": "bank_statement",
-  "content_summary": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2026–27\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2026-04-01\nOpening balance b/f\n867,408,731\n2026-04-01\nVendor payment #263\n28,030,603\n839,378,128\n2026-04-02\nVendor payment #239\n5,756,578\n833,621,550\n2026-04-03\nReceipt against invoice (rcpt #262)\n33,828,661\n867,450,211\n2026-04-07\nTDS deposited (202603)\n5,856,438\n861,593,773\n2026-04-10\nV",
-  "_source_file": "C:\\Users\\adits\\Downloads\\BITS-Hackathon-Dataset\\documents\\bank_statement\\DOC-BANK-2026.pdf"
+  "fiscal_year": 2026,
+  "bank_name": "Kalinga National Bank",
+  "account_no": "00417 2210 9944",
+  "transactions": [
+    {
+      "date": "2026-04-01",
+      "particulars": "Opening balance b/f",
+      "amount": null,
+      "direction": null,
+      "balance": 867408731.0
+    },
+    {
+      "date": "2026-04-01",
+      "particulars": "Vendor payment #263",
+      "amount": 28030603.0,
+      "direction": "withdrawal",
+      "balance": 839378128.0
+    },
+    {
+      "date": "2026-04-02",
+      "particulars": "Vendor payment #239",
+      "amount": 5756578.0,
+      "direction": "withdrawal",
+      "balance": 833621550.0
+    },
+    {
+      "date": "2026-04-03",
+      "particulars": "Receipt against invoice (rcpt #262)",
+      "amount": 33828661.0,
+      "direction": "deposit",
+      "balance": 867450211.0
+    },
+    {
+      "date": "2026-04-07",
+      "particulars": "TDS deposited (202603)",
+      "amount": 5856438.0,
+      "direction": "withdrawal",
+      "balance": 861593773.0
+    },
+    {
+      "date": "2026-04-10",
+      "particulars": "Vendor payment #205",
+      "amount": 10590333.0,
+      "direction": "withdrawal",
+      "balance": 851003440.0
+    },
+    {
+      "date": "2026-04-11",
+      "particulars": "Receipt against invoice (rcpt #250)",
+      "amount": 52777625.0,
+      "direction": "deposit",
+      "balance": 903781065.0
+    },
+    {
+      "date": "2026-04-11",
+      "particulars": "Vendor payment #257",
+      "amount": 32759745.0,
+      "direction": "withdrawal",
+      "balance": 871021320.0
+    },
+    {
+      "date": "2026-04-12",
+      "particulars": "Receipt against invoice (rcpt #391)",
+      "amount": 48252776.0,
+      "direction": "deposit",
+      "balance": 919274096.0
+    },
+    {
+      "date": "2026-04-19",
+      "particulars": "GST settlement (period 20254)",
+      "amount": 141132183.0,
+      "direction": "withdrawal",
+      "balance": 778141913.0
+    },
+    {
+      "date": "2026-04-28",
+      "particulars": "Receipt against invoice (rcpt #386)",
+      "amount": 60948725.0,
+      "direction": "deposit",
+      "balance": 839090638.0
+    },
+    {
+      "date": "2026-04-28",
+      "particulars": "Vendor payment #297",
+      "amount": 34550609.0,
+      "direction": "withdrawal",
+      "balance": 804540029.0
+    },
+    {
+      "date": "2026-05-07",
+      "particulars": "TDS deposited (202604)",
+      "amount": 1925651.0,
+      "direction": "withdrawal",
+      "balance": 802614378.0
+    },
+    {
+      "date": "2026-05-11",
+      "particulars": "Vendor payment #302",
+      "amount": 5505889.0,
+      "direction": "withdrawal",
+      "balance": 797108489.0
+    },
+    {
+      "date": "2026-05-12",
+      "particulars": "Vendor payment #304",
+      "amount": 56235874.0,
+      "direction": "withdrawal",
+      "balance": 740872615.0
+    },
+    {
+      "date": "2026-05-25",
+      "particulars": "Receipt against invoice (rcpt #223)",
+      "amount": 34255655.0,
+      "direction": "deposit",
+      "balance": 775128270.0
+    },
+    {
+      "date": "2026-05-26",
+      "particulars": "Vendor payment #262",
+      "amount": 39106406.0,
+      "direction": "withdrawal",
+      "balance": 736021864.0
+    },
+    {
+      "date": "2026-05-30",
+      "particulars": "Receipt against invoice (rcpt #277)",
+      "amount": 28196286.0,
+      "direction": "deposit",
+      "balance": 764218150.0
+    },
+    {
+      "date": "2026-05-31",
+      "particulars": "Receipt against invoice (rcpt #189)",
+      "amount": 33266922.0,
+      "direction": "deposit",
+      "balance": 797485072.0
+    },
+    {
+      "date": "2026-06-07",
+      "particulars": "TDS deposited (202605)",
+      "amount": 1738761.0,
+      "direction": "withdrawal",
+      "balance": 795746311.0
+    },
+    {
+      "date": "2026-06-08",
+      "particulars": "Vendor payment #299",
+      "amount": 55502764.0,
+      "direction": "withdrawal",
+      "balance": 740243547.0
+    },
+    {
+      "date": "2026-06-11",
+      "particulars": "Vendor payment #260",
+      "amount": 12586270.0,
+      "direction": "withdrawal",
+      "balance": 727657277.0
+    },
+    {
+      "date": "2026-06-12",
+      "particulars": "Vendor payment #266",
+      "amount": 25679516.0,
+      "direction": "withdrawal",
+      "balance": 701977761.0
+    },
+    {
+      "date": "2026-06-16",
+      "particulars": "Receipt against invoice (rcpt #275)",
+      "amount": 20225533.0,
+      "direction": "deposit",
+      "balance": 722203294.0
+    },
+    {
+      "date": "2026-06-21",
+      "particulars": "Receipt against invoice (rcpt #425)",
+      "amount": 868161.0,
+      "direction": "deposit",
+      "balance": 723071455.0
+    },
+    {
+      "date": "2026-06-23",
+      "particulars": "Receipt against invoice (rcpt #282)",
+      "amount": 25054852.0,
+      "direction": "deposit",
+      "balance": 748126307.0
+    },
+    {
+      "date": "2026-07-01",
+      "particulars": "Receipt against invoice (rcpt #255)",
+      "amount": 46748878.0,
+      "direction": "deposit",
+      "balance": 794875185.0
+    },
+    {
+      "date": "2026-07-05",
+      "particulars": "Receipt against invoice (rcpt #393)",
+      "amount": 48252776.0,
+      "direction": "deposit",
+      "balance": 843127961.0
+    },
+    {
+      "date": "2026-07-06",
+      "particulars": "Receipt against invoice (rcpt #207)",
+      "amount": 56152433.0,
+      "direction": "deposit",
+      "balance": 899280394.0
+    },
+    {
+      "date": "2026-07-07",
+      "particulars": "TDS deposited (202606) Closing balance Computer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.",
+      "amount": 897663696.0,
+      "direction": "withdrawal",
+      "balance": 897663696.0
+    }
+  ],
+  "_source_file": "C:\\Users\\Dell\\OneDrive\\Desktop\\JAW-hackathon-test-dataset\\documents\\bank_statement\\DOC-BANK-2026.pdf",
+  "_text": "Kalinga National Bank\nStatement of Account · Current Account\nACCOUNT STATEMENT — FY 2026–27\nA/c: 00417 2210 9944 · National Infrastructure Corp. Ltd.\nIFSC: KNBX0004417\nDate\nParticulars\nWithdrawal\nDeposit\nBalance\n2026-04-01\nOpening balance b/f\n867,408,731\n2026-04-01\nVendor payment #263\n28,030,603\n839,378,128\n2026-04-02\nVendor payment #239\n5,756,578\n833,621,550\n2026-04-03\nReceipt against invoice (rcpt #262)\n33,828,661\n867,450,211\n2026-04-07\nTDS deposited (202603)\n5,856,438\n861,593,773\n2026-04-10\nVendor payment #205\n10,590,333\n851,003,440\n2026-04-11\nReceipt against invoice (rcpt #250)\n52,777,625\n903,781,065\n2026-04-11\nVendor payment #257\n32,759,745\n871,021,320\n2026-04-12\nReceipt against invoice (rcpt #391)\n48,252,776\n919,274,096\n2026-04-19\nGST settlement (period 20254)\n141,132,183\n778,141,913\n2026-04-28\nReceipt against invoice (rcpt #386)\n60,948,725\n839,090,638\n2026-04-28\nVendor payment #297\n34,550,609\n804,540,029\n2026-05-07\nTDS deposited (202604)\n1,925,651\n802,614,378\n2026-05-11\nVendor payment #302\n5,505,889\n797,108,489\n2026-05-12\nVendor payment #304\n56,235,874\n740,872,615\n2026-05-25\nReceipt against invoice (rcpt #223)\n34,255,655\n775,128,270\n2026-05-26\nVendor payment #262\n39,106,406\n736,021,864\n2026-05-30\nReceipt against invoice (rcpt #277)\n28,196,286\n764,218,150\n2026-05-31\nReceipt against invoice (rcpt #189)\n33,266,922\n797,485,072\n2026-06-07\nTDS deposited (202605)\n1,738,761\n795,746,311\n2026-06-08\nVendor payment #299\n55,502,764\n740,243,547\n2026-06-11\nVendor payment #260\n12,586,270\n727,657,277\n2026-06-12\nVendor payment #266\n25,679,516\n701,977,761\n2026-06-16\nReceipt against invoice (rcpt #275)\n20,225,533\n722,203,294\n2026-06-21\nReceipt against invoice (rcpt #425)\n868,161\n723,071,455\n2026-06-23\nReceipt against invoice (rcpt #282)\n25,054,852\n748,126,307\n2026-07-01\nReceipt against invoice (rcpt #255)\n46,748,878\n794,875,185\n2026-07-05\nReceipt against invoice (rcpt #393)\n48,252,776\n843,127,961\nDOC-BANK-2026\nPage 1 of 2\n\n2026-07-06\nReceipt against invoice (rcpt #207)\n56,152,433\n899,280,394\n2026-07-07\nTDS deposited (202606)\n1,616,698\n897,663,696\nClosing balance\n897,663,696\nComputer-generated statement; does not require signature. Entries are subject to realisation. Please report discrepancies within 30 days.\nDOC-BANK-2026\nPage 2 of 2\n"
 }
