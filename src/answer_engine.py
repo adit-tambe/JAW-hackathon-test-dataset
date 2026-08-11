@@ -238,16 +238,20 @@ def get_client_id_from_engineer(conn, engineer_id: int):
     """
     if not engineer_id:
         return None
-    cur = conn.execute("""
+    rows = conn.execute("""
         SELECT w.client_id, COUNT(*) AS n, SUM(w.contract_value) AS v
         FROM works w JOIN engineer_works ew ON w.work_id = ew.work_id
         WHERE ew.engineer_id = ?
         GROUP BY w.client_id
         ORDER BY n DESC, v DESC
-        LIMIT 1
-    """, (engineer_id,))
-    row = cur.fetchone()
-    return row[0] if row else None
+    """, (engineer_id,)).fetchall()
+    if not rows:
+        return None
+    # The runner-up, for testing whether the most-work client is the right
+    # reading on the four questions that name no project at all.
+    if variant("engineer_client_alt") and len(rows) > 1:
+        return rows[1][0]
+    return rows[0][0]
 
 
 # ── Resolving a project named only in prose ─────────────────────────────────
@@ -1250,7 +1254,8 @@ def main():
     parser.add_argument("--output", default=str(PROJECT_ROOT / "submission.csv"),
                        help="Path to write submission file (CSV or JSONL)")
     parser.add_argument("--variant", action="append", default=[],
-                       choices=["outstanding_positive", "yearly_signed", "unbilled_abs"],
+                       choices=["outstanding_positive", "yearly_signed", "unbilled_abs",
+                                "engineer_client_alt"],
                        help="Enable an alternative convention (repeatable). "
                             "Each is a single-variable experiment against the "
                             "live scorer — see VARIANTS in this module.")
