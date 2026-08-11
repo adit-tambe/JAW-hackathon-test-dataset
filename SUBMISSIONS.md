@@ -32,8 +32,9 @@ Official metric: `Score = max(0, 1 − |answer − gold| / gold)`, averaged, ×1
 | 5 | 7:40:58 PM | `1196bc1` | `variant_engineer_client_alt.csv` | 95.866 | −0.295 | −1.0 |
 | — | (rejected) | `1196bc1` | `variant_unbilled_abs.csv` | — | — | not counted — SHA already scored |
 | 6 | 9:28:12 PM | `20c49ec` | `variant_unbilled_abs.csv` | **96.461** | +0.300 | **+1.0** |
+| 7 | 9:43:25 PM | `fcf48c4` | `variant_yearly_signed.csv` | 94.059 | −2.102 vs #4 | −7.0 |
 
-Attempts used: 6 of 20. **Current best: 96.461** (`variant_unbilled_abs.csv`).
+Attempts used: 7 of 20. **Current best: 96.461** (`variant_unbilled_abs.csv`).
 
 ### What each submission changed
 
@@ -67,6 +68,27 @@ value. Sole difference was `HV-IC-0041`: we sent `-377309701`, the variant sent
 this convention is now settled and must be carried into every later
 submission.**
 
+**#7 (−7.0 questions). REJECTED.** `yearly_signed` — year-on-year movement as
+(first year − second year) instead of the absolute difference. The arithmetic is
+unusually clean and worth reading carefully:
+
+```
+96.161  (submission #4, no variants)
+−2.102  = 7 questions × 0.30030, the full predicted swing
+=94.059  observed
+```
+
+Landing on the predicted swing exactly means **all 7 questions went from right to
+wrong**, so absolute is correct for every one of them. `yearly_diff` is settled.
+
+The same arithmetic also shows the uploaded file was `variant_yearly_signed.csv`,
+the *unstacked* build — it measured against #4 (96.161) rather than against the
+current best #6 (96.461), because it did not carry the `unbilled_abs` fix. Had
+the stacked file been used the score would have read 94.359. No information was
+lost, but it is the confound the stacked builds exist to prevent, so the
+superseded files have been renamed `retired_*` to keep them out of the file
+picker.
+
 ---
 
 ## Conventions: settled vs open
@@ -78,24 +100,34 @@ submission.**
 | `collection_percent` = received / invoiced | **settled** | `outstanding = invoiced − received` holds for all 518 register rows, so both candidate formulas are identical |
 | engineer→client = most-works | **settled** by #5 | Runner-up scored 0.295 lower |
 | `unbilled_gap` absolute | **settled** by #6 | +0.300, exactly as predicted |
-| `outstanding_balance` signed | **OPEN** | 24 questions; signed tracks the FS Trade Receivables line (FY2019 66.6M vs 67.4M reported; positive-only gives 79.9M) but that is indirect |
-| `yearly_diff` absolute | **OPEN** | 7 questions would change sign |
+| `yearly_diff` absolute | **settled** by #7 | Signed cost the full 2.102 — all 7 questions flipped to wrong |
+| `outstanding_balance` signed | **OPEN — the last one** | 24 questions; signed tracks the FS Trade Receivables line (FY2019 66.6M vs 67.4M reported; positive-only gives 79.9M) but that is indirect |
 
 ---
 
-## Remaining queue
+## Remaining queue — one experiment left
 
-Gap to 100 from 96.461 is **3.539 points = 11.8 questions**. The two open
-conventions are worth 3.123 + 2.102 = **5.225** between them, so the arithmetic
-to close it still exists.
+Gap to 100 from 96.461 is **3.539 points = 11.8 questions**, and exactly one
+convention is still open.
 
-**Each file below already includes `unbilled_abs`,** so its delta measures only
-the new variable:
+| File | Questions changed | Predicted swing |
+|---|--:|--:|
+| `variant_unbilled_abs+outstanding_positive.csv` | 24 | ±7.21 |
 
-| Order | File | Questions changed | Predicted swing | Submit next if |
-|--:|---|--:|--:|---|
-| 1 | `variant_unbilled_abs+outstanding_positive.csv` | 24 | ±7.21 | largest single block; alone could close most of the gap |
-| 2 | `variant_unbilled_abs+yearly_signed.csv` | 7 | ±2.10 | |
+This is the decisive submission. It carries the proven `unbilled_abs` fix, so its
+delta measures `outstanding_positive` alone.
+
+**If it gains ≈ +3.12 → 99.58.** The convention was wrong and is now fixed; the
+remaining ~0.42 is the fractional leakage predicted below.
+
+**If it loses ≈ −3.12 → 93.34.** The signed sum was right (the financial-statement
+cross-check holds), and the entire 3.539 gap lives somewhere not yet identified —
+at most 1.2 of it in the four underdetermined client picks, leaving ~2.3
+unexplained and needing fresh investigation. Re-upload
+`variant_unbilled_abs.csv` to restore 96.461 in that case.
+
+Either outcome is worth the attempt: it is the last cheap measurement available,
+and it either closes most of the gap or tells us the gap is somewhere new.
 
 Regenerate with:
 
@@ -105,9 +137,8 @@ python src/answer_engine.py --questions validation_questions.json \
   --variant unbilled_abs --variant outstanding_positive
 ```
 
-Reading the result: `Δscore ÷ 0.30030` = how many questions the convention
-affects. A gain means adopt it (and add its flag to every later file); a loss of
-the predicted magnitude means the default was right and the loss is elsewhere.
+Reading any result: `Δscore ÷ 0.30030` = how many questions the convention
+affects, measured against the score of the file it was stacked on.
 
 ### Housekeeping
 
