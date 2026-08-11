@@ -9,9 +9,6 @@ from dotenv import load_dotenv
 import warnings
 warnings.filterwarnings("ignore")
 
-# Load .env file if it exists
-load_dotenv()
-
 # ── Paths ───────────────────────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).parent.parent
 DOCUMENTS_DIR = PROJECT_ROOT / "documents"
@@ -19,6 +16,9 @@ DATA_DIR = PROJECT_ROOT / "data"
 EXTRACTED_DIR = DATA_DIR / "extracted"
 DB_PATH = DATA_DIR / "company.db"
 SAMPLE_QUESTIONS_PATH = PROJECT_ROOT / "sample_questions.json"
+
+# Load .env file explicitly from PROJECT_ROOT
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Ensure output directories exist
 EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
