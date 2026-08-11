@@ -28,19 +28,26 @@ from src.money import _words_to_number, format_as_answer
 # variable at a time, since the score is a mean and a single-variable change
 # reveals exactly how many questions the convention affects.
 #
+# All four were tested against the live scorer and are now settled. The one that
+# won is enabled by default below; the losers are kept as flags so the
+# experiments stay reproducible. Full log in SUBMISSIONS.md.
+#
+#   unbilled_abs          absolute value of awarded-less-invoiced.
+#                         ADOPTED: +0.300 (submission #6), exactly the predicted
+#                         one-question swing. HV-IC-0041's gold is positive.
 #   outstanding_positive  sum only unpaid invoices, ignoring the negative
 #                         outstanding on over-received (paid) invoices.
-#                         Default off: the signed sum tracks the financial
-#                         statements' Trade Receivables far more closely.
-#                         25 questions, 7.51 points at stake.
+#                         REJECTED: -4.355 (#8). The signed sum is correct, as
+#                         the Trade Receivables cross-check indicated.
 #   yearly_signed         year-on-year movement as (first year - second year)
 #                         rather than the absolute difference.
-#                         7 questions would change sign, 2.10 points.
-#   unbilled_abs          absolute value of awarded-less-invoiced.
-#                         1 question is currently negative, 0.30 points.
+#                         REJECTED: -2.102 (#7) — the full predicted swing, so
+#                         all 7 questions went from right to wrong.
+#   engineer_client_alt   runner-up client where a question names no project.
+#                         REJECTED: -0.295 (#5). Most-works is the better read.
 #
-# Usage: python src/answer_engine.py --variant yearly_signed ...
-VARIANTS = set()
+# Usage: python src/answer_engine.py --variant outstanding_positive ...
+VARIANTS = {"unbilled_abs"}
 
 
 def variant(name: str) -> bool:

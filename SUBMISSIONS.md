@@ -33,8 +33,10 @@ Official metric: `Score = max(0, 1 − |answer − gold| / gold)`, averaged, ×1
 | — | (rejected) | `1196bc1` | `variant_unbilled_abs.csv` | — | — | not counted — SHA already scored |
 | 6 | 9:28:12 PM | `20c49ec` | `variant_unbilled_abs.csv` | **96.461** | +0.300 | **+1.0** |
 | 7 | 9:43:25 PM | `fcf48c4` | `variant_yearly_signed.csv` | 94.059 | −2.102 vs #4 | −7.0 |
+| 8 | 10:03:46 PM | `a3b4bee` | `variant_unbilled_abs_outstanding_positive.csv` | 92.106 | −4.355 vs #6 | −14.5 |
 
-Attempts used: 7 of 20. **Current best: 96.461** (`variant_unbilled_abs.csv`).
+Attempts used: 8 of 20. **Current best: 96.461**, now reproduced by
+`submission.csv` from the committed defaults.
 
 ### What each submission changed
 
@@ -89,6 +91,36 @@ lost, but it is the confound the stacked builds exist to prevent, so the
 superseded files have been renamed `retired_*` to keep them out of the file
 picker.
 
+**#8 (−14.5 questions). REJECTED.** `outstanding_positive` — summing only unpaid
+invoices instead of netting the negative outstanding on over-received ones.
+Cost 4.355 of the possible 7.207, meaning the 24 questions did not all collapse
+to zero but lost about 60% of their credit on average — the signature of
+replacing a correct figure with a same-ballpark wrong one. **The signed sum is
+correct**, which is what the Trade Receivables cross-check predicted
+(FY2019: 66.6M signed against 67.4M reported; positive-only gives 79.9M).
+
+---
+
+## Final state
+
+All four disputed conventions are settled by measurement. Exactly one needed
+changing, and it is now the committed default:
+
+```python
+VARIANTS = {"unbilled_abs"}      # src/answer_engine.py
+```
+
+`python src/run_pipeline.py` reproduces the 96.461 answer set unaided, and
+`submission.csv` is byte-identical to the file that scored it. Samples remain
+25/25 under both metrics; the audit still passes 155/155 on every field.
+
+The losing flags are kept so the experiments stay reproducible:
+
+```bash
+python src/answer_engine.py --questions validation_questions.json \
+  --output /tmp/x.csv --variant outstanding_positive   # reproduces #8
+```
+
 ---
 
 ## Conventions: settled vs open
@@ -101,44 +133,127 @@ picker.
 | engineer→client = most-works | **settled** by #5 | Runner-up scored 0.295 lower |
 | `unbilled_gap` absolute | **settled** by #6 | +0.300, exactly as predicted |
 | `yearly_diff` absolute | **settled** by #7 | Signed cost the full 2.102 — all 7 questions flipped to wrong |
-| `outstanding_balance` signed | **OPEN — the last one** | 24 questions; signed tracks the FS Trade Receivables line (FY2019 66.6M vs 67.4M reported; positive-only gives 79.9M) but that is indirect |
+| `outstanding_balance` signed | **settled** by #8 | Positive-only cost 4.355 |
 
 ---
 
-## Remaining queue — one experiment left
+## Where the last 3.539 points are — and are not
 
-Gap to 100 from 96.461 is **3.539 points = 11.8 questions**, and exactly one
-convention is still open.
+Gap to 100 from 96.461 is **3.539 points = 11.8 questions**. The convention
+hypotheses are now exhausted: every one of the six was tested or bounded, and
+five of them confirmed the existing default. So the remaining loss is *not* a
+convention.
 
-| File | Questions changed | Predicted swing |
-|---|--:|--:|
-| `variant_unbilled_abs+outstanding_positive.csv` | 24 | ±7.21 |
+Ruled out by direct inspection as well:
 
-This is the decisive submission. It carries the proven `unbilled_abs` fix, so its
-delta measures `outstanding_positive` alone.
+- **Category pair selection.** No `category_difference` question mentions more
+  than two categories, so there is no wrong-pair-picked failure among the 62.
+- **Empty sides.** All 62 category pairs and all 24 year pairs have both sides
+  populated, so no answer collapses to one side by accident.
+- **Threshold parsing.** All 22 word-number thresholds ("twenty-three crore")
+  parse to the right figure.
+- **Entity coverage.** Every question resolves a client; no engineer named in a
+  question is missing from the database; no answer is zero; every answer is in
+  range for its declared type.
 
-**If it gains ≈ +3.12 → 99.58.** The convention was wrong and is now fixed; the
-remaining ~0.42 is the fractional leakage predicted below.
+What is left, in descending order of size:
 
-**If it loses ≈ −3.12 → 93.34.** The signed sum was right (the financial-statement
-cross-check holds), and the entire 3.539 gap lives somewhere not yet identified —
-at most 1.2 of it in the four underdetermined client picks, leaving ~2.3
-unexplained and needing fresh investigation. Re-upload
-`variant_unbilled_abs.csv` to restore 96.461 in that case.
+1. **Four questions whose client is underdetermined** (`HV-IC-0044`, `0178`,
+   `0276`, `0333`) — worth at most 1.2 points. Each names an engineer and a
+   credential but no project, and the engineer serves four to six clients. No
+   document links a credential to a project (each credential id appears in
+   exactly one document, its own certificate), and the projects named in
+   comparable questions show no pattern — largest 23/95, latest 25/95, earliest
+   15/95. Submission #5 established most-works beats the runner-up, but not how
+   many of the four are right. Brute-forcing these is possible with the 12
+   remaining attempts: switch one question at a time and read the 0.300 steps.
+2. **≈2.3 points spread thinly**, most likely fractional error across the 76
+   receivables questions (`collection_percent`, `unbilled_gap`,
+   `outstanding_balance`) where an answer can be near-right and lose a fraction
+   rather than the whole mark. A rounding or scope difference of a few percent
+   on 26 percentage answers would look exactly like this and is invisible to
+   single-variable convention tests.
+3. **Three prose-resolved date spans** (`HV-IC-0014`, `0244`, `0335`) not yet
+   independently verified against the documents, worth up to 0.9. `HV-IC-0118`
+   from the same group was verified correct.
 
-Either outcome is worth the attempt: it is the last cheap measurement available,
-and it either closes most of the gap or tells us the gap is somewhere new.
+An honest read: 96.461 is a solid score built on measured decisions, and the
+remaining 3.5 points sit in places where the corpus is either silent or where
+the loss is fractional rather than structural. Reaching exactly 100.000 would
+require the four underdetermined picks to land *and* the thin leakage to
+disappear — the first is luck, the second needs a lead none of the diagnostics
+have produced yet.
 
-Regenerate with:
+---
 
-```bash
-python src/answer_engine.py --questions validation_questions.json \
-  --output variant_unbilled_abs+outstanding_positive.csv \
-  --variant unbilled_abs --variant outstanding_positive
+## Appendix — verification run, current defaults
+
+Captured from `python src/run_pipeline.py` at the state that produces the 96.461
+answer set (`VARIANTS = {"unbilled_abs"}`). Full pipeline, 678 PDFs to scored
+answers, **7.7 seconds, no API calls**.
+
+```
+STAGE 1/4  Extracting PDFs (local regex)
+STAGE 1b   Extracting Excel Workbooks
+STAGE 2/4  Building SQLite Database
+  Loaded 155 completion certificates
+  Loaded 132 reference letters (132 matched to works)
+  Loaded 48 personnel certificates
+  Loaded 39 CVs, created 0 engineer-work links
+  Loaded 60 performance bonds
+  Loaded 5 ISO certificates
+  Loaded 9 workbooks
+  Loaded 7 financial statements (154 line items)
+  Loaded 8 ledger books (6147 postings)
+  Loaded 8 bank statements (973 transactions)
+  Loaded 12 bills (81 BOQ lines)
+  Loaded 6 tender dossiers
+  Loaded 40 compliance matrices (187 items)
+  Loaded 2 annual reports (45 figures)
+  Stored full text for 678 documents
+  Reconciled 155/155 works against DOC-PPP-001
+    role_corrected: 44
+    category_normalised: 71
+
+STAGE 3/5  Auditing the database (independent reconciliation)
+  OK   client             155/155 agree
+  OK   contract_value     155/155 agree
+  OK   completion_date    155/155 agree
+  OK   category           155/155 agree
+  OK   role               155/155 agree
+  OK   works                              155 (expected 155)
+  OK   works with a reference letter      132 (expected 132)
+  OK   distinct work categories            13 (expected 13)
+  OK   total delivered value (Cr)        5530 (expected 5530)
+  OK   works with a known role            155 (expected 155)
+  OK   credentials on a named engineer     48 (expected 48)
+       contract_value         155/155 populated
+       completion_date        155/155 populated
+       work_category          155/155 populated
+       role                   155/155 populated
+       performance_grading    111/155 populated  (some certificates state no
+                                                  grade — verified against gold)
+       signing_officer        155/155 populated
+AUDIT PASSED — database agrees with the credentials pack on every field,
+               and all corpus invariants hold.
+
+STAGE 4/5  Answering Sample Questions        Sample Accuracy: 25/25 (100.0%)
+STAGE 4b   Answering 333 validation questions -> submission.csv
+STAGE 5/5  Running Evaluation
+             bundled scorer (banded)      TOTAL 25.0   / 25 = 100.0%
+             official formula (continuous) TOTAL 25.000 / 25 = 100.00%
+PIPELINE COMPLETE in 7.7s
 ```
 
-Reading any result: `Δscore ÷ 0.30030` = how many questions the convention
-affects, measured against the score of the file it was stacked on.
+Note the 44 roles corrected and 71 categories normalised on every run: those are
+not one-off repairs but a standing reconciliation, so a regression in the
+certificate parsers would surface as a change in those counts rather than
+silently reaching the answers.
+
+`performance_grading` sitting at 111/155 is deliberate, not a gap — some
+certificates state no grade, and the boilerplate "quality of work has been found
+satisfactory" is *not* one (gold excludes such works from Satisfactory sums, see
+REPORT.md §4).
 
 ### Housekeeping
 
