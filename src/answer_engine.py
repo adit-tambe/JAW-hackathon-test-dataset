@@ -511,11 +511,30 @@ def parse_question(conn, question_text: str) -> dict:
         if dm:
             date_ref = parse_date_str(dm.group(1))
     if not date_ref:
-        dm2 = re.search(r'(march\s+10,?\s+2021|mar\s+10\s+2021|march\s+2021|mar\s+10)', qlow)
+        # Ordinal and year-less renderings: "March 10th", "March 10th, 2021",
+        # "10 March 2021". Without this, the date is lost and the handler falls
+        # back to the engineer's credential, which is only safe when they hold
+        # exactly one — nine of them hold two.
+        MONTHS = {'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5,
+                  'june': 6, 'july': 7, 'august': 8, 'september': 9,
+                  'october': 10, 'november': 11, 'december': 12}
+        mon = r'(january|february|march|april|may|june|july|august|september|october|november|december)'
+        dm2 = (re.search(mon + r'\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?', qlow)
+               or re.search(r'\b(\d{1,2})(?:st|nd|rd|th)?\s+' + mon + r',?\s*(\d{4})?', qlow))
         if dm2:
-            date_ref = '2021-03-10'
+            g = dm2.groups()
+            if g[0] in MONTHS:
+                month, day, year = MONTHS[g[0]], int(g[1]), g[2]
+            else:
+                month, day, year = MONTHS[g[1]], int(g[0]), g[2]
+            # With no year stated, date_ref stays None on purpose: the handler
+            # resolves it from the credential the question names, which is the
+            # only source that knows the year.
+            if year:
+                date_ref = f"{year}-{month:02d}-{day:02d}"
 
-    cert_type = 'PMP' if 'pmp' in qlow else ('Six Sigma' if 'six sigma' in qlow else None)
+    cert_type = ('Six Sigma Black Belt' if 'six sigma' in qlow
+                 else ('PMP' if 'pmp' in qlow else None))
     cidm = re.search(r'(PMI-\d+|ASQ-\d+|6S-\d+)', qclean)
     cert_id = cidm.group(1) if cidm else None
 
@@ -789,17 +808,47 @@ def handle_absence(conn, params: dict) -> float:
     return conn.execute("SELECT COUNT(*) FROM works WHERE client_id = ? AND has_reference_letter = 0", (client_id,)).fetchone()[0]
 
 
+def cert_issue_date(conn, engineer_id: int, cert_type: str = None,
+                    cert_id: str = None) -> str:
+    """Issue date of the credential a question refers to.
+
+    Nine engineers hold two credentials with different dates — a PMP issued
+    2021-03-10 and a Six Sigma Black Belt issued 2023-01-01 — so taking the
+    latest one regardless of type silently answers about the wrong certificate.
+    That is what made HV-IC-0177 read 575 days instead of 87.
+    """
+    if cert_id:
+        row = conn.execute(
+            "SELECT issue_date FROM engineer_certs WHERE engineer_id = ? AND cert_id = ?",
+            (engineer_id, cert_id)).fetchone()
+        if row:
+            return row[0]
+    if cert_type:
+        row = conn.execute(
+            "SELECT issue_date FROM engineer_certs "
+            "WHERE engineer_id = ? AND UPPER(cert_type) LIKE UPPER(?) "
+            "ORDER BY issue_date LIMIT 1",
+            (engineer_id, f"%{cert_type}%")).fetchone()
+        if row:
+            return row[0]
+    # No type named: the earliest credential, not the latest, since these
+    # questions are about a span running forward from issuance.
+    row = conn.execute(
+        "SELECT issue_date FROM engineer_certs WHERE engineer_id = ? "
+        "ORDER BY issue_date LIMIT 1", (engineer_id,)).fetchone()
+    return row[0] if row else None
+
+
 def handle_date_span(conn, params: dict) -> float:
     engineer_id = find_engineer_id(conn, params.get("engineer_name"))
     project_name = params.get("project_name")
     date_ref = params.get("date_reference")
     
     if not date_ref and engineer_id:
-        cur = conn.execute("SELECT issue_date FROM engineer_certs WHERE engineer_id = ? ORDER BY issue_date DESC LIMIT 1", (engineer_id,))
-        row = cur.fetchone()
-        if row:
-            date_ref = row[0]
-            
+        date_ref = cert_issue_date(conn, engineer_id, params.get("cert_type"),
+                                   params.get("cert_id"))
+
+
     comp_date = None
     if project_name:
         cur = conn.execute("SELECT completion_date FROM works WHERE LOWER(project_name) = LOWER(?)", (normalize_text(project_name),))
@@ -940,7 +989,8 @@ def handle_temporal_chain(conn, params: dict) -> float:
     engineer_id = find_engineer_id(conn, params.get("engineer_name"))
     if not engineer_id:
         return 0
-    dref = params.get("date_reference") or "2021-03-10"
+    dref = params.get("date_reference") or cert_issue_date(
+        conn, engineer_id, params.get("cert_type"), params.get("cert_id")) or "2021-03-10"
     cur = conn.execute("SELECT SUM(w.contract_value) FROM works w JOIN engineer_works ew ON w.work_id = ew.work_id WHERE ew.engineer_id = ? AND w.completion_date > ? AND w.contract_value IS NOT NULL", (engineer_id, dref))
     res = cur.fetchone()[0]
     return res if res else 0
