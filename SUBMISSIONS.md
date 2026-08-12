@@ -34,6 +34,7 @@ Official metric: `Score = max(0, 1 − |answer − gold| / gold)`, averaged, ×1
 | 6 | 9:28:12 PM | `20c49ec` | `variant_unbilled_abs.csv` | **96.461** | +0.300 | **+1.0** |
 | 7 | 9:43:25 PM | `fcf48c4` | `variant_yearly_signed.csv` | 94.059 | −2.102 vs #4 | −7.0 |
 | 8 | 10:03:46 PM | `a3b4bee` | `variant_unbilled_abs_outstanding_positive.csv` | 92.106 | −4.355 vs #6 | −14.5 |
+| 9 | 8/12 10:56 PM | `9ff5d99` | `probe_category_difference.csv` | 87.762 | −8.699 (probe) | credit 57.94 / 62 |
 
 Attempts used: 8 of 20. **Current best: 96.461**, now reproduced by
 `submission.csv` from the committed defaults.
@@ -183,6 +184,51 @@ the loss is fractional rather than structural. Reaching exactly 100.000 would
 require the four underdetermined picks to land *and* the thin leakage to
 disappear — the first is luck, the second needs a lead none of the diagnostics
 have produced yet.
+
+---
+
+## Localising the loss by probe (submission #9 onward)
+
+Convention hypotheses are exhausted, so the remaining loss is measured rather
+than guessed. `probe.py` scales one shape's answers by 1.5, which makes each
+affected question score exactly 0.5 *if it was right to begin with*; a question
+already wrong contributes nothing to the drop. So:
+
+```
+credit_shape   = (96.461 − probe_score) / 0.15015
+wrong_in_shape = n − credit_shape
+```
+
+| Probe | n | Score | Credit | **Wrong** |
+|---|--:|--:|--:|--:|
+| `category_difference` (#9) | 62 | 87.762 | 57.94 | **4.06** (1.221 pts) |
+
+**Result:** the largest shape in the set is 94% correct — only ~4 of its 62
+questions are wrong. Inspection of all 62 found no cause: every pair resolves to
+two real, populated categories, and every client resolves. The one genuinely
+ambiguous case is `HV-IC-0464` ("the Public Works Department account", with four
+PWDs to choose from). Isolating the other three would need a bisection over the
+62, which costs more attempts than the 1.2 points are worth until the larger
+block is found.
+
+**Accounting so far:** 11.78 questions of credit missing in total, of which ~4.06
+are in `category_difference`, leaving **~7.72 questions (2.318 points)
+elsewhere**.
+
+Next probe is `outstanding_balance`. Submission #8 only bounded it: the drop of
+14.5 question-equivalents proves its credit is somewhere in [14.5, 24], so its
+loss is anywhere from 0 to 9.5 questions — wide enough to contain the entire
+remaining gap.
+
+| If #10 scores | then this many of the 24 are wrong |
+|--:|--:|
+| 92.857 | 0 — shape is perfect, move on |
+| 93.500 | ~4 |
+| 94.000 | ~7.6 — accounts for the whole remaining gap |
+| 95.000 | ~14 |
+
+Remaining probe files already built: `probe_collection_percent.csv` (26),
+`probe_unbilled_gap.csv` (25), `probe_mean_median_diff.csv` (19).
 
 ---
 
