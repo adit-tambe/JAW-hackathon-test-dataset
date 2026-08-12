@@ -115,16 +115,10 @@ def generate_llm(self_test_only=False, clear_cache=False, hybrid=False):
 
                     if hybrid:
                         rule_ans = answer_question_rule(conn, question, qid, answer_type=answer_type)
-                        if rule_ans == 0:
-                            print(f"[{qid}] Rule engine failed (0), calling LLM...")
-                            llm_ans = answer_question_llm(question, answer_type, qid)
-                            ans = llm_ans if llm_ans != 0 else rule_ans
-                            time.sleep(13)
-                        else:
-                            ans = rule_ans
+                        ans = rule_ans
                     else:
                         ans = answer_question_llm(question, answer_type, qid)
-                        time.sleep(13)
+                        time.sleep(4)
 
                     f.write(f"{qid},{ans}\n")
 

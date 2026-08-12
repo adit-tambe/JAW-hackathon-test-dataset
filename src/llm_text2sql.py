@@ -53,7 +53,7 @@ def get_next_model():
         raise RuntimeError("No GEMINI_API_KEY found in .env")
     key = API_KEYS[_current_key_idx % len(API_KEYS)]
     genai.configure(api_key=key)
-    return genai.GenerativeModel("gemini-3.5-flash")
+    return genai.GenerativeModel("gemini-1.5-flash-latest")
 
 def rotate_key():
     """Switch to the next API key."""

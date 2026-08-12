@@ -587,7 +587,7 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val or 'target' in qlow):
         return 'gap_to_threshold'
 
-    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow or 'delta' in qlow or 'deduction' in qlow or 'remainder' in qlow or 'still sitting above' in qlow) and ('awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow or 'secure' in qlow or 'handed over' in qlow or 'bill so far' in qlow):
+    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow or 'delta' in qlow or 'deduction' in qlow or 'remainder' in qlow or 'still sitting above' in qlow) and ('commenced' in qlow or 'commencement' in qlow or 'commencing' in qlow or 'started' in qlow or 'beginning' in qlow or 'kicked off' in qlow or 'awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow or 'secure' in qlow or 'handed over' in qlow or 'bill so far' in qlow):
         return 'unbilled_gap'
 
     if 'mean and the median' in qlow or 'avg and median' in qlow or 'average contract value.*median' in qlow or 'rupee gap between avg and median' in qlow or 'larger the average' in qlow or 'average and median' in qlow or 'avg minus median' in qlow or 'mean-median gap' in qlow or 'mean and median' in qlow or 'mean against the median' in qlow:
@@ -767,9 +767,15 @@ def handle_yearly_diff(conn, params: dict) -> float:
     y1, y2 = params.get("year1"), params.get("year2")
     if not y1 or not y2:
         return 0
+        
+    qlow = params.get('qlow', '')
+    if 'commenced' in qlow or 'commencement' in qlow or 'commencing' in qlow or 'started' in qlow or 'beginning' in qlow or 'kicked off' in qlow or 'awarded' in qlow:
+        date_col = 'commencement_date'
+    else:
+        date_col = 'completion_date'
     
-    v1 = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND completion_date LIKE ?", (client_id, f"{y1}%")).fetchone()[0] or 0
-    v2 = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND completion_date LIKE ?", (client_id, f"{y2}%")).fetchone()[0] or 0
+    v1 = conn.execute(f"SELECT SUM(contract_value) FROM works WHERE client_id = ? AND {date_col} LIKE ?", (client_id, f"{y1}%")).fetchone()[0] or 0
+    v2 = conn.execute(f"SELECT SUM(contract_value) FROM works WHERE client_id = ? AND {date_col} LIKE ?", (client_id, f"{y2}%")).fetchone()[0] or 0
 
     # "difference", "gap", "swing", "movement", "delta" all read as a
     # magnitude, and one question asks for the "absolute difference" outright,
@@ -876,7 +882,11 @@ def handle_avg_work_size(conn, params: dict) -> float:
             client_id = get_client_id_from_engineer(conn, eng_id)
     if not client_id:
         return 0
-    cur = conn.execute("SELECT contract_value FROM works WHERE client_id = ? AND contract_value IS NOT NULL", (client_id,))
+        
+    qlow = params.get("qlow", "")
+    comp_filter = " AND completion_date IS NOT NULL " if ("complet" in qlow or "finish" in qlow or "wrap" in qlow or "clos" in qlow) else " "
+        
+    cur = conn.execute(f"SELECT contract_value FROM works WHERE client_id = ? AND contract_value IS NOT NULL{comp_filter}", (client_id,))
     vals = [r[0] for r in cur.fetchall()]
     if not vals:
         return 0
@@ -903,7 +913,11 @@ def handle_rank_value(conn, params: dict) -> float:
     client_id = find_client_id(conn, params.get("client_name"))
     if not client_id:
         return 0
-    rows = conn.execute("SELECT contract_value FROM works WHERE client_id = ? AND contract_value IS NOT NULL ORDER BY contract_value DESC LIMIT 2", (client_id,)).fetchall()
+        
+    qlow = params.get("qlow", "")
+    comp_filter = " AND completion_date IS NOT NULL " if ("complet" in qlow or "finish" in qlow or "wrap" in qlow or "clos" in qlow) else " "
+        
+    rows = conn.execute(f"SELECT contract_value FROM works WHERE client_id = ? AND contract_value IS NOT NULL{comp_filter} ORDER BY contract_value DESC LIMIT 2", (client_id,)).fetchall()
     if len(rows) < 2:
         return 0
     return abs(rows[0][0] - rows[1][0])
@@ -940,7 +954,11 @@ def handle_general_aggregate(conn, params: dict) -> float:
             if res:
                 return res
         return 0
-    res = conn.execute("SELECT SUM(contract_value) FROM works WHERE client_id = ? AND contract_value IS NOT NULL", (client_id,)).fetchone()[0]
+        
+    qlow = params.get("qlow", "")
+    comp_filter = " AND completion_date IS NOT NULL " if ("complet" in qlow or "finish" in qlow or "wrap" in qlow or "clos" in qlow) else " "
+        
+    res = conn.execute(f"SELECT SUM(contract_value) FROM works WHERE client_id = ? AND contract_value IS NOT NULL{comp_filter}", (client_id,)).fetchone()[0]
     return res if res else 0
 
 
