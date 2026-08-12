@@ -40,7 +40,7 @@ from src.money import _words_to_number, format_as_answer
 #                         1 question is currently negative, 0.30 points.
 #
 # Usage: python src/answer_engine.py --variant yearly_signed ...
-VARIANTS = {'unbilled_abs'}
+VARIANTS = {'unbilled_abs', 'outstanding_positive'}
 
 
 def variant(name: str) -> bool:
