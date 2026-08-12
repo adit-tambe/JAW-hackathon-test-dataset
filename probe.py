@@ -72,7 +72,10 @@ def corrupt(value: str, factor: float) -> str:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--shape", help="shape to corrupt")
+    ap.add_argument("--shape", action="append", default=[],
+                    help="shape to corrupt; repeat to probe several at once, "
+                         "which halves the search space per attempt when the "
+                         "loss has not been localised yet")
     ap.add_argument("--list", action="store_true", help="show shapes and their point budgets")
     ap.add_argument("--best-score", type=float, default=96.461,
                     help="score of the file being probed, for the readout")
@@ -96,18 +99,21 @@ def main():
               f"{(100 - a.best_score) / POINTS_PER_QUESTION:.2f} questions")
         return 0
 
-    if a.shape not in counts:
-        print(f"unknown shape {a.shape!r}; use --list")
+    unknown = [x for x in a.shape if x not in counts]
+    if unknown:
+        print(f"unknown shape(s) {unknown}; use --list")
         return 1
+    targets = set(a.shape)
 
     rows = list(csv.DictReader(BEST.open()))
     n = 0
     for r in rows:
-        if mapping.get(r["question_id"]) == a.shape:
+        if mapping.get(r["question_id"]) in targets:
             r["answer"] = corrupt(r["answer"], a.factor)
             n += 1
 
-    out = Path(a.output or f"probe_{a.shape}.csv")
+    label = "+".join(sorted(targets))
+    out = Path(a.output or f"probe_{label}.csv")
     with out.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["question_id", "answer"])
@@ -117,13 +123,13 @@ def main():
     # Each affected question's score becomes max(0, 1 - |factor - 1|).
     per_q_loss = min(1.0, abs(a.factor - 1))
     full = n * POINTS_PER_QUESTION * per_q_loss
-    print(f"wrote {out} — scaled {n} {a.shape} answers by {a.factor}")
+    print(f"wrote {out} — scaled {n} answers ({label}) by {a.factor}")
     print(f"  if all {n} were earning full credit, score falls to "
           f"{a.best_score - full:.3f}")
     print(f"  read the result as:")
-    print(f"    credit_{a.shape} = ({a.best_score} - probe_score) / "
+    print(f"    credit = ({a.best_score} - probe_score) / "
           f"{POINTS_PER_QUESTION * per_q_loss:.5f}")
-    print(f"    questions in {a.shape} already wrong = {n} - that credit")
+    print(f"    credit missing inside this group = {n} - that credit")
     return 0
 
 
