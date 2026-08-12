@@ -474,9 +474,9 @@ def parse_question(conn, question_text: str) -> dict:
 
     # Target value
     target_val = None
-    tgt_m = re.search(r'(?:target|reach|threshold|mark|bar|cutoff)\b.*?\b(?:inr\s*)?(\d+)\s*(?:cr|crore)', qlow)
+    tgt_m = re.search(r'(?:target|reach|threshold|mark|bar|cutoff)\b.*?\b(?:inr\s*)?(\d+\.?\d*)\s*(?:cr|crore)', qlow)
     if tgt_m:
-        target_val = int(float(tgt_m.group(1)) * 10_000_000)
+        target_val = int(float(tgt_m.group(1)) * 10000000)
     if not target_val:
         tgt_m = re.search(r'([\w-]+(?:\s+[\w-]+)*)\s+crore\s+(?:mark|credential|target|threshold|bar)', qlow)
         if tgt_m:
@@ -484,13 +484,13 @@ def parse_question(conn, question_text: str) -> dict:
             if word_val:
                 target_val = int(word_val)
     if not target_val:
-        tgt_m = re.search(r'(\d+)\s*(?:cr|crore)', qlow)
+        tgt_m = re.search(r'(\d+\.?\d*)\s*(?:cr|crore)', qlow)
         if tgt_m:
-            target_val = int(float(tgt_m.group(1)) * 10_000_000)
+            target_val = int(float(tgt_m.group(1)) * 10000000)
 
     # Years
     year1, year2 = None, None
-    ym = re.findall(r'\b(20\d\d)\b', qlow)
+    ym = list(dict.fromkeys(re.findall(r'\b(20\d\d)\b', qlow)))
     if len(ym) >= 2:
         year1, year2 = ym[0], ym[1]
 

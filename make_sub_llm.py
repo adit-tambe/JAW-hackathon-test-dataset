@@ -70,10 +70,10 @@ def generate_llm(self_test_only=False, clear_cache=False, hybrid=False):
                     ans = rule_ans
                     print(f"  Rule: {rule_ans} ({rule_score}), LLM: {llm_ans} ({llm_score}) -> using Rule")
 
-                time.sleep(4)  # Rate limit
+                time.sleep(13)  # Rate limit 5 RPM
         else:
             ans = answer_question_llm(question, answer_type, qid)
-            time.sleep(4)  # Rate limit
+            time.sleep(13)  # Rate limit 5 RPM
 
         sample_results.append({'qid': qid, 'answer': ans})
 
@@ -115,21 +115,22 @@ def generate_llm(self_test_only=False, clear_cache=False, hybrid=False):
 
                     if hybrid:
                         rule_ans = answer_question_rule(conn, question, qid, answer_type=answer_type)
-                        llm_ans = answer_question_llm(question, answer_type, qid)
-
-                        # For validation, we don't know gold, so prefer LLM
-                        # (it handles edge cases the rule engine misses)
-                        ans = llm_ans if llm_ans != 0 else rule_ans
+                        if rule_ans == 0:
+                            print(f"[{qid}] Rule engine failed (0), calling LLM...")
+                            llm_ans = answer_question_llm(question, answer_type, qid)
+                            ans = llm_ans if llm_ans != 0 else rule_ans
+                            time.sleep(13)
+                        else:
+                            ans = rule_ans
                     else:
                         ans = answer_question_llm(question, answer_type, qid)
+                        time.sleep(13)
 
                     f.write(f"{qid},{ans}\n")
 
                     if (i + 1) % 10 == 0:
                         print(f"  [{i+1}/{len(vquestions)}] completed...")
                         save_cache()
-
-                    time.sleep(4)  # Rate limit
 
             save_cache()
             print(f"\nSubmission CSV: {len(vquestions)} rows written to submission.csv")
