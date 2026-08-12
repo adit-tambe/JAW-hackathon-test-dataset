@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# LLM cross-check cache (may embed question text)
+data/llm_crosscheck_cache.json
