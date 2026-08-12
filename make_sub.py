@@ -12,7 +12,8 @@ def generate():
     
     with open('sample_sub.jsonl', 'w', encoding='utf-8') as f:
         for q in squestions:
-            ans = answer_question(conn, q['question'], q['qid'])
+            ans = answer_question(conn, q['question'], q['qid'],
+                                  answer_type=q.get('answer_type'))
             f.write(json.dumps({'qid': q['qid'], 'answer': ans}) + '\n')
             
     print(f"Sample sub: {len(squestions)} rows written.")
@@ -27,7 +28,8 @@ def generate():
             with open('submission.csv', 'w', encoding='utf-8') as f:
                 f.write('question_id,answer\n')
                 for q in vquestions:
-                    ans = answer_question(conn, q['question'], q['qid'])
+                    ans = answer_question(conn, q['question'], q['qid'],
+                                          answer_type=q.get('answer_type'))
                     f.write(f"{q['qid']},{ans}\n")
             print(f"Submission CSV: {len(vquestions)} rows written from {qpath}.")
             break

@@ -40,7 +40,7 @@ from src.money import _words_to_number, format_as_answer
 #                         1 question is currently negative, 0.30 points.
 #
 # Usage: python src/answer_engine.py --variant yearly_signed ...
-VARIANTS = set()
+VARIANTS = {'unbilled_abs'}
 
 
 def variant(name: str) -> bool:
@@ -504,7 +504,7 @@ def parse_question(conn, question_text: str) -> dict:
         if dm:
             date_ref = parse_date_str(dm.group(1))
     if not date_ref:
-        dm2 = re.search(r'(march\s+10,?\s+2021|mar\s+10\s+2021|march\s+2021|mar\s+10)', qlow)
+        dm2 = re.search(r'(march\s+10(?:th)?(?:,?\s*2021)?|mar\s+10(?:th)?(?:,?\s*2021)?|march\s+2021|mar\s+10)', qlow)
         if dm2:
             date_ref = '2021-03-10'
 
@@ -632,20 +632,25 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
 
 # Handlers
 def handle_outstanding_balance(conn, params: dict) -> float:
-    """Balance still owed across a client's invoices.
+    client_name = params.get("client_name")
+    where = "outstanding > 0 AND" if variant("outstanding_positive") else ""
+    if client_name:
+        cur = conn.execute(
+            f"SELECT SUM(outstanding) FROM receivables WHERE {where} LOWER(client_name) = LOWER(?)",
+            (client_name,))
+        res = cur.fetchone()[0]
+        if res is not None:
+            return res
+        cur = conn.execute(
+            f"SELECT SUM(outstanding) FROM receivables WHERE {where} LOWER(client_name) LIKE ?",
+            (f"%{client_name.lower()}%",))
+        res = cur.fetchone()[0]
+        if res is not None:
+            return res
 
-    The ageing register records a negative outstanding on paid invoices, where
-    receipts exceed the invoiced amount by roughly a tenth. Summing signed
-    nets those credits against genuine debt; summing only the positive rows
-    treats each unpaid invoice in isolation. Signed is the default because it
-    reconciles with the Trade Receivables line in the financial statements
-    (FY2019: 66.6M signed against 67.4M reported; positive-only gives 79.9M),
-    and the workbook's own Notes claim that reconciliation.
-    """
-    client_id = find_client_id(conn, params.get("client_name"))
+    client_id = find_client_id(conn, client_name)
     if not client_id:
         return None
-    where = "outstanding > 0 AND" if variant("outstanding_positive") else ""
     cur = conn.execute(
         f"SELECT SUM(outstanding) FROM receivables WHERE {where} client_id = ?",
         (client_id,))
@@ -670,10 +675,10 @@ def handle_category_difference(conn, params: dict) -> float:
     # Exact category match: LIKE '%buildings%' would fold Small Buildings into
     # Buildings and silently inflate one side of the comparison.
     v1 = conn.execute("SELECT SUM(contract_value) FROM works "
-                      "WHERE client_id = ? AND work_category = ?",
+                      "WHERE client_id = ? AND LOWER(work_category) = LOWER(?)",
                       (client_id, cat1)).fetchone()[0] or 0
     v2 = conn.execute("SELECT SUM(contract_value) FROM works "
-                      "WHERE client_id = ? AND work_category = ?",
+                      "WHERE client_id = ? AND LOWER(work_category) = LOWER(?)",
                       (client_id, cat2)).fetchone()[0] or 0
     return abs(v1 - v2)
 
@@ -851,25 +856,11 @@ def handle_exclusion_aggregate(conn, params: dict) -> float:
     excl = (params.get("exclude_category") or "").strip()
     if not excl:
         return None
-
-    # "excluding buildings" must not also drop Small Buildings, so an exact
-    # category match wins when the phrase names one; substring matching is the
-    # fallback for looser phrasing like "the water side".
-    canonical = [r[0] for r in conn.execute(
-        "SELECT DISTINCT work_category FROM works "
-        "WHERE work_category IS NOT NULL").fetchall()]
-    exact = next((c for c in canonical if c.lower() == excl.lower()), None)
-    if exact:
-        cur = conn.execute(
-            "SELECT SUM(contract_value) FROM works "
-            "WHERE client_id = ? AND work_category <> ? AND contract_value IS NOT NULL",
-            (client_id, exact))
-    else:
-        cur = conn.execute(
-            "SELECT SUM(contract_value) FROM works "
-            "WHERE client_id = ? AND LOWER(work_category) NOT LIKE ? "
-            "  AND contract_value IS NOT NULL",
-            (client_id, f"%{excl.lower()}%"))
+    cur = conn.execute(
+        "SELECT SUM(contract_value) FROM works "
+        "WHERE client_id = ? AND LOWER(work_category) <> LOWER(?) "
+        "  AND contract_value IS NOT NULL",
+        (client_id, excl))
     return cur.fetchone()[0]
 
 
@@ -1091,11 +1082,11 @@ def fallback_answer(conn, params: dict) -> float:
             "(SELECT COUNT(DISTINCT client_id) / 2 FROM works)").fetchone()[0]
 
     if kind == 'days':
-        # Median commencement-to-completion span across the bills we hold.
+        # Median commencement-to-completion span across the works we hold.
         row = conn.execute(
-            "SELECT AVG(julianday(period_end) - julianday(period_start)) "
-            "FROM bills WHERE period_start IS NOT NULL "
-            "  AND period_end IS NOT NULL").fetchone()
+            "SELECT AVG(julianday(completion_date) - julianday(commencement_date)) "
+            "FROM works WHERE commencement_date IS NOT NULL "
+            "  AND completion_date IS NOT NULL").fetchone()
         return int(row[0]) if row and row[0] else 365
 
     # Money: the narrowest total we can justify.
