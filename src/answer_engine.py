@@ -434,13 +434,31 @@ def parse_question(conn, question_text: str) -> dict:
         'sewerage and drainage', 'water supply', 'small buildings', 'tunnels',
         'expressways', 'expressway', 'irrigation', 'buildings', 'maintenance',
     ]
+    # Three client names contain a category word — National *Expressway*
+    # Development Authority, *Irrigation* & Waterways Dept, and Central Works &
+    # *Buildings* Bureau. Matching a category inside the client's own name
+    # invents a category the question never asked about and, because the client
+    # is usually named first, displaces the real second one. So the spans
+    # occupied by client names are masked out before categories are read.
+    client_spans = []
+    for c in db_clients:
+        for m in re.finditer(re.escape(normalize_text(c).lower()), qlow):
+            client_spans.append((m.start(), m.end()))
+    for pat, _alias in CLIENT_ALIASES:
+        for m in re.finditer(pat, qlow):
+            client_spans.append((m.start(), m.end()))
+
+    def inside_client(a, b):
+        return any(s <= a and b <= e for s, e in client_spans)
+
     hits = []
     for surface in sorted(category_surface, key=len, reverse=True):
         for m in re.finditer(r'\b' + re.escape(surface.lower()) + r'\b', qlow):
             cat = canonical_category(surface)
             # Skip a shorter name that sits inside one already matched, so
             # "small buildings" is not also counted as "buildings".
-            if cat and not any(a <= m.start() and m.end() <= b for a, b, _ in hits):
+            if cat and not inside_client(m.start(), m.end()) \
+                    and not any(a <= m.start() and m.end() <= b for a, b, _ in hits):
                 hits.append((m.start(), m.end(), cat))
     hits.sort()
     ordered = []
