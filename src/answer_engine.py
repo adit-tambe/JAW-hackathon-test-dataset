@@ -617,7 +617,13 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
 
     if 'outstanding' in qlow or 'unpaid' in qlow or 'pending' in qlow or 'still owe' in qlow or 'still owed' in qlow or 'due across' in qlow or 'remaining balance' in qlow or 'true balance' in qlow or 'deducting all cleared' in qlow or 'net balance' in qlow or 'system balance' in qlow \
             or 'still on our books' in qlow or 'balance still' in qlow \
-            or ('balance' in qlow and re.search(r'invoice|payment|paid|cleared|credit', qlow)):
+            or ('balance' in qlow and re.search(r'invoice|payment|paid|cleared|credit', qlow)) \
+            or re.search(r'\bremains?\b[^.]{0,30}\binvoices?\b', qlow):
+        # "what amount remains on the invoices we are cross-checking" is an
+        # unpaid-balance question, but "cross-check" + "invoice" would
+        # otherwise trip the unbilled-gap rule below first. Matched narrowly so
+        # that "the unbilled remainder ... against our submitted claims"
+        # (HV-IC-0120) still reaches unbilled_gap.
         return 'outstanding_balance'
 
     if year1 and year2 and ('difference' in qlow or 'gap' in qlow or 'moved' in qlow or 'shift' in qlow or 'between' in qlow or 'from' in qlow or 'delta' in qlow or 'move' in qlow or 'in 20' in qlow or 'totals' in qlow or 'swing' in qlow or 'compare' in qlow):
@@ -629,7 +635,12 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if cat1 and cat2 and ('difference' in qlow or 'spread' in qlow or 'variance' in qlow or 'versus' in qlow or ' vs ' in qlow or 'compared' in qlow or 'and' in qlow or 'across both scopes' in qlow):
         return 'category_difference'
 
-    if 'collection' in qlow or 'collected' in qlow or 'cleared against' in qlow or 'out of 100' in qlow:
+    # A share-of-works question also says "out of 100", so the reference-letter
+    # wording has to be excluded here or it never reaches referenced_share
+    # below. HV-IC-0095 only escaped by spelling it "out-of-100".
+    if (('collection' in qlow or 'collected' in qlow or 'cleared against' in qlow
+         or 'out of 100' in qlow)
+            and not re.search(r'testimonial|endorsement|reference letter|sign-off|client approval', qlow)):
         return 'collection_percent'
 
     if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val or 'target' in qlow):
@@ -657,7 +668,7 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if 'testimonial' in qlow or ('share' in qlow and 'reference' in qlow) or 'endorsement' in qlow or 'formal verification' in qlow or 'client sign-off' in qlow or 'backed by a client reference' in qlow or ('reference letter' in qlow and ('divided' in qlow or 'share' in qlow or 'out of' in qlow or 'portion' in qlow)):
         return 'referenced_share'
 
-    if re.search(r'\bexclud(?:e|es|ing)\b|minus the|remove the|without the|carve that out|carve out|set aside|drop(?:ping)? the|filter(?:ed)? out|strip(?:ped)? out', qlow):
+    if re.search(r'\bexclud(?:e|es|ed|ing)\b|minus the|remove the|without the|carve that out|carve out|set aside|drop(?:ping)? the|filter(?:ed)? out|strip(?:ped)? out', qlow):
         return 'exclusion_aggregate'
 
     if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val):
