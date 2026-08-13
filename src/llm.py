@@ -35,8 +35,79 @@ _lock = threading.Lock()
 _stats = {"calls": 0, "retries": 0, "failures": 0, "empty": 0}
 
 
+_resolved: dict[str, str] = {}
+
+
+def _candidate_endpoints() -> list[str]:
+    """The documented form first, then the obvious near-misses.
+
+    The brief shows `$LLM_BASE_URL/chat/completions`, so that is what we try.
+    But whether the exported base already carries the `/v1` prefix is not
+    something to bet the run on: if it does not and we assume it does, every
+    call 404s, the liveness probe reports the endpoint down, and the model
+    layer silently disables itself for the whole run.
+    """
+    base = LLM_BASE_URL.rstrip("/")
+    urls = [f"{base}/chat/completions"]
+    if base.endswith("/v1"):
+        urls.append(f"{base[:-3].rstrip('/')}/chat/completions")
+    else:
+        urls.append(f"{base}/v1/chat/completions")
+    seen, out = set(), []
+    for url in urls:
+        if url not in seen:
+            seen.add(url)
+            out.append(url)
+    return out
+
+
 def endpoint() -> str:
-    return f"{LLM_BASE_URL}/chat/completions"
+    return _resolved.get("url") or _candidate_endpoints()[0]
+
+
+def model_name() -> str:
+    return _resolved.get("model") or LLM_MODEL
+
+
+def _discover_model(chat_url: str) -> None:
+    """Ask the server what it actually serves.
+
+    The model id is documented, but a wrong one is rejected on every single
+    call, and the symptom — nothing ever answers — looks exactly like an outage.
+    Asking costs one request. We keep the configured name whenever the server
+    confirms it, and only substitute when it plainly serves something else.
+    """
+    models_url = chat_url.rsplit("/chat/completions", 1)[0] + "/models"
+    try:
+        response = _session.get(models_url, timeout=(10, 30))
+        served = [m.get("id") for m in (response.json().get("data") or [])
+                  if m.get("id")]
+    except Exception:
+        return
+    if served and LLM_MODEL not in served:
+        _resolved["model"] = served[0]
+        print(f"  note: endpoint serves {served[0]!r}, not {LLM_MODEL!r} — using it")
+
+
+def resolve_endpoint() -> str | None:
+    """Find which candidate URL actually answers, and remember it."""
+    if "url" in _resolved:
+        return _resolved["url"]
+    probe = {"model": LLM_MODEL,
+             "messages": [{"role": "user", "content": "Reply with the digit 1 only."}],
+             "max_tokens": LLM_MAX_TOKENS, "temperature": 0}
+    for url in _candidate_endpoints():
+        try:
+            response = _session.post(url, json=probe, timeout=(10, 120))
+        except Exception:
+            continue
+        if response.status_code == 404:
+            continue
+        if response.status_code < 500:
+            _resolved["url"] = url
+            _discover_model(url)
+            return url
+    return None
 
 
 def stats() -> dict:
@@ -59,6 +130,8 @@ def available() -> bool:
     perfectly healthy endpoint.
     """
     try:
+        if resolve_endpoint() is None:
+            return False
         reply = chat([{"role": "user", "content": "Reply with the digit 1 only."}],
                      max_tokens=LLM_MAX_TOKENS, retries=2)
         return reply is not None
@@ -71,7 +144,7 @@ def chat(messages: list[dict], *, schema: dict | None = None,
          retries: int = _RETRIES) -> str | None:
     """One chat completion. Returns assistant content, or None on failure."""
     payload: dict[str, Any] = {
-        "model": LLM_MODEL,
+        "model": model_name(),
         "messages": messages,
         # Generous by default: too small and a reasoning model burns the whole
         # budget on its trace and returns nothing.

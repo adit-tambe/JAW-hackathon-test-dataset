@@ -813,6 +813,48 @@ def load_iso_certificates(conn):
     return count
 
 
+def _norm_key(name) -> str:
+    """'Cost (INR)' -> 'cost'.  'Qty Measured' -> 'qtymeasured'."""
+    text = re.sub(r"\(.*?\)", " ", str(name or ""))
+    return re.sub(r"[^a-z0-9]", "", text.lower())
+
+
+def pick(row: dict, *candidates):
+    """Fetch a column by normalised name.
+
+    Spreadsheet headers carry units and spacing that vary between workbooks —
+    'Cost (INR)' against 'Cost', 'Rate (INR)' against 'Unit Rate'. Matching them
+    literally is how the plant register and every BOQ rate silently loaded as
+    zero: the rows were there, the numbers were not. Matching on a normalised
+    key survives that, which matters most on an estate whose headers we have
+    never seen.
+    """
+    normalised = {_norm_key(k): v for k, v in row.items()}
+    for candidate in candidates:
+        value = normalised.get(_norm_key(candidate))
+        if value not in (None, ""):
+            return value
+    return None
+
+
+def pick_text(row: dict, *candidates) -> str:
+    value = pick(row, *candidates)
+    return "" if value is None else str(value).strip()
+
+
+def pick_number(row: dict, *candidates):
+    value = pick(row, *candidates)
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    cleaned = re.sub(r"[^\d.\-]", "", str(value))
+    try:
+        return float(cleaned) if cleaned not in ("", "-", ".") else None
+    except ValueError:
+        return None
+
+
 def load_workbook_data(conn):
     """Load data from extracted workbook JSON files."""
     count = 0
@@ -827,62 +869,73 @@ def load_workbook_data(conn):
             for sheet_name, sheet_data in data.get("sheets", {}).items():
                 for row in sheet_data.get("data", []):
                     if isinstance(row, dict):
-                        desc = (row.get("Description") or row.get("Item")
-                                or row.get("description") or "")
-                        qty = row.get("Quantity") or row.get("Qty") or 0
-                        rate = row.get("Rate") or row.get("Unit Rate") or 0
-                        amount = row.get("Amount") or row.get("Total") or 0
-                        try:
-                            conn.execute("""
-                                INSERT INTO boq_items
-                                    (contract_ref, item_desc, quantity, rate, amount)
-                                VALUES (?, ?, ?, ?, ?)
-                            """, (
-                                data.get("contract_ref", doc_id),
-                                str(desc),
-                                float(qty) if qty else 0,
-                                float(rate) if rate else 0,
-                                float(amount) if amount else 0,
-                            ))
-                        except (ValueError, TypeError):
-                            pass
-        
+                        desc = pick_text(row, "description", "item", "particulars")
+                        qty = pick_number(row, "quantity", "qty", "qtymeasured")
+                        rate = pick_number(row, "rate", "unitrate")
+                        amount = pick_number(row, "amount", "total", "value")
+                        conn.execute("""
+                            INSERT INTO boq_items
+                                (contract_ref, item_desc, quantity, rate, amount)
+                            VALUES (?, ?, ?, ?, ?)
+                        """, (data.get("contract_ref", doc_id), desc,
+                              qty or 0, rate or 0, amount or 0))
+
         elif doc_type == "asset_register":
             for sheet_name, sheet_data in data.get("sheets", {}).items():
+                if sheet_name.lower().startswith("note"):
+                    continue
                 for row in sheet_data.get("data", []):
-                    if isinstance(row, dict):
-                        desc = (row.get("Description") or row.get("Asset")
-                                or row.get("description") or "")
-                        cost = (row.get("Cost") or row.get("Acquisition Cost")
-                                or row.get("Value") or 0)
-                        date = row.get("Date") or row.get("Acquisition Date")
-                        try:
-                            conn.execute("""
-                                INSERT INTO assets
-                                    (description, acquisition_cost, acquisition_date)
-                                VALUES (?, ?, ?)
-                            """, (str(desc), float(cost) if cost else 0,
-                                  str(date) if date else None))
-                        except (ValueError, TypeError):
-                            pass
+                    if not isinstance(row, dict):
+                        continue
+                    # The register describes an asset across several columns
+                    # rather than in one "description" field, so build the label
+                    # from whichever of them this workbook actually carries.
+                    label = " ".join(x for x in (
+                        pick_text(row, "type", "asset", "description"),
+                        pick_text(row, "make", "manufacturer"),
+                        pick_text(row, "location"),
+                    ) if x).strip()
+                    cost = pick_number(row, "cost", "acquisitioncost", "value",
+                                       "grossblock")
+                    date = pick_text(row, "acquired", "acquisitiondate", "date",
+                                     "purchasedate")
+                    if not label and cost is None:
+                        continue
+                    conn.execute("""
+                        INSERT INTO assets
+                            (description, acquisition_cost, acquisition_date)
+                        VALUES (?, ?, ?)
+                    """, (label, cost or 0, date or None))
 
         elif doc_type == "receivables_ageing":
             for sheet_name, sheet_data in data.get("sheets", {}).items():
-                if sheet_name == "Notes":
+                if sheet_name.lower().startswith("note"):
                     continue
                 for row in sheet_data.get("data", []):
-                    if isinstance(row, dict) and row.get("Client"):
-                        cname = row.get("Client").strip()
-                        c_row = conn.execute("SELECT client_id FROM clients WHERE LOWER(client_name) = LOWER(?) OR client_name LIKE ?", (cname, f"%{cname}%")).fetchone()
-                        client_id = c_row[0] if c_row else None
-                        inv = float(row.get("Invoiced (INR)") or 0)
-                        rec = float(row.get("Received (INR)") or 0)
-                        out = float(row.get("Outstanding (INR)") or 0)
-                        conn.execute("""
-                            INSERT INTO receivables
-                                (invoice_no, client_name, client_id, invoice_date, invoiced, status, received, outstanding, doc_id)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        """, (row.get("Invoice No"), cname, client_id, row.get("Invoice Date"), inv, row.get("Status"), rec, out, doc_id))
+                    if not isinstance(row, dict):
+                        continue
+                    cname = pick_text(row, "client", "customer", "party")
+                    if not cname:
+                        continue
+                    c_row = conn.execute(
+                        "SELECT client_id FROM clients WHERE LOWER(client_name) = LOWER(?) "
+                        "OR client_name LIKE ?", (cname, f"%{cname}%")).fetchone()
+                    inv = pick_number(row, "invoiced", "billed", "invoiceamount") or 0
+                    rec = pick_number(row, "received", "receipts", "collected") or 0
+                    out = pick_number(row, "outstanding", "balance", "due")
+                    # The register states outstanding, but derive it if a
+                    # differently-shaped workbook does not.
+                    if out is None:
+                        out = inv - rec
+                    conn.execute("""
+                        INSERT INTO receivables
+                            (invoice_no, client_name, client_id, invoice_date,
+                             invoiced, status, received, outstanding, doc_id)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (pick_text(row, "invoiceno", "invoice", "billno"), cname,
+                          c_row[0] if c_row else None,
+                          pick_text(row, "invoicedate", "date"), inv,
+                          pick_text(row, "status"), rec, out, doc_id))
         
         conn.execute(
             "INSERT OR REPLACE INTO doc_metadata VALUES (?, ?, ?, 0)",

@@ -39,16 +39,39 @@ def load_questions(path: Path) -> list[dict]:
     with open(path, encoding="utf-8-sig") as fh:
         payload = json.load(fh)
     questions = payload.get("questions", payload) if isinstance(payload, dict) else payload
-    out = []
+    out, seen = [], set()
     for q in questions:
         qid = q.get("qid") or q.get("question_id") or q.get("id")
         text = q.get("question") or q.get("text") or ""
         if not qid:
             continue
-        out.append({"qid": str(qid), "question": text,
-                    "answer_type": (q.get("answer_type") or "money").lower(),
+        qid = str(qid).strip()
+        if qid in seen:
+            # One row per question. A repeated id would otherwise produce two
+            # rows for the same question, which is not a submission shape they
+            # asked for.
+            continue
+        seen.add(qid)
+        out.append({"qid": qid, "question": text,
+                    "answer_type": (q.get("answer_type") or "money").strip().lower(),
                     "tier": q.get("tier", "")})
     return out
+
+
+def write_csv(out_path: Path, questions: list[dict], answers: dict) -> None:
+    """Write the submission atomically.
+
+    Via a temporary file and a replace, so a run interrupted mid-write cannot
+    leave a half-written CSV where a complete one used to be.
+    """
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out_path.with_suffix(out_path.suffix + ".tmp")
+    with open(tmp, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["question_id", "answer"])
+        for q in questions:
+            writer.writerow([q["qid"], answers.get(q["qid"], "0")])
+    os.replace(tmp, out_path)
 
 
 def format_answer(value, answer_type: str) -> str:
@@ -80,6 +103,10 @@ def main() -> int:
                     help="LLM votes on a disagreement (default 3)")
     ap.add_argument("--workers", type=int, default=None,
                     help="questions answered concurrently (default: LLM_CONCURRENCY)")
+    ap.add_argument("--time-budget", type=float,
+                    default=float(os.getenv("JAW_TIME_BUDGET", "5400")),
+                    help="seconds before the model pass gives way to the engine "
+                         "(0 disables the deadline)")
     ap.add_argument("--skip-ingest", action="store_true",
                     help="reuse an existing database (development only)")
     args = ap.parse_args()
@@ -117,35 +144,59 @@ def main() -> int:
     else:
         print("\n  [skipped] ingest and build — reusing existing database")
 
-    banner("3/4  Answer")
+    banner("3/4  Answer — deterministic pass")
     import collections
     import sqlite3
     from src.llm import map_concurrent, stats as llm_stats
-    from src.resolve import resolve
+    from src.resolve import deterministic, resolve
     from src.schema_card import build_card
 
     conn = sqlite3.connect(DB_PATH)
     card = build_card(conn)
     print(f"  schema card: {len(card)} chars (~{len(card)//4} tokens)")
 
+    # The deterministic pass runs first, on its own, and its result is written
+    # out immediately. It takes about a second, needs no network, and from that
+    # moment there is a complete, valid submission on disk. Everything after
+    # this can only improve it — and if anything later hangs, is killed, or
+    # throws, the file already there is the one that gets graded.
+    answers: dict[str, str] = {}
+    for q in questions:
+        try:
+            first = deterministic(conn, q["question"], q["qid"], q["answer_type"])
+            value = first["value"]
+        except Exception:
+            value = None
+        answers[q["qid"]] = format_answer(value, q["answer_type"])
+    write_csv(out_path, questions, answers)
+    print(f"  baseline submission written ({len(answers)} rows) — safe from here")
+
     use_llm = False
     if not args.no_llm:
         from src.llm import available, endpoint
         print(f"  probing {endpoint()} ...", flush=True)
         use_llm = available()
-        print(f"  LLM {'available' if use_llm else 'UNAVAILABLE — engine only'}")
+        print(f"  LLM {'available' if use_llm else 'UNAVAILABLE — keeping the deterministic pass'}")
 
-    answers: dict[str, str] = {}
     routes: collections.Counter = collections.Counter()
     disagreements: list[tuple] = []
     done = [0]
+    deadline = started + args.time_budget if args.time_budget > 0 else None
+    degraded = [False]
 
-    def work(q: dict) -> tuple[str, str, str]:
+    def work(q: dict):
         # One connection per worker: sqlite3 objects are not shareable.
         local = sqlite3.connect(DB_PATH)
+        # Past the deadline the remaining questions fall back to the engine, so
+        # the run always finishes rather than being cut off part way.
+        over = deadline is not None and time.time() > deadline
+        if over and not degraded[0]:
+            degraded[0] = True
+            print(f"    !! time budget reached — remaining questions answered "
+                  f"by the engine alone", flush=True)
         try:
             outcome = resolve(local, DB_PATH, card, q["question"], q["qid"],
-                              q["answer_type"], use_llm=use_llm,
+                              q["answer_type"], use_llm=use_llm and not over,
                               samples=args.samples)
         except Exception as exc:
             print(f"    !! {q['qid']}: {type(exc).__name__}: {exc}")
@@ -158,15 +209,23 @@ def main() -> int:
             print(f"    {done[0]}/{len(questions)} answered", flush=True)
         return q["qid"], outcome, q["answer_type"]
 
-    # LLM latency dominates; the engine alone is fast enough to stay serial.
-    results = (map_concurrent(work, questions, workers=args.workers)
-               if use_llm else [work(q) for q in questions])
-
-    for qid, outcome, answer_type in results:
-        answers[qid] = format_answer(outcome["value"], answer_type)
-        routes[outcome["route"]] += 1
-        if outcome["route"] not in ("agreed", "engine", "engine-only"):
-            disagreements.append((qid, outcome))
+    if use_llm:
+        banner("3b/4  Answer — model cross-check")
+        try:
+            results = map_concurrent(work, questions, workers=args.workers)
+        except Exception as exc:
+            print(f"  !! cross-check pass failed ({type(exc).__name__}: {exc})")
+            print("     keeping the deterministic submission already written")
+            results = []
+        for qid, outcome, answer_type in results:
+            # Never let the refinement pass replace a real answer with nothing.
+            if outcome["value"] is not None:
+                answers[qid] = format_answer(outcome["value"], answer_type)
+            routes[outcome["route"]] += 1
+            if outcome["route"] not in ("agreed", "engine", "engine-only"):
+                disagreements.append((qid, outcome))
+    else:
+        routes["engine-only"] = len(questions)
     conn.close()
 
     print("\n  how each answer was reached:")
@@ -183,12 +242,7 @@ def main() -> int:
                   f"llm={llm_value} -> {outcome['route']}")
 
     banner("4/4  Write")
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w", newline="", encoding="utf-8") as fh:
-        writer = csv.writer(fh)
-        writer.writerow(["question_id", "answer"])
-        for q in questions:
-            writer.writerow([q["qid"], answers.get(q["qid"], "0")])
+    write_csv(out_path, questions, answers)
     print(f"  wrote {len(questions)} rows to {out_path}")
     print(f"\n  DONE in {time.time() - started:.1f}s")
     return 0

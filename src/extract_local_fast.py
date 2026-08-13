@@ -439,20 +439,40 @@ def extract_bond(text: str, doc_id: str) -> dict:
     bank_name = lines[0] if lines else "Unknown Bank"
     flat = re.sub(r'\s+', ' ', text)
     
-    bond_no_m = re.search(r'Bond No:\s*([^\n]+)', flat)
+    # `flat` has had its newlines collapsed, so a `[^\n]+` capture runs to the
+    # end of the document — which is how the bond number came to hold three
+    # pages of guarantee text. Bound the capture to the shape of a reference,
+    # and accept both layouts: one says "Bond No", the other "BG No".
+    bond_no_m = re.search(r'\b(?:Bond|BG)\s*(?:No|Ref|Reference)\.?:?\s*([A-Za-z0-9][\w/\-]*)',
+                          flat, re.I)
     bond_number = bond_no_m.group(1).strip() if bond_no_m else None
-    
-    val_m = re.search(r'not exceeding\s+([^\n)(,]+(?:Lakh|Crore|Cr)?)', flat) or \
+
+    val_m = re.search(r'not exceeding\s+Rs\.?\s*([\d,\.]+\s*(?:Lakh|Crore|Cr)?)', flat, re.I) or \
+            re.search(r'not exceeding\s+([^\n)(,]+(?:Lakh|Crore|Cr)?)', flat) or \
             re.search(r'Rs\.?\s*([\d,\.]+\s*(?:Lakh|Crore|Cr)?)', flat)
     bond_val_str = val_m.group(1).strip() if val_m else None
     raw_bond_val = parse_indian_money(bond_val_str)
-    
-    dates_m = re.search(r'valid from\s+(\S+)\s+until\s+(\S+)', flat)
-    issue_date = parse_date(dates_m.group(1)) if dates_m else None
-    expiry_date = parse_date(dates_m.group(2)) if dates_m else None
-    
+
+    dates_m = re.search(r'valid from\s+(\S+)\s+until\s+(\S+)', flat, re.I)
+    if dates_m:
+        issue_date = parse_date(dates_m.group(1))
+        expiry_date = parse_date(dates_m.group(2))
+    else:
+        # Second layout: "Date: 25 Apr 2019" ... "in force up to and including
+        # 05 Jul 2021".
+        issued = re.search(r'\bDate:\s*(\d{1,2}\s+\w+\s+\d{4}|\d{4}-\d{2}-\d{2})', flat)
+        until = re.search(r'in force up to and including\s+(\d{1,2}\s+\w+\s+\d{4}|\d{4}-\d{2}-\d{2})',
+                          flat, re.I)
+        issue_date = parse_date(issued.group(1)) if issued else None
+        expiry_date = parse_date(until.group(1)) if until else None
+
     proj_m = re.search(r'work of\s+([^,\n]+)', flat)
+    if not proj_m:
+        proj_m = re.search(r'Subject:\s*Performance Bond\s*[—\-–]\s*([^(\n]+)', flat, re.I)
     project_name = proj_m.group(1).strip() if proj_m else None
+
+    tender_m = re.search(r'\b(RFP-\d+)', flat)
+    tender_ref = tender_m.group(1) if tender_m else None
     
     return {
         "_doc_id": doc_id,
@@ -466,6 +486,7 @@ def extract_bond(text: str, doc_id: str) -> dict:
         "contract_value_raw": None,
         "bank_name": bank_name,
         "bond_number": bond_number,
+        "tender_ref": tender_ref,
         "issue_date": issue_date,
         "expiry_date": expiry_date
     }

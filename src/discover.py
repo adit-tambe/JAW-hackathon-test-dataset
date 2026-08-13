@@ -61,6 +61,9 @@ PREFIX = {
     "asset_register_workbook":        "WB-ASSETS",
     "boq_workbook":                   "WB-BOQ",
     "unknown_workbook":               "WB-OTHER",
+    # Not a family we recognise. Kept rather than dropped: its text still goes
+    # into the corpus and the run log names it.
+    "unknown_document":               "DOC-UNKNOWN",
 }
 
 
@@ -251,6 +254,7 @@ def discover(root: Path, verbose: bool = True) -> list[Doc]:
     counters: dict[str, int] = {}
     docs: list[Doc] = []
     unmatched: list[Path] = []
+    unreadable: list[Path] = []
 
     for path in files:
         try:
@@ -269,12 +273,18 @@ def discover(root: Path, verbose: bool = True) -> list[Doc]:
                 kind = "xlsx"
         except Exception as exc:                      # a single bad file must not
             print(f"  !! could not read {path.name}: {exc}")   # sink the whole run
-            unmatched.append(path)
+            unreadable.append(path)
             continue
 
         if doc_type is None:
+            # A document family we have never seen must not vanish. Typing it
+            # as unknown keeps its full text in the corpus, so it still reaches
+            # the text fallback and still shows up in the run log — where an
+            # unexpected family is something we want to see, loudly, rather
+            # than discover from a wrong answer.
             unmatched.append(path)
-            continue
+            doc_type, how = ("unknown_workbook" if kind == "xlsx"
+                             else "unknown_document"), "unmatched"
 
         n = counters.get(doc_type, 0) + 1
         counters[doc_type] = n
@@ -286,7 +296,12 @@ def discover(root: Path, verbose: bool = True) -> list[Doc]:
         for doc_type in sorted(counters, key=lambda t: -counters[t]):
             print(f"      {doc_type:34s} {counters[doc_type]}")
         if unmatched:
-            print(f"  {len(unmatched)} file(s) could not be typed:")
-            for p in unmatched[:10]:
+            print(f"  !! {len(unmatched)} file(s) matched no known family and were "
+                  f"kept as unknown (text retained, typed fields not extracted):")
+            for p in unmatched[:15]:
+                print(f"      {p}")
+        if unreadable:
+            print(f"  !! {len(unreadable)} file(s) could not be opened at all:")
+            for p in unreadable[:15]:
                 print(f"      {p}")
     return docs
