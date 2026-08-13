@@ -24,8 +24,32 @@ MODE = "sql"
 CALLS = {"n": 0}
 
 
+_OUT_OF_SCOPE_SQL: list[tuple[str, str]] = [
+    ("plant and machinery on the register", "SELECT SUM(acquisition_cost) FROM assets"),
+    ("items are listed in our plant", "SELECT COUNT(*) FROM assets"),
+    ("money paid in", "SELECT SUM(amount) FROM bank_txns WHERE direction='deposit'"),
+    ("transactions are recorded", "SELECT COUNT(*) FROM bank_txns"),
+    ("debit posting", "SELECT SUM(debit) FROM ledger_entries"),
+    ("complied with", "SELECT COUNT(*) FROM compliance_items WHERE status='Complied'"),
+    ("combined bid value", "SELECT SUM(bid_value) FROM tenders"),
+    ("iso certificates", "SELECT COUNT(*) FROM iso_certs"),
+    ("net amount claimed", "SELECT SUM(net_claimed) FROM bills"),
+    ("bill-of-quantity line items",
+     "SELECT SUM(amount) FROM boq_items WHERE contract_ref='Contract_71'"),
+    ("pmp credential",
+     "SELECT COUNT(DISTINCT engineer_id) FROM engineer_certs WHERE UPPER(cert_type)='PMP'"),
+    ("contract revenue from epc",
+     "SELECT SUM(current_year) FROM statement_items WHERE fiscal_year=2019 "
+     "AND section='revenue' AND particulars LIKE 'Contract Revenue%'"),
+]
+
+
 def _sql_for(question: str) -> str:
     """A crude intent guess — enough to produce executable, varied SQL."""
+    just = _just_the_question(question).lower()
+    for cue, sql in _OUT_OF_SCOPE_SQL:
+        if cue in just:
+            return sql
     q = question.lower()
     client = None
     m = re.search(r"(national expressway development authority|trishakti power "
@@ -124,8 +148,21 @@ _SHAPE_CUES: list[tuple[str, str]] = [
 ]
 
 
+# Subjects none of the nineteen shapes computes over. A competent classifier
+# should return "other" for these and let the general query path handle them.
+_OUT_OF_SCOPE = (
+    "plant and machinery", "plant register", "asset", "bank statement",
+    "paid in", "ledger", "debit posting", "compliance", "complied",
+    "tender dossier", "bid value", "iso certificate", "running account bill",
+    "bill-of-quantity", "bill of quantity", "pmp credential", "fiscal year",
+    "financial statement",
+)
+
+
 def _shape_for(question: str) -> str:
     q = _just_the_question(question).lower()
+    if any(cue in q for cue in _OUT_OF_SCOPE):
+        return "other"
     for needle, shape in _SHAPE_CUES:
         if needle in q:
             return shape

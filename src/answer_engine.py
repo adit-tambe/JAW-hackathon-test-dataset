@@ -205,11 +205,63 @@ def find_engineer_id(conn, engineer_name: str):
     row = cur.fetchone()
     if row:
         return row[0]
-    cur = conn.execute("SELECT engineer_id FROM engineers WHERE name LIKE ?", (f"%{engineer_name}%",))
+    # Ordered, so a partial that matches more than one person resolves the same
+    # way every run. Without it the answer depends on the order documents were
+    # ingested in, which is not a property of the documents at all.
+    cur = conn.execute(
+        "SELECT engineer_id FROM engineers WHERE name LIKE ? ORDER BY name",
+        (f"%{engineer_name}%",))
     row = cur.fetchone()
     if row:
         return row[0]
     return None
+
+
+def disambiguate_engineer(conn, candidates: list, qlow: str):
+    """Choose between people who share a first name, using the rest of the question.
+
+    A question that says only "priya's rajasthan pumping station" still contains
+    enough to identify her: exactly one Priya has a pumping station in Rajasthan.
+    So score each candidate on how much of the question their own portfolio
+    accounts for — the state named, and the kind of work named — and take the
+    clear winner.
+
+    Where the question genuinely does not distinguish them, fall back to the
+    first alphabetically. That is still a guess, but it is the same guess on
+    every run and on every arrangement of the same documents, which a positional
+    one is not.
+    """
+    state = next((s for s in STATES if s.lower() in qlow), None)
+    hint_words = [w for phrase, words in TYPE_HINTS.items()
+                  if re.search(r'\b' + re.escape(phrase) + r'\b', qlow)
+                  for w in words]
+
+    best, best_score, tied = None, 0, False
+    for name in candidates:
+        rows = conn.execute("""
+            SELECT w.project_name FROM works w
+            JOIN engineer_works ew ON ew.work_id = w.work_id
+            JOIN engineers e ON e.engineer_id = ew.engineer_id
+            WHERE e.name = ?
+        """, (name,)).fetchall()
+        projects = [r[0].lower() for r in rows if r[0]]
+        score = 0
+        if state:
+            score += sum(1 for p in projects if state.lower() in p)
+        if hint_words:
+            score += sum(1 for p in projects if any(w in p for w in hint_words))
+        if state and hint_words:
+            # Both in the same project is much stronger evidence than either
+            # appearing separately across a portfolio.
+            score += 3 * sum(1 for p in projects
+                             if state.lower() in p and any(w in p for w in hint_words))
+        if score > best_score:
+            best, best_score, tied = name, score, False
+        elif score == best_score and score > 0:
+            tied = True
+    if best is not None and not tied:
+        return best
+    return candidates[0]
 
 
 def get_client_id_from_project(conn, project_name: str):
@@ -380,11 +432,19 @@ def parse_question(conn, question_text: str) -> dict:
             eng = e
             break
     if not eng:
-        for e in db_engineers:
-            fname = e.split()[0].lower()
-            if len(fname) >= 4 and re.search(r'\b' + fname + r"(?:'s|s)?\b", qlow):
-                eng = e
-                break
+        # A question may give only a first name, and first names are not unique
+        # here. Taking whichever person the database happened to store first
+        # makes the answer depend on the order the documents were ingested in —
+        # the same estate, differently arranged, resolves to a different person
+        # and returns a different, confident, wrong number.
+        candidates = sorted(
+            e for e in db_engineers
+            if len(e.split()[0]) >= 4
+            and re.search(r'\b' + re.escape(e.split()[0].lower()) + r"(?:'s|s)?\b", qlow))
+        if len(candidates) == 1:
+            eng = candidates[0]
+        elif candidates:
+            eng = disambiguate_engineer(conn, candidates, qlow)
 
     # 3. Match project
     proj = None
@@ -610,9 +670,14 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     # still need to secure to clear the 120 Cr credential threshold" is a
     # credential-gap question, not an unpaid-invoice one, even though it says
     # "outstanding".
+    # "how much is still missing" has many spellings and they all mean the same
+    # thing. The distinguishing feature is not the wording but that a target is
+    # named and the question asks for the remainder rather than the total.
     if (target_val or threshold_val) and re.search(
             r'need to secure|need to bring in|how much more|still need|'
-            r'credential (?:target|threshold)|to hit the|to reach', qlow):
+            r'credential (?:target|threshold)|to hit the|to reach|'
+            r'\bshort\b|\bshortfall\b|fall(?:ing)? short|still missing|'
+            r'how far (?:off|away)|remaining to|left to (?:reach|hit)', qlow):
         return 'gap_to_threshold'
 
     if 'outstanding' in qlow or 'unpaid' in qlow or 'pending' in qlow or 'still owe' in qlow or 'still owed' in qlow or 'due across' in qlow or 'remaining balance' in qlow or 'true balance' in qlow or 'deducting all cleared' in qlow or 'net balance' in qlow or 'system balance' in qlow \

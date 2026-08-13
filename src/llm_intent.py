@@ -79,6 +79,16 @@ Judge by what is being asked, not by which words appear. Questions are \
 deliberately paraphrased, and some contain a mistaken recollection ("that \
 number looks off", "I'm half-remembering") which is narrative framing, not part \
 of the calculation. Ignore it.
+
+The listed calculations cover completed works and client invoices only. The \
+records also hold plant and machinery, bank transactions, ledger postings, \
+trial balances, tender dossiers, compliance checklists, RA bills and bills of \
+quantity, staff profiles and certifications, and published annual figures. \
+Nothing in the list computes over those. If the question is about any of them, \
+or about anything else the list does not produce, answer "other" — that is a \
+correct and useful answer, and it routes the question to a general query. \
+Forcing such a question into the nearest listed calculation returns a confident \
+wrong number, which is the worst outcome available.
 """
 
 
