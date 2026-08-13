@@ -1,0 +1,4 @@
+# Shell scripts must keep LF endings: a CRLF run.sh fails on Linux with
+# "bad interpreter: /usr/bin/env bash^M" before a single line executes.
+*.sh text eol=lf
+*.py text eol=lf
