@@ -75,13 +75,21 @@ def write_csv(out_path: Path, questions: list[dict], answers: dict) -> None:
 
 
 def format_answer(value, answer_type: str) -> str:
-    """Plain numbers only: no units, no separators, no symbols."""
+    """Plain numbers only: no units, no separators, no symbols.
+
+    Never raises. This is called outside the guard that wraps answering, so an
+    exception here would take down the whole pass rather than one question —
+    and nan or inf is exactly what a degenerate division produces, which is the
+    kind of value a new estate can hand us without warning.
+    """
     if value is None:
         return "0"
     try:
         value = float(value)
     except (TypeError, ValueError):
         return "0"
+    if value != value or value in (float("inf"), float("-inf")):
+        return "0"                      # nan / inf: no answer, not a crash
     if answer_type in ("count", "days"):
         return str(int(round(value)))
     if answer_type == "percent":

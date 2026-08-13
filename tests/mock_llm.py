@@ -254,6 +254,11 @@ class Handler(BaseHTTPRequestHandler):
                        "confidence": "high", "why": "mock"}
             payload.update(_params_for(question))
             content = json.dumps(payload)
+        elif "sql" in props and MODE == "repair" and "A previous attempt failed" not in question:
+            # First look at a question: hand back SQL that cannot run, so the
+            # repair pass has something real to recover from.
+            content = json.dumps({"reasoning": "mock",
+                                  "sql": "SELECT SUM(cost) FROM plant_register"})
         elif "sql" in props:
             content = json.dumps({"reasoning": "mock", "sql": _sql_for(question)})
         else:
@@ -278,7 +283,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8112)
     ap.add_argument("--mode", default="sql",
-                    choices=["sql", "judge", "flaky", "length"])
+                    choices=["sql", "judge", "flaky", "length", "repair"])
     args = ap.parse_args()
     MODE = args.mode
     print(f"mock llm on :{args.port} mode={args.mode}", flush=True)
