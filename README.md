@@ -77,22 +77,42 @@ sums — so the model is never asked to do mental arithmetic on crore figures.
 
 ## What has been verified
 
-| check | result |
-|---|---|
-| document typing vs. the manifest it replaces | 687 / 687, zero disagreements, from content alone |
-| scrambled tree — every file renamed to a hash, scattered across seven directories four deep | output **byte-identical** to the normal tree |
-| provided sample questions, under this round's exact-match tolerance | 25 / 25 |
-| 333-question regression | identical to baseline through the full LLM path |
-| paraphrased questions (engine alone) | 13 / 25 — 52% |
-| paraphrased questions (with the LLM) | **24 / 25 — 96%** |
-
-That 52% is the honest measure of what phrase-matching is worth on wording it has
-not seen, and it is the entire argument for the LLM layer.
-
 ```bash
-python tests/score.py --questions tests/paraphrases.json --submission out.csv
-python tests/mock_llm.py --port 8112      # stands in for the endpoint locally
+python tests/verify.py                          # everything, engine only
+python tests/verify.py --llm "$LLM_BASE_URL"    # everything, model path too
 ```
+
+| check | what it proves | result |
+|---|---|---|
+| **regression** | 333 questions with answers verified against source documents | identical to baseline |
+| **samples** | the organisers' own questions, this round's exact-match tolerance | 25 / 25 |
+| **paraphrases** | the same questions reworded — the closest proxy for the graded set | **25 / 25** (14 / 25 engine alone) |
+| **novel** | questions reaching tables no deterministic shape computes over | **12 / 12** (0 / 12 engine alone) |
+| **permutations** | the same estate in three unrelated arrangements | all three agree exactly |
+| **hostile** | corrupt files, unknown families, odd question files | 5 / 5 produce a valid submission |
+| **typing** | content sniffing against the manifest it replaces | 687 / 687, zero disagreements |
+| **scrambled tree** | every file renamed to a hash, scattered four levels deep | output byte-identical |
+
+Two of those numbers are the argument for the whole design. **14/25** is what
+phrase-matching is worth on wording it has not seen. **0/12** is what it is worth
+on a subject it was not written for. Both are what the graded set will be made of.
+
+The permutation check exists because a bug of exactly that kind got through: an
+ambiguous first name resolved by taking whichever engineer the database happened
+to store first, so the same documents in a different order gave a different
+answer. Nothing about a single run reveals it.
+
+## If the run goes wrong
+
+The deterministic pass runs first, alone, and its result is written before the
+model is even contacted — about a second in, with no network. From that moment a
+complete valid submission exists on disk, written atomically. Everything after
+can only improve it. If the endpoint is unreachable, slow, flaky or wrong, the
+worst case is the engine's own answers.
+
+A wall-clock budget (`JAW_TIME_BUDGET`, default 90 min) hands any remaining
+questions back to the engine rather than being cut off part way. Against an
+endpoint failing every third call, paraphrase accuracy holds at 92%.
 
 ## Endpoint notes
 
