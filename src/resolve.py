@@ -27,8 +27,24 @@ from pathlib import Path
 
 from src.answer_engine import answer_question, parse_question, reconcile_shape
 from src.llm import chat_json
-from src.llm_intent import classify, run_shape
+from src.llm_intent import classify, merge_params, run_shape
 from src.llm_sql import answer_question_sql
+
+_CATEGORY_CACHE: dict[int, list[str]] = {}
+
+
+def _categories(conn: sqlite3.Connection) -> list[str]:
+    """The exact spelling of every work category, so the model cannot invent one."""
+    key = id(conn)
+    if key not in _CATEGORY_CACHE:
+        try:
+            rows = conn.execute(
+                "SELECT DISTINCT work_category FROM works "
+                "WHERE work_category IS NOT NULL ORDER BY 1").fetchall()
+            _CATEGORY_CACHE[key] = [r[0] for r in rows]
+        except sqlite3.Error:
+            _CATEGORY_CACHE[key] = []
+    return _CATEGORY_CACHE[key]
 
 
 def _params(conn: sqlite3.Connection, question: str, answer_type: str) -> dict | None:
@@ -101,7 +117,13 @@ def deterministic(conn: sqlite3.Connection, question: str, qid: str,
 
     needed = REQUIRED.get(shape, ())
     resolved = all(params.get(k) not in (None, "") for k in needed)
-    confident = bool(value is not None and shape != "other" and needed and resolved)
+    # A zero is not an answer here. Every shape in this set aggregates over rows
+    # that exist, so zero means a filter matched nothing — a missing threshold,
+    # a category that never resolved — rather than a genuine total. Treating it
+    # as unconfident hands it to the model instead of shipping it.
+    hollow = value is not None and float(value) == 0.0
+    confident = bool(value is not None and not hollow
+                     and shape != "other" and needed and resolved)
     return {"value": None if value is None else float(value),
             "shape": shape, "confident": confident,
             "missing": [k for k in needed if params.get(k) in (None, "")]}
@@ -141,7 +163,7 @@ def resolve(conn: sqlite3.Connection, db_path: Path, card: str, question: str,
     # the calculation is a much lower bar than writing SQL for it, and it aims
     # straight at the engine's weak spot, which is recognising an unfamiliar
     # phrasing rather than computing the answer once recognised.
-    intent = classify(question, answer_type, engine["shape"])
+    intent = classify(question, answer_type, _categories(conn))
     llm_shape = (intent or {}).get("shape")
     if llm_shape == "other":
         llm_shape = None
@@ -165,6 +187,12 @@ def resolve(conn: sqlite3.Connection, db_path: Path, card: str, question: str,
     # protect and the model can only help.
     if llm_shape:
         params = _params(conn, question, answer_type)
+        if params is not None and intent:
+            # The engine extracts parameters with the same phrase rules that
+            # classify the shape, so an unfamiliar wording usually loses both at
+            # once. Rerouting without also filling the gap would aggregate the
+            # whole portfolio and look plausible.
+            params = merge_params(params, intent, _categories(conn))
         # A shape that cannot produce the declared kind of number is the wrong
         # shape, whoever proposed it: a percent question answered with a crore
         # figure scores zero either way.

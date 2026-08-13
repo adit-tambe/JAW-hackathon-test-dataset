@@ -62,36 +62,118 @@ def _just_the_question(prompt: str) -> str:
     return prompt[idx:] if idx >= 0 else prompt
 
 
+# Ordered most-specific first. This stands in for a 35B instruction-tuned
+# model, so it is allowed to be reasonably capable — the point of the fixture is
+# to test whether the ARCHITECTURE recovers when the classifier is competent,
+# not to simulate a weak one. Deliberately keyed on paraphrases the
+# deterministic engine does not recognise, since those are the interesting case.
+_SHAPE_CUES: list[tuple[str, str]] = [
+    ("midpoint value", "mean_median_diff"),
+    ("mean and the median", "mean_median_diff"),
+    ("median", "mean_median_diff"),
+    ("no client reference letter", "absence"),
+    ("lack a client reference", "absence"),
+    ("written endorsement", "referenced_share"),
+    ("testimonial", "referenced_share"),
+    ("out of one hundred", "referenced_share"),
+    ("different kinds of work", "distinct_count"),
+    ("distinct work categor", "distinct_count"),
+    ("how long did it take", "date_span"),
+    ("how many days", "date_span"),
+    ("interval", "date_span"),
+    ("not yet raised an invoice", "unbilled_gap"),
+    ("have we claimed on bills", "unbilled_gap"),
+    ("value we have claimed", "unbilled_gap"),
+    ("unbilled", "unbilled_gap"),
+    ("awarded and the amount we have actually invoiced", "unbilled_gap"),
+    ("still not paid us", "outstanding_balance"),
+    ("left owing", "outstanding_balance"),
+    ("outstanding", "outstanding_balance"),
+    ("unpaid", "outstanding_balance"),
+    ("still due", "outstanding_balance"),
+    ("proportion has actually reached us", "collection_percent"),
+    ("collection", "collection_percent"),
+    ("by how much are we short", "gap_to_threshold"),
+    ("how much more", "gap_to_threshold"),
+    ("we are short", "gap_to_threshold"),
+    ("runner-up", "rank_value"),
+    ("immediately below", "rank_value"),
+    ("exceeds the second", "rank_value"),
+    ("next one down", "rank_value"),
+    ("second-largest", "rank_value"),
+    ("after she already held", "temporal_chain"),
+    ("after he already held", "temporal_chain"),
+    ("completed after", "temporal_chain"),
+    ("typical contract", "avg_work_size"),
+    ("average size", "avg_work_size"),
+    ("average", "avg_work_size"),
+    ("leave the", "exclusion_aggregate"),
+    ("strip out", "exclusion_aggregate"),
+    ("exclud", "exclusion_aggregate"),
+    ("or more", "threshold_aggregate"),
+    ("or above", "threshold_aggregate"),
+    ("crore mark", "threshold_aggregate"),
+    ("crore threshold", "threshold_aggregate"),
+    ("how far apart in value", "category_difference"),
+    ("what separates the two", "category_difference"),
+    ("difference in value between", "category_difference"),
+    ("move between", "yearly_diff"),
+    ("size of the swing", "yearly_diff"),
+    ("as prime", "role_split"),
+    ("graded", "doc_filtered_aggregate"),
+]
+
+
 def _shape_for(question: str) -> str:
-    """A crude independent classifier, so both agree and reroute paths run."""
     q = _just_the_question(question).lower()
-    for needle, shape in [
-        ("median", "mean_median_diff"),
-        ("lack", "absence"),
-        ("out of one hundred", "referenced_share"),
-        ("share", "referenced_share"),
-        ("distinct work categor", "distinct_count"),
-        ("days", "date_span"),
-        ("interval", "date_span"),
-        ("outstanding", "outstanding_balance"),
-        ("unpaid", "outstanding_balance"),
-        ("still due", "outstanding_balance"),
-        ("collect", "collection_percent"),
-        ("unbilled", "unbilled_gap"),
-        ("exceeds the second", "rank_value"),
-        ("next one down", "rank_value"),
-        ("average", "avg_work_size"),
-        ("exclud", "exclusion_aggregate"),
-        ("crore mark", "threshold_aggregate"),
-        ("crore line", "threshold_aggregate"),
-        ("as prime", "role_split"),
-        ("graded", "doc_filtered_aggregate"),
-        ("satisfactory", "doc_filtered_aggregate"),
-        ("after", "temporal_chain"),
-    ]:
+    for needle, shape in _SHAPE_CUES:
         if needle in q:
             return shape
     return "general_aggregate"
+
+
+_WORD_NUMBERS = {
+    "ten": 10, "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50,
+    "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90, "hundred": 100,
+    "twenty-three": 23, "twenty-one": 21, "twenty-five": 25,
+    "thirty-five": 35, "forty-three": 43, "seventy-three": 73, "six": 6, "two": 2,
+}
+_CATEGORIES = [
+    "Water Treatment", "Roads Highways", "Bridges Flyovers", "Expressways",
+    "Tunnels", "Irrigation", "Sewerage Drainage", "Buildings", "Small Buildings",
+    "Large Bridges", "Water Supply", "Industrial Epc", "Roads Maintenance",
+]
+
+
+def _params_for(prompt: str) -> dict:
+    """Pull the parameters a question states. Crude, but independent of the engine."""
+    q = _just_the_question(prompt)
+    low = q.lower()
+    out = {"category_a": "", "category_b": "", "excluded_category": "",
+           "year_a": "", "year_b": "", "threshold_rupees": ""}
+
+    mentioned = [c for c in _CATEGORIES if c.lower() in low]
+    if re.search(r"leave the|strip out|exclud|without the|minus the", low) and mentioned:
+        out["excluded_category"] = mentioned[0]
+    elif len(mentioned) >= 2:
+        out["category_a"], out["category_b"] = mentioned[0], mentioned[1]
+
+    years = re.findall(r"\b(20[0-2]\d)\b", q)
+    years = [y for y in years if y != "2021"]
+    if len(years) >= 2:
+        out["year_a"], out["year_b"] = years[0], years[1]
+
+    m = re.search(r"([\w-]+|\d+(?:\.\d+)?)\s*(crore|lakh)", low)
+    if m:
+        token = m.group(1)
+        try:
+            amount = float(token)
+        except ValueError:
+            amount = _WORD_NUMBERS.get(token, 0)
+        if amount:
+            out["threshold_rupees"] = str(
+                int(amount * (10_000_000 if m.group(2) == "crore" else 100_000)))
+    return out
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -131,8 +213,10 @@ class Handler(BaseHTTPRequestHandler):
             content = json.dumps({"choice": random.choice(["A", "B"]),
                                   "why": "mock adjudication"})
         elif "shape" in props:                  # the intent call
-            content = json.dumps({"shape": _shape_for(question),
-                                  "confidence": "high", "why": "mock"})
+            payload = {"shape": _shape_for(question),
+                       "confidence": "high", "why": "mock"}
+            payload.update(_params_for(question))
+            content = json.dumps(payload)
         elif "sql" in props:
             content = json.dumps({"reasoning": "mock", "sql": _sql_for(question)})
         else:

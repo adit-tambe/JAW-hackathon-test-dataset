@@ -51,8 +51,23 @@ INTENT_SCHEMA = {
         "shape": {"type": "string", "enum": list(SHAPE_GLOSSARY)},
         "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
         "why": {"type": "string", "description": "One short sentence."},
+        # Parameters are asked for too, because the engine extracts them with
+        # the same phrase rules that classify the shape. "leave the water
+        # treatment jobs out of it" fails both at once: the shape is missed AND
+        # the excluded category is never captured, so rerouting alone would
+        # still aggregate the whole portfolio. Entity names are deliberately
+        # absent — the engine matches those against the database and so cannot
+        # invent one.
+        "category_a": {"type": "string", "description": "First named work category, or empty."},
+        "category_b": {"type": "string", "description": "Second named work category, or empty."},
+        "excluded_category": {"type": "string", "description": "Category to leave out, or empty."},
+        "year_a": {"type": "string", "description": "First year mentioned, or empty."},
+        "year_b": {"type": "string", "description": "Second year mentioned, or empty."},
+        "threshold_rupees": {"type": "string",
+                             "description": "Any value threshold in plain rupees, or empty."},
     },
-    "required": ["shape", "confidence", "why"],
+    "required": ["shape", "confidence", "why", "category_a", "category_b",
+                 "excluded_category", "year_a", "year_b", "threshold_rupees"],
     "additionalProperties": False,
 }
 
@@ -67,22 +82,66 @@ of the calculation. Ignore it.
 """
 
 
-def _prompt(question: str, answer_type: str, engine_shape: str) -> list[dict]:
+def _prompt(question: str, answer_type: str, categories: list[str]) -> list[dict]:
     glossary = "\n".join(f"  {name}: {desc}" for name, desc in SHAPE_GLOSSARY.items())
+    vocab = ("\nWork categories, spelled exactly as they appear in the records:\n  "
+             + " | ".join(categories) + "\n") if categories else ""
     return [
         {"role": "system", "content": SYSTEM},
         {"role": "user", "content":
-            f"Available calculations:\n{glossary}\n\n"
+            f"Available calculations:\n{glossary}\n{vocab}\n"
             f"The answer must be a {answer_type} value.\n\n"
             f"Question:\n{question}\n\n"
-            "Which calculation does it ask for?"},
+            "Name the calculation, and fill in any parameter the question "
+            "states. Leave a parameter empty when the question does not give "
+            "it. Express a threshold in plain rupees (forty crore = 400000000)."},
     ]
 
 
-def classify(question: str, answer_type: str, engine_shape: str = "") -> dict | None:
-    """Return {'shape', 'confidence', 'why'} or None if the endpoint failed."""
-    return chat_json(_prompt(question, answer_type, engine_shape),
+def classify(question: str, answer_type: str,
+             categories: list[str] | None = None) -> dict | None:
+    """Return the named calculation and any parameters, or None on failure."""
+    return chat_json(_prompt(question, answer_type, categories or []),
                      INTENT_SCHEMA, temperature=0.0)
+
+
+def merge_params(params: dict, intent: dict, categories: list[str]) -> dict:
+    """Fill gaps in the engine's parameters from the model's reading.
+
+    Only gaps. Where the engine did extract something it stays, because it
+    matched against values that exist in the database rather than recalling
+    them.
+    """
+    merged = dict(params)
+    canonical = {c.lower(): c for c in categories}
+
+    def as_category(value: str) -> str | None:
+        value = (value or "").strip()
+        return canonical.get(value.lower()) if value else None
+
+    for field, key in (("category_a", "cat1"), ("category_b", "cat2"),
+                       ("excluded_category", "exclude_category")):
+        if not merged.get(key):
+            category = as_category(intent.get(field, ""))
+            if category:
+                merged[key] = category
+
+    for field, key in (("year_a", "year1"), ("year_b", "year2")):
+        if not merged.get(key):
+            raw = (intent.get(field) or "").strip()
+            if raw.isdigit() and len(raw) == 4:
+                merged[key] = int(raw)
+
+    if not merged.get("threshold_value") and not merged.get("target_value"):
+        raw = (intent.get("threshold_rupees") or "").replace(",", "").strip()
+        try:
+            value = float(raw)
+        except ValueError:
+            value = 0.0
+        if value > 0:
+            merged["threshold_value"] = value
+            merged["target_value"] = value
+    return merged
 
 
 def run_shape(conn, params: dict, shape: str):
