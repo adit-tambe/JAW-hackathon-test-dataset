@@ -481,7 +481,9 @@ def parse_question(conn, question_text: str) -> dict:
 
     # Target value
     target_val = None
-    tgt_m = re.search(r'(?:target|reach|threshold|mark|bar|cutoff)\b.*?\b(?:inr\s*)?(\d+)\s*(?:cr|crore)', qlow)
+    # Decimals matter: "cross-checked against the 23.0 Cr limit" and "12.5 Cr"
+    # both lose their fractional part to a bare (\d+).
+    tgt_m = re.search(r'(?:target|reach|threshold|mark|bar|cutoff)\b.*?\b(?:inr\s*)?(\d+\.?\d*)\s*(?:cr|crore)', qlow)
     if tgt_m:
         target_val = int(float(tgt_m.group(1)) * 10_000_000)
     if not target_val:
@@ -491,13 +493,15 @@ def parse_question(conn, question_text: str) -> dict:
             if word_val:
                 target_val = int(word_val)
     if not target_val:
-        tgt_m = re.search(r'(\d+)\s*(?:cr|crore)', qlow)
+        tgt_m = re.search(r'(\d+\.?\d*)\s*(?:cr|crore)', qlow)
         if tgt_m:
             target_val = int(float(tgt_m.group(1)) * 10_000_000)
 
-    # Years
+    # Years. Deduplicated in order of first appearance: a question that names
+    # the same year twice ("...2020 figure... back in 2020... versus 2022")
+    # otherwise yields year1 == year2, and the difference computes as zero.
     year1, year2 = None, None
-    ym = re.findall(r'\b(20\d\d)\b', qlow)
+    ym = list(dict.fromkeys(re.findall(r'\b(20\d\d)\b', qlow)))
     if len(ym) >= 2:
         year1, year2 = ym[0], ym[1]
 
