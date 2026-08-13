@@ -648,13 +648,15 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     # Checked before the plain-average rule: these questions say "average" too,
     # but they want the signed gap between the mean and the median, and the
     # word "median" is what distinguishes them.
-    if 'median' in qlow:
+    if 'median' in qlow or 'midpoint' in qlow or 'arithmetic mean' in qlow:
         return 'mean_median_diff'
 
     if 'excellent' in qlow or 'satisfactory' in qlow or 'graded' in qlow or 'marked satisfactory' in qlow or 'performance certificate' in qlow:
         return 'doc_filtered_aggregate'
     if 'average size' in qlow or 'mean size' in qlow or 'average value' in qlow or 'mean across' in qlow or 'average across' in qlow or 'overall average' in qlow or 'average contract value' in qlow or 'mean scale' in qlow or 'typical scale' in qlow or 'mean volume' in qlow \
-            or 'project scale' in qlow or 'typical project' in qlow or 'mean contract' in qlow:
+            or 'project scale' in qlow or 'typical project' in qlow or 'mean contract' in qlow \
+            or 'typical contract' in qlow or 'average contract' in qlow \
+            or re.search(r'what does a typical', qlow):
         return 'avg_work_size'
 
     # "after <the certification date>" in any of its phrasings. The literal
@@ -663,7 +665,10 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if re.search(r'(?:wrapped up|completed|finished|reached completion|concluded|'
                  r'delivered|closed)\s+after', qlow) \
             or re.search(r'after (?:that|his|her|the) (?:date|certification|issuance|issue)', qlow) \
-            or 'post-certification' in qlow:
+            or 'post-certification' in qlow \
+            or re.search(r'not finished until after', qlow) \
+            or re.search(r'only those (?:that|which) (?:were )?(?:not )?(?:finished|completed|closed|wrapped)', qlow) \
+            or re.search(r'after (?:she|he) already held', qlow):
         return 'temporal_chain'
 
     # Checked before the receivables shapes: "the outstanding contract value we
@@ -675,15 +680,19 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     # named and the question asks for the remainder rather than the total.
     if (target_val or threshold_val) and re.search(
             r'need to secure|need to bring in|how much more|still need|'
-            r'credential (?:target|threshold)|to hit the|to reach|'
+            r'credential (?:target|threshold)|to hit the|'
             r'\bshort\b|\bshortfall\b|fall(?:ing)? short|still missing|'
-            r'how far (?:off|away)|remaining to|left to (?:reach|hit)', qlow):
+            r'how far (?:off|away)|remaining to|left to (?:reach|hit)', qlow) \
+            and not re.search(r'totalling only|add up only|sum of (?:only|those)|reach \d', qlow):
         return 'gap_to_threshold'
 
     if 'outstanding' in qlow or 'unpaid' in qlow or 'pending' in qlow or 'still owe' in qlow or 'still owed' in qlow or 'due across' in qlow or 'remaining balance' in qlow or 'true balance' in qlow or 'deducting all cleared' in qlow or 'net balance' in qlow or 'system balance' in qlow \
             or 'still on our books' in qlow or 'balance still' in qlow \
             or ('balance' in qlow and re.search(r'invoice|payment|paid|cleared|credit', qlow)) \
-            or re.search(r'\bremains?\b[^.]{0,30}\binvoices?\b', qlow):
+            or re.search(r'\bremains?\b[^.]{0,30}\binvoices?\b', qlow) \
+            or re.search(r'(?:still )?not paid (?:us|them)', qlow) \
+            or 'left owing' in qlow or 'netting off' in qlow \
+            or re.search(r'(?:what|how much).{0,40}(?:they|client).{0,20}(?:owe|paid)', qlow):
         # "what amount remains on the invoices" is an unpaid-balance
         # question, but "cross-check" plus "invoice" would otherwise trip the
         # unbilled-gap rule below first. The pattern is deliberately narrow so
@@ -694,7 +703,11 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if year1 and year2 and ('difference' in qlow or 'gap' in qlow or 'moved' in qlow or 'shift' in qlow or 'between' in qlow or 'from' in qlow or 'delta' in qlow or 'move' in qlow or 'in 20' in qlow or 'totals' in qlow or 'swing' in qlow or 'compare' in qlow):
         return 'yearly_diff'
 
-    if 'surplus value' in qlow or 'biggest and next' in qlow or 'next one down' in qlow or 'second largest' in qlow or 'second one' in qlow or 'subsequent one' in qlow or 'top finished contract beats' in qlow or 'top finished contract' in qlow or ('largest' in qlow and ('exceed' in qlow or 'difference' in qlow or 'second' in qlow)):
+    if 'surplus value' in qlow or 'biggest and next' in qlow or 'next one down' in qlow or 'second largest' in qlow or 'second one' in qlow or 'subsequent one' in qlow or 'top finished contract beats' in qlow or 'top finished contract' in qlow or ('largest' in qlow and ('exceed' in qlow or 'difference' in qlow or 'second' in qlow)) \
+            or 'runner-up' in qlow or 'immediately below' in qlow \
+            or re.search(r'(?:spread|gap|difference).{0,30}(?:biggest|largest|top).{0,30}(?:runner|next|second)', qlow) \
+            or re.search(r'(?:biggest|largest|top).{0,30}(?:runner|next|below)', qlow) \
+            or re.search(r'how much (?:bigger|larger).{0,30}(?:top|biggest|largest)', qlow):
         return 'rank_value'
 
     if cat1 and cat2 and ('difference' in qlow or 'spread' in qlow or 'variance' in qlow or 'versus' in qlow or ' vs ' in qlow or 'compared' in qlow or 'and' in qlow or 'across both scopes' in qlow):
@@ -711,7 +724,10 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val or 'target' in qlow):
         return 'gap_to_threshold'
 
-    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow or 'delta' in qlow or 'deduction' in qlow or 'remainder' in qlow or 'still sitting above' in qlow) and ('awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow or 'secure' in qlow or 'handed over' in qlow or 'bill so far' in qlow):
+    if ('gap' in qlow or 'shortfall' in qlow or 'cross-check' in qlow or 'reconciliation' in qlow or 'invoiced' in qlow or 'missing amount' in qlow or 'variance' in qlow or 'unbilled' in qlow or 'delta' in qlow or 'deduction' in qlow or 'remainder' in qlow or 'still sitting above' in qlow) and ('awarded' in qlow or 'billed' in qlow or 'invoice' in qlow or 'claims' in qlow or 'approved' in qlow or 'sanctioned' in qlow or 'commitments' in qlow or 'claimed' in qlow or 'submitted' in qlow or 'secure' in qlow or 'handed over' in qlow or 'bill so far' in qlow) \
+            or re.search(r'not yet (?:raised|sent|issued|submitted).{0,20}invoice', qlow) \
+            or re.search(r'have(?:n.t| not) (?:yet )?(?:invoiced|billed)', qlow) \
+            or re.search(r'work.{0,20}awarded.{0,30}invoice', qlow):
         return 'unbilled_gap'
 
     if 'mean and the median' in qlow or 'avg and median' in qlow or 'average contract value.*median' in qlow or 'rupee gap between avg and median' in qlow or 'larger the average' in qlow or 'average and median' in qlow or 'avg minus median' in qlow or 'mean-median gap' in qlow or 'mean and median' in qlow or 'mean against the median' in qlow:
@@ -727,19 +743,22 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if 'days' in qlow or 'interval' in qlow or 'elapsed' in qlow or 'how many days' in qlow or 'span from' in qlow or 'count from' in qlow or 'timeline' in qlow or 'wrap up' in qlow or 'handover' in qlow or 'count to final completion' in qlow:
         return 'date_span'
 
-    if 'distinct' in qlow or ('categories' in qlow and ('brought to a close' in qlow or 'wrapped up' in qlow or 'concluded' in qlow or 'closed out' in qlow or 'completion' in qlow or 'how many' in qlow)):
+    if 'distinct' in qlow or ('categories' in qlow and ('brought to a close' in qlow or 'wrapped up' in qlow or 'concluded' in qlow or 'closed out' in qlow or 'completion' in qlow or 'how many' in qlow)) \
+            or re.search(r'(?:different|various) (?:kinds?|types?|categories|sorts?) of (?:work|project|contract)', qlow):
         return 'distinct_count'
 
     if 'testimonial' in qlow or ('share' in qlow and 'reference' in qlow) or 'endorsement' in qlow or 'formal verification' in qlow or 'client sign-off' in qlow or 'backed by a client reference' in qlow or ('reference letter' in qlow and ('divided' in qlow or 'share' in qlow or 'out of' in qlow or 'portion' in qlow)):
         return 'referenced_share'
 
-    if re.search(r'\bexclud(?:e|es|ed|ing)\b|minus the|remove the|without the|carve that out|carve out|set aside|drop(?:ping)? the|filter(?:ed)? out|strip(?:ped)? out', qlow):
+    if re.search(r'\bexclud(?:e|es|ed|ing)\b|minus the|remove the|without the|carve that out|carve out|set aside|drop(?:ping)? the|filter(?:ed)? out|strip(?:ped)? out|leave .{1,30} out of it|leave out the|strip out', qlow):
         return 'exclusion_aggregate'
 
     if ('additional work' in qlow or 'credential target' in qlow or 'how much more' in qlow or 'shortfall' in qlow or 'reach' in qlow or 'target' in qlow) and (target_val or threshold_val):
         return 'gap_to_threshold'
 
-    if (threshold_val or target_val) and ('crossing' in qlow or 'hitting' in qlow or 'exceeding' in qlow or 'clear' in qlow or 'cutoff' in qlow or 'threshold' in qlow or 'mark' in qlow or 'limit' in qlow or 'exceed' in qlow or 'or higher' in qlow or 'crore' in qlow):
+    if (threshold_val or target_val) and ('crossing' in qlow or 'hitting' in qlow or 'exceeding' in qlow or 'clear' in qlow or 'cutoff' in qlow or 'threshold' in qlow or 'mark' in qlow or 'limit' in qlow or 'exceed' in qlow or 'or higher' in qlow or 'crore' in qlow \
+            or 'or above' in qlow or 'at least' in qlow or re.search(r'reach \d', qlow) \
+            or re.search(r'totalling only|add up only|sum of (?:only|those)', qlow)):
         return 'threshold_aggregate'
 
     if 'satisfactory' in qlow or 'graded' in qlow or 'marked satisfactory' in qlow or 'performance certificate' in qlow:
