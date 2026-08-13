@@ -4,3 +4,7 @@
 data/
 __pycache__/
 *.pyc
+
+# Never commit local credentials.
+.env
+.env.*
