@@ -76,6 +76,10 @@ def main() -> int:
                     help="scratch directory (default: ./data)")
     ap.add_argument("--no-llm", action="store_true",
                     help="skip the LLM layer; deterministic engine only")
+    ap.add_argument("--samples", type=int, default=3,
+                    help="LLM votes on a disagreement (default 3)")
+    ap.add_argument("--workers", type=int, default=None,
+                    help="questions answered concurrently (default: LLM_CONCURRENCY)")
     ap.add_argument("--skip-ingest", action="store_true",
                     help="reuse an existing database (development only)")
     args = ap.parse_args()
@@ -114,24 +118,69 @@ def main() -> int:
         print("\n  [skipped] ingest and build — reusing existing database")
 
     banner("3/4  Answer")
+    import collections
     import sqlite3
-    from src.answer_engine import answer_question
+    from src.llm import map_concurrent, stats as llm_stats
+    from src.resolve import resolve
+    from src.schema_card import build_card
 
     conn = sqlite3.connect(DB_PATH)
+    card = build_card(conn)
+    print(f"  schema card: {len(card)} chars (~{len(card)//4} tokens)")
+
+    use_llm = False
+    if not args.no_llm:
+        from src.llm import available, endpoint
+        print(f"  probing {endpoint()} ...", flush=True)
+        use_llm = available()
+        print(f"  LLM {'available' if use_llm else 'UNAVAILABLE — engine only'}")
+
     answers: dict[str, str] = {}
-    failures = 0
-    for i, q in enumerate(questions, 1):
+    routes: collections.Counter = collections.Counter()
+    disagreements: list[tuple] = []
+    done = [0]
+
+    def work(q: dict) -> tuple[str, str, str]:
+        # One connection per worker: sqlite3 objects are not shareable.
+        local = sqlite3.connect(DB_PATH)
         try:
-            raw = answer_question(conn, q["question"], q["qid"], q["answer_type"])
+            outcome = resolve(local, DB_PATH, card, q["question"], q["qid"],
+                              q["answer_type"], use_llm=use_llm,
+                              samples=args.samples)
         except Exception as exc:
-            raw, failures = None, failures + 1
             print(f"    !! {q['qid']}: {type(exc).__name__}: {exc}")
-        answers[q["qid"]] = format_answer(raw, q["answer_type"])
-        if i % 50 == 0 or i == len(questions):
-            print(f"    {i}/{len(questions)} answered", flush=True)
+            outcome = {"value": None, "route": "error", "shape": "?",
+                       "engine": {}, "llm": None}
+        finally:
+            local.close()
+        done[0] += 1
+        if done[0] % 25 == 0 or done[0] == len(questions):
+            print(f"    {done[0]}/{len(questions)} answered", flush=True)
+        return q["qid"], outcome, q["answer_type"]
+
+    # LLM latency dominates; the engine alone is fast enough to stay serial.
+    results = (map_concurrent(work, questions, workers=args.workers)
+               if use_llm else [work(q) for q in questions])
+
+    for qid, outcome, answer_type in results:
+        answers[qid] = format_answer(outcome["value"], answer_type)
+        routes[outcome["route"]] += 1
+        if outcome["route"] not in ("agreed", "engine", "engine-only"):
+            disagreements.append((qid, outcome))
     conn.close()
-    if failures:
-        print(f"  {failures} question(s) fell back to a default answer")
+
+    print("\n  how each answer was reached:")
+    for route, n in routes.most_common():
+        print(f"      {route:32s} {n}")
+    if use_llm:
+        print(f"  llm calls: {llm_stats()}")
+    if disagreements:
+        print(f"\n  {len(disagreements)} question(s) where the two systems parted:")
+        for qid, outcome in disagreements[:25]:
+            engine_value = (outcome.get("engine") or {}).get("value")
+            llm_value = (outcome.get("llm") or {}).get("value")
+            print(f"      {qid}  {outcome['shape']:22s} engine={engine_value} "
+                  f"llm={llm_value} -> {outcome['route']}")
 
     banner("4/4  Write")
     out_path.parent.mkdir(parents=True, exist_ok=True)
