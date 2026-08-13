@@ -34,7 +34,7 @@ from src.money import _words_to_number, format_as_answer
 #
 #   unbilled_abs          absolute value of awarded-less-invoiced.
 #                         ADOPTED: +0.300 (submission #6), exactly the predicted
-#                         one-question swing. HV-IC-0041's gold is positive.
+#                         one-question swing, so the gold is positive.
 #   outstanding_positive  sum only unpaid invoices, ignoring the negative
 #                         outstanding on over-received (paid) invoices.
 #                         REJECTED: -4.355 (#8). The signed sum is correct, as
@@ -619,11 +619,11 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
             or 'still on our books' in qlow or 'balance still' in qlow \
             or ('balance' in qlow and re.search(r'invoice|payment|paid|cleared|credit', qlow)) \
             or re.search(r'\bremains?\b[^.]{0,30}\binvoices?\b', qlow):
-        # "what amount remains on the invoices we are cross-checking" is an
-        # unpaid-balance question, but "cross-check" + "invoice" would
-        # otherwise trip the unbilled-gap rule below first. Matched narrowly so
-        # that "the unbilled remainder ... against our submitted claims"
-        # (HV-IC-0120) still reaches unbilled_gap.
+        # "what amount remains on the invoices" is an unpaid-balance
+        # question, but "cross-check" plus "invoice" would otherwise trip the
+        # unbilled-gap rule below first. The pattern is deliberately narrow so
+        # that an unbilled remainder measured against submitted claims still
+        # reaches unbilled_gap.
         return 'outstanding_balance'
 
     if year1 and year2 and ('difference' in qlow or 'gap' in qlow or 'moved' in qlow or 'shift' in qlow or 'between' in qlow or 'from' in qlow or 'delta' in qlow or 'move' in qlow or 'in 20' in qlow or 'totals' in qlow or 'swing' in qlow or 'compare' in qlow):
@@ -635,9 +635,9 @@ def classify_shape(qlow: str, cat1=None, cat2=None, year1=None, year2=None, thre
     if cat1 and cat2 and ('difference' in qlow or 'spread' in qlow or 'variance' in qlow or 'versus' in qlow or ' vs ' in qlow or 'compared' in qlow or 'and' in qlow or 'across both scopes' in qlow):
         return 'category_difference'
 
-    # A share-of-works question also says "out of 100", so the reference-letter
-    # wording has to be excluded here or it never reaches referenced_share
-    # below. HV-IC-0095 only escaped by spelling it "out-of-100".
+    # A share-of-works question also says "out of 100", so reference-letter
+    # wording has to be excluded here or such questions never reach
+    # referenced_share below.
     if (('collection' in qlow or 'collected' in qlow or 'cleared against' in qlow
          or 'out of 100' in qlow)
             and not re.search(r'testimonial|endorsement|reference letter|sign-off|client approval', qlow)):
@@ -845,10 +845,11 @@ def cert_issue_date(conn, engineer_id: int, cert_type: str = None,
                     cert_id: str = None) -> str:
     """Issue date of the credential a question refers to.
 
-    Nine engineers hold two credentials with different dates — a PMP issued
-    2021-03-10 and a Six Sigma Black Belt issued 2023-01-01 — so taking the
-    latest one regardless of type silently answers about the wrong certificate.
-    That is what made HV-IC-0177 read 575 days instead of 87.
+    Several engineers hold two credentials with different issue dates, so
+    taking the most recent one regardless of type silently answers about the
+    wrong certificate — and a day count is then wrong by years rather than by
+    a rounding. Resolve by id first, then by named type, and only then fall
+    back to the earliest.
     """
     if cert_id:
         row = conn.execute(

@@ -1190,18 +1190,18 @@ def validate_database(conn):
     print("\n=== Database Validation ===\n")
     
     checks = [
-        ("Total works", "SELECT COUNT(*) FROM works", 155),
+        ("Total works", "SELECT COUNT(*) FROM works", None),
         ("Total clients", "SELECT COUNT(*) FROM clients", None),
         ("Works WITH reference letters",
          "SELECT COUNT(*) FROM works WHERE has_reference_letter = 1", None),
         ("Works WITHOUT reference letters",
          "SELECT COUNT(*) FROM works WHERE has_reference_letter = 0", None),
         ("Total reference letters",
-         "SELECT COUNT(*) FROM reference_letters", 132),
+         "SELECT COUNT(*) FROM reference_letters", None),
         ("Total engineers", "SELECT COUNT(*) FROM engineers", None),
         ("Engineer-work links", "SELECT COUNT(*) FROM engineer_works", None),
         ("Engineer certificates", "SELECT COUNT(*) FROM engineer_certs", None),
-        ("Performance bonds", "SELECT COUNT(*) FROM bonds", 60),
+        ("Performance bonds", "SELECT COUNT(*) FROM bonds", None),
         ("Works with NULL contract_value",
          "SELECT COUNT(*) FROM works WHERE contract_value IS NULL", None),
         ("Works with NULL completion_date",
@@ -1232,27 +1232,37 @@ def validate_database(conn):
         print(f"  [{row[1]:3d}] {row[0]}")
     
     # Jal Nigam, Jharkhand test case
-    print("\n--- Jal Nigam, Jharkhand works (test case) ---")
-    cur = conn.execute("""
-        SELECT w.project_name, w.contract_value, w.has_reference_letter,
-               w.performance_grading, w.role
-        FROM works w
-        JOIN clients c ON w.client_id = c.client_id
-        WHERE c.client_name LIKE '%Jal Nigam%Jharkhand%'
-    """)
-    expected_values = {730200000, 814400000, 69200000}
-    actual_values = set()
-    for row in cur:
-        actual_values.add(row[1])
-        print(f"  {row[0]} | val={row[1]} | ref={row[2]} | "
-              f"grade={row[3]} | role={row[4]}")
-    
-    if actual_values == expected_values:
-        print(f"  -> Values MATCH expected: {expected_values}")
-    elif actual_values:
-        print(f"  -> WARNING: Expected {expected_values}, got {actual_values}")
+    print("\n--- Integrity ---")
+    # Integrity checks that hold on any estate, rather than a spot check
+    # against figures from the sample one. What matters is not that a
+    # particular client totals a particular number, but that nothing was
+    # dropped or left unresolved on the way in.
+    problems = []
+    checks = [
+        ("works with no client", "SELECT COUNT(*) FROM works WHERE client_id IS NULL"),
+        ("works with no value",
+         "SELECT COUNT(*) FROM works WHERE contract_value IS NULL OR contract_value <= 0"),
+        ("works with no completion date",
+         "SELECT COUNT(*) FROM works WHERE completion_date IS NULL"),
+        ("works with no category",
+         "SELECT COUNT(*) FROM works WHERE work_category IS NULL OR work_category = ''"),
+        ("receivable rows where outstanding != invoiced - received",
+         "SELECT COUNT(*) FROM receivables "
+         "WHERE ABS(COALESCE(outstanding,0) - (COALESCE(invoiced,0) - COALESCE(received,0))) > 1"),
+    ]
+    for label, query in checks:
+        try:
+            n = conn.execute(query).fetchone()[0]
+        except sqlite3.Error:
+            continue
+        if n:
+            problems.append(f"{n} {label}")
+    if problems:
+        print("  integrity warnings:")
+        for problem in problems:
+            print(f"      {problem}")
     else:
-        print("  -> No matching records found")
+        print("  integrity checks passed")
 
 
 # ── Main ────────────────────────────────────────────────────────────────────

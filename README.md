@@ -1,187 +1,126 @@
-# BITS Hackathon — Bid Intelligence over a Document Estate
+# Bid intelligence pipeline — JAW 2026
 
-You are given the complete document archive of a construction company. **There is no database.**
-Your task is to build a system that reads those documents and answers precise numerical questions
-about the business.
-
----
-
-## The company
-
-**National Infrastructure Corp. Ltd.** — an Indian infrastructure contractor, founded 2005, head
-office in Salt Lake, Kolkata. It builds highways, water treatment plants, flyovers, drainage,
-tunnels and power infrastructure for state and central government bodies.
-
-| | |
-|---|---|
-| Completed works | 155, delivered 2010 – 2025 |
-| Clients | 62 government departments and authorities |
-| Employees on record | 486 |
-| Business units | 6 |
-| Total delivered value | ~₹5,530 crore |
-
-Everything about this company is synthetic. It has never existed, and the identifiers in these
-documents (CIN, GST, PAN) are deliberately invalid — see *Rules* below.
-
----
-
-## What you are given
-
-**687 documents, 20 types, ~39 MB.** 678 PDFs and 9 Excel workbooks, in `documents/`, grouped by
-type.
-
-| Document type | Count | What it holds |
-|---|---:|---|
-| `completion_certificate` | 155 | Client's sign-off on a finished work: value, dates, and the client's **written grading** of our performance |
-| `company_completion_certificate` | 155 | Our own record of the same work |
-| `reference_letter` | 132 | Client testimonials — note that not every work has one |
-| `performance_bond` | 60 | Bank guarantees issued against contracts |
-| `personnel_certificate` | 48 | PMP, Six Sigma and other credentials held by staff |
-| `cv` | 39 | Engineer profiles: which works they led |
-| `compliance_matrix` | 40 | Tender compliance checklists |
-| `general_ledger_book` | 8 | Full journal — invoices, receipts, credit notes |
-| `bank_statement` | 8 | Cash movements |
-| `financial_statement` | 7 | Statutory accounts, several reporting eras |
-| `ra_bill` / `final_ra_bill` | 12 | Running-account bills with BOQ detail |
-| `tender_dossier` | 6 | Bids submitted |
-| `iso_certificate` | 5 | Quality and safety accreditations |
-| `annual_report` | 2 | Narrative reports with registers and tables |
-| `past_performance_portfolio` | 1 | Consolidated credentials pack |
-| **workbooks** (`.xlsx`) | 9 | BOQ, ageing, trial balance, asset register — with live formulas |
-
-Plus:
-
-- `document_index.csv` — `doc_id`, `doc_type`, `filename`, `size_bytes`. **It deliberately does not
-  tell you which document is about which project or client.** Working that out is part of the task.
-- `sample_questions.json` — 25 worked examples, with answers and reasoning (see below).
-- `evaluate.py` — the exact scorer we will run, so you can measure yourself.
-- `sample_submission.jsonl` — the submission format.
-
-### What you are deliberately NOT given
-
-No database, no knowledge graph, no schema, no extracted fact table, and no mapping from documents to
-entities. If we handed you a database this would be a SQL exercise. The interesting problem is
-getting structured, queryable knowledge **out of** 687 unstructured documents — so that is the part
-we left for you.
-
----
-
-## What you have to build
-
-A system that takes a question in plain English and returns a number.
-
-The questions are written the way people on a bid desk actually ask them — sometimes a formal note,
-sometimes a hurried message before a deadline. They are not templated, and no two are phrased alike.
-
-Answering them generally requires **several documents at once**. A typical question names an
-engineer's certificate, expects you to find which project that engineer led, work out which client
-commissioned it, gather *every* project for that client, and total their values — where each value
-must be read out of that project's own certificate. Four documents minimum, often more.
-
-**Three things make this harder than it first looks:**
-
-1. **Money is written the way people write it.** A contract worth 333,800,000 rupees appears in
-   documents as `INR 33.38 Cr`, or `3,338.00 Lakh`, or `33,38,00,000` in Indian digit grouping. Your
-   extraction has to handle all of it. (The rendering is lossless — no precision is hidden from you.)
-
-2. **Some facts exist only in prose.** A client's opinion of our work — "Very Good", "Satisfactory" —
-   appears in the text of a completion certificate and nowhere else. Questions that filter on it
-   cannot be answered by any amount of table parsing.
-
-3. **Absence is a real answer.** "How many completed works have no reference letter on file?"
-   requires proving something is *missing* across a client's whole portfolio. A system that
-   hallucinates connections will confidently say zero.
-
----
-
-## What the questions look like
-
-All 25 examples are in `sample_questions.json`, with answers and a step-by-step derivation. Three of
-them:
-
-> **Regarding Asha Nair’s PMP work on the Cable Stayed Bridge — Jharkhand Pkg-115, what is the defensible average size across all completed projects for the commissioning client?**
-> → `537933333`
-
-> **Cross-checking the completion date against Asha Nair's PMP for 2021-03-10, what number of days passed from issuance to finish for School Building — Madhya Pradesh Pkg-145?**
-> → `1569`
-
-> **Jal Nigam, Jharkhand is our starting point for the audit, so what whole number out of one hundred represents the defensible share of completed assignments that carry formal verification on file?**
-> → `33.33`
-
-Each sample carries `reasoning_steps` showing the path from question to answer, and the individual
-values that had to be read out of documents along the way. Use them to calibrate — they are the same
-kinds of question you will be scored on, only easier.
-
-**Answers are always a plain number**: rupees (no units, no commas), a count, a percentage out of
-100, or a number of days. Every question states which.
-
----
-
-## Scoring
-
-You will be scored on a **larger, harder hidden set** you never see. It contains the same kinds of
-question as the samples, across all 21 reasoning patterns.
-
-Close answers earn partial credit — the aim is to reward a system that reasons correctly and misses
-one contributor, over one that guesses:
-
-**Money and other large values** (|answer| ≥ 100)
-
-| Relative error | Score |
-|---|---|
-| ≤ 0.5% | **1.0** |
-| ≤ 2% | 0.7 |
-| ≤ 10% | 0.3 |
-| more | 0 |
-
-**Counts and percentages** (|answer| < 100)
-
-| | Score |
-|---|---|
-| Exact | **1.0** |
-| Off by one | 0.3 |
-| more | 0 |
-
-Run it yourself:
+Answers numerical questions about a construction company's document estate:
+completion certificates, reference letters, CVs, credentials, bonds, ledgers,
+bank statements, RA bills, tenders and workbooks.
 
 ```bash
-python evaluate.py --self-test                                  # confirm the bands
-python evaluate.py --submission my_answers.jsonl --per-question  # score against the samples
+pip install -r requirements.txt
+./setup.sh
+./run.sh --docs /path/to/documents --questions /path/to/questions.json --out submission.csv
 ```
 
-### Submission format
+No network access is required or attempted at run time. There are no model
+weights to fetch, so `setup.sh` downloads nothing — it runs a preflight that
+fails loudly, at install time, for the packaging mistakes that would otherwise
+surface mid-run.
 
-One JSON object per line, `qid` and `answer`:
+## How it works
 
-```json
-{"qid": "HV-IC-0001", "answer": 1069600000}
-{"qid": "HV-IC-0002", "answer": 58.96}
+```
+documents/  ──►  discover  ──►  extract  ──►  SQLite  ──►  resolve  ──►  submission.csv
+                (by content)    (typed)      (24 tables)   (engine + LLM)
 ```
 
-Answer every question — an unanswered one scores zero, and a wrong one costs nothing extra.
+**1. Discover.** Walks `--docs` recursively and types every file by what it says
+on its face — never by a path or a file name, because the tree we are given is
+nested differently from anything we have seen and the file names are not ours.
+Ordered marker rules run over whitespace-collapsed lowercase text, since several
+headings render in small caps and titles wrap across lines. Four document
+families carry two layouts apiece and both are handled. Workbooks are typed from
+sheet names and header rows.
 
----
+**2. Extract.** Each type has a parser that pulls typed fields, and the full text
+is retained so a figure can still be read straight out of a document when no
+typed field holds it.
 
-## Rules
+**3. Build.** Records load into SQLite and are reconciled against the credentials
+pack, which states role and category once and uniformly for every work — the
+individual certificates each say it their own way.
 
-- **The corpus is synthetic.** The company, people, clients and projects were generated. Searching
-  the internet for "National Infrastructure Corp" will not help you, and any real company by a
-  similar name is unrelated.
-- **Identifiers are intentionally invalid.** The CIN, GST and PAN numbers fail their check digits by
-  design. Do not use them to look anything up.
-- **Everything you need is in `documents/`.** Every value required by every question was verified to
-  be readable from the shipped documents before the question was accepted. If you cannot find
-  something, it is a retrieval problem, not a missing file.
-- Use any tools, models or libraries you like.
+**4. Resolve.** Two independent systems answer every question, and they fail in
+opposite directions:
 
----
+- a **deterministic engine** classifies the question into one of nineteen shapes
+  and runs a hand-written query for it. Exact where it recognises the question,
+  blind where it does not;
+- the **provided LLM** is asked which calculation the question wants, and for any
+  parameters the question states. Naming the calculation is a far lower bar than
+  writing SQL for it, and it aims at the engine's weak spot — recognising an
+  unfamiliar phrasing, not computing the answer once recognised.
 
-## Getting started
+When the model names a shape, the engine's own handler for that shape is
+re-run. The arithmetic always stays in code that was checked against source
+documents; the model only ever changes the routing.
 
-1. Read three or four completion certificates by hand. Notice how the value, dates, client and
-   grading are laid out, and how much the layout varies between documents.
-2. Open `sample_questions.json` and follow one `reasoning_steps` chain through the actual PDFs.
-3. That will tell you what your extraction has to produce. Build that, then build the reasoning on
-   top of it.
+The arbitration is deliberately asymmetric:
 
-Good luck.
+| situation | outcome |
+|---|---|
+| engine confident | engine answers; a differing opinion is logged, not acted on |
+| engine unsure, or its answer is zero | model reroutes, subject to an answer-type check |
+| no endpoint reachable | engine alone |
+
+Testing settled that. An earlier version let a confident classification override
+the engine, and against a deliberately unreliable fixture that destroyed all 25
+sample answers. The engine reproduces the sample gold exactly; the classifier has
+no comparable record. With no partial credit, overriding a verified answer on an
+unverified opinion is a losing trade.
+
+## Why SQL rather than retrieval
+
+The questions are numeric aggregations over a whole estate, and the tier that
+breaks ties rewards exhaustively covering many documents with exact arithmetic
+across them. Chunk retrieval reliably misses documents and leaves the model doing
+the arithmetic. A `GROUP BY` either covers every row or none, and SQLite does the
+sums — so the model is never asked to do mental arithmetic on crore figures.
+
+## What has been verified
+
+| check | result |
+|---|---|
+| document typing vs. the manifest it replaces | 687 / 687, zero disagreements, from content alone |
+| scrambled tree — every file renamed to a hash, scattered across seven directories four deep | output **byte-identical** to the normal tree |
+| provided sample questions, under this round's exact-match tolerance | 25 / 25 |
+| 333-question regression | identical to baseline through the full LLM path |
+| paraphrased questions (engine alone) | 13 / 25 — 52% |
+| paraphrased questions (with the LLM) | **24 / 25 — 96%** |
+
+That 52% is the honest measure of what phrase-matching is worth on wording it has
+not seen, and it is the entire argument for the LLM layer.
+
+```bash
+python tests/score.py --questions tests/paraphrases.json --submission out.csv
+python tests/mock_llm.py --port 8112      # stands in for the endpoint locally
+```
+
+## Endpoint notes
+
+`src/llm.py` is the only thing that talks to the provided endpoint, and it
+handles the three documented traps: a reasoning model returns
+`finish_reason: "length"` with null content when `max_tokens` is small (we retry
+with more room), the trace field is `reasoning`, and `json_schema` decoding is
+constrained so structured replies always parse. Concurrency is deliberately
+modest — the endpoint is shared, and a client that opens hundreds of connections
+loses more time than it gains.
+
+The pipeline stands up no services of its own, so ports 8112–8115 stay free.
+SQLite is in-process.
+
+## Layout
+
+```
+main.py              --docs / --questions / --out entry point
+run.sh, setup.sh     packaging
+src/discover.py      find and type documents by content
+src/ingest.py        walk, extract, write records + manifest
+src/build_db.py      load into SQLite, reconcile against the credentials pack
+src/answer_engine.py shape classification and the query per shape
+src/llm.py           the only client for the provided endpoint
+src/llm_intent.py    which calculation, and any stated parameters
+src/llm_sql.py       text-to-SQL fallback, self-consistent over samples
+src/resolve.py       arbitration between the two systems
+src/schema_card.py   introspected schema + vocabulary + measured conventions
+tests/               fixtures, scorer, mock endpoint — see tests/NOTES.md
+history/             previous round's artefacts; nothing reads them
+```

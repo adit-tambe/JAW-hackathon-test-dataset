@@ -40,14 +40,6 @@ LLM_CONCURRENCY = int(os.getenv("LLM_CONCURRENCY", "6"))
 # Ensure output directories exist
 EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Gemini API ──────────────────────────────────────────────────────────────
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-
-# Rate limit settings (free tier: 15 RPM, we use 12 for safety)
-GEMINI_RPM = 12
-GEMINI_DELAY_SECONDS = 60.0 / GEMINI_RPM  # ~5 seconds between requests
-GEMINI_MODEL = "gemini-3.5-flash"
-
 # ── Document types and their priorities ─────────────────────────────────────
 # Processing order: highest priority first
 DOC_TYPE_PRIORITY = [
