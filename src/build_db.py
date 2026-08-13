@@ -282,6 +282,20 @@ CREATE TABLE IF NOT EXISTS annual_figures (
     doc_id          TEXT
 );
 
+-- Account balances by fiscal year, from the trial balance workbook. Extracted
+-- since the beginning and, until now, never loaded: the workbook loader had no
+-- branch for it, so seven years of account-level figures sat in the extracted
+-- JSON and reached nothing that could answer a question.
+CREATE TABLE IF NOT EXISTS trial_balance (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    fiscal_year     INTEGER,
+    account         TEXT,
+    debit           REAL,
+    credit          REAL,
+    balance         REAL,
+    doc_id          TEXT
+);
+
 -- Full document text, so a figure with no typed field is still reachable
 CREATE TABLE IF NOT EXISTS doc_text (
     doc_id          TEXT PRIMARY KEY,
@@ -906,6 +920,28 @@ def load_workbook_data(conn):
                             (description, acquisition_cost, acquisition_date)
                         VALUES (?, ?, ?)
                     """, (label, cost or 0, date or None))
+
+        elif doc_type == "trial_balance":
+            for sheet_name, sheet_data in data.get("sheets", {}).items():
+                if sheet_name.lower().startswith("note"):
+                    continue
+                # Sheets are named for the fiscal year they cover: "TB 2019-20".
+                year_match = re.search(r"(20\d{2})", sheet_name)
+                fiscal_year = int(year_match.group(1)) if year_match else None
+                for row in sheet_data.get("data", []):
+                    if not isinstance(row, dict):
+                        continue
+                    account = pick_text(row, "account", "particulars", "head")
+                    if not account or account.upper() == "TOTAL":
+                        continue
+                    conn.execute("""
+                        INSERT INTO trial_balance
+                            (fiscal_year, account, debit, credit, balance, doc_id)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (fiscal_year, account,
+                          pick_number(row, "debit") or 0,
+                          pick_number(row, "credit") or 0,
+                          pick_number(row, "balance") or 0, doc_id))
 
         elif doc_type == "receivables_ageing":
             for sheet_name, sheet_data in data.get("sheets", {}).items():
