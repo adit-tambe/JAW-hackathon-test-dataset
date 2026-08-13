@@ -4,7 +4,11 @@ All paths, API keys, and constants live here.
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+try:                        # development convenience only; never required
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*_a, **_k):
+        return False
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -13,12 +17,25 @@ warnings.filterwarnings("ignore")
 load_dotenv()
 
 # ── Paths ───────────────────────────────────────────────────────────────────
+# The document root and the scratch directory are both overridable, because at
+# run time we are handed an arbitrary --docs path and must not assume the repo
+# directory is writable. run.sh sets these before anything imports this module.
 PROJECT_ROOT = Path(__file__).parent.parent
-DOCUMENTS_DIR = PROJECT_ROOT / "documents"
-DATA_DIR = PROJECT_ROOT / "data"
+DOCUMENTS_DIR = Path(os.getenv("JAW_DOCS_DIR") or (PROJECT_ROOT / "documents"))
+DATA_DIR = Path(os.getenv("JAW_DATA_DIR") or (PROJECT_ROOT / "data"))
 EXTRACTED_DIR = DATA_DIR / "extracted"
 DB_PATH = DATA_DIR / "company.db"
 SAMPLE_QUESTIONS_PATH = PROJECT_ROOT / "sample_questions.json"
+
+# ── Provided LLM endpoint ───────────────────────────────────────────────────
+# An OpenAI-compatible vLLM server, exported into our environment by the
+# harness. It is the only generative model we are permitted to use.
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "http://localhost:8100/v1").rstrip("/")
+LLM_MODEL = os.getenv("LLM_MODEL", "qwen3.6-35b-a3b-nvfp4")
+# This is a reasoning model: it spends budget on a hidden trace before it
+# answers, and a small cap returns finish_reason "length" with null content.
+LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "4096"))
+LLM_CONCURRENCY = int(os.getenv("LLM_CONCURRENCY", "6"))
 
 # Ensure output directories exist
 EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)

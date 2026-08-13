@@ -19,7 +19,6 @@ from tqdm import tqdm
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import DOCUMENTS_DIR, EXTRACTED_DIR, PROJECT_ROOT
 from src.money import parse_indian_money
-from src.extract_pdfs import load_document_index
 from src.extract_records import (
     extract_financial_statement, extract_ledger_book, extract_bank_statement,
     extract_ra_bill, extract_final_ra_bill, extract_tender_dossier,
@@ -501,47 +500,17 @@ EXTRACTORS = {
 
 
 def run_fast_extraction():
-    docs = load_document_index()
-    pdf_docs = [d for d in docs if d['filename'].endswith('.pdf')]
-    
-    print(f"Starting local extraction for {len(pdf_docs)} PDFs...")
-    
-    extracted_count = 0
-    errors = []
-    for doc_info in tqdm(pdf_docs, desc="Extracting PDFs"):
-        doc_id = doc_info['doc_id']
-        doc_type = doc_info['doc_type']
-        filepath = DOCUMENTS_DIR / doc_info['filename']
-        output_path = EXTRACTED_DIR / f"{doc_id}.json"
-        
-        if not filepath.exists():
-            continue
-        
-        try:
-            doc = fitz.open(filepath)
-            raw_text = '\n'.join(page.get_text() for page in doc)
-            doc.close()
-            
-            if doc_type == "reference_letter":
-                data = extract_ref(raw_text, doc_id, raw_text=raw_text)
-            else:
-                extractor = EXTRACTORS.get(doc_type,
-                                           lambda t, d: extract_generic(t, d, doc_type))
-                data = extractor(raw_text, doc_id)
-            data["_source_file"] = str(filepath)
-            # Keep the full text so the answer engine can fall back to reading
-            # a figure straight out of a document when no typed field holds it.
-            data["_text"] = raw_text
-            
-            with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            
-            extracted_count += 1
-        except Exception as e:
-            errors.append((doc_id, str(e)))
-            print(f"\n  Error on {doc_id}: {e}")
-            
-    print(f"\nExtracted {extracted_count} PDFs.")
+    """Deprecated shim.
+
+    Extraction used to be driven by a checked-in manifest of 687 known file
+    names resolved against a fixed `documents/` directory, which only ever
+    worked on the machine the manifest was built on. Discovery now happens by
+    content in `src/discover.py`; this remains so the older development entry
+    point keeps working.
+    """
+    from src.config import DOCUMENTS_DIR, EXTRACTED_DIR
+    from src.ingest import ingest
+    ingest(DOCUMENTS_DIR, EXTRACTED_DIR)
 
 
 if __name__ == "__main__":

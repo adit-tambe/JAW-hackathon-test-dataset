@@ -16,7 +16,6 @@ import sys
 from pathlib import Path
 
 import openpyxl
-import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import DOCUMENTS_DIR, EXTRACTED_DIR
