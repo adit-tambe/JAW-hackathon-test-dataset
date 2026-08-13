@@ -61,15 +61,16 @@ def _workbook_record(doc: Doc) -> dict:
     return data
 
 
-def ingest(docs_root: Path, out_dir: Path, verbose: bool = True) -> dict:
+def ingest(docs_root: Path, out_dir: Path, verbose: bool = True,
+           use_llm: bool = True) -> dict:
     """Discover, extract and persist every document under `docs_root`."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     docs = discover(Path(docs_root), verbose=verbose)
     manifest: dict[str, dict] = {}
-    written = 0
     failures: list[tuple[str, str]] = []
+    extracted: list[tuple[Doc, dict]] = []
 
     for doc in docs:
         try:
@@ -83,7 +84,31 @@ def ingest(docs_root: Path, out_dir: Path, verbose: bool = True) -> dict:
         data.setdefault("_doc_type", doc.doc_type)
         data["_source_file"] = str(doc.path)
         data["_sniffed_type"] = doc.doc_type
+        extracted.append((doc, data))
 
+    # A record whose typed fields came back mostly empty means the document
+    # carries a layout our patterns do not cover. That is silent — the record
+    # exists, so nothing errors — and it is exactly what an estate we have never
+    # seen is most likely to hand us. Re-read those before anything downstream
+    # depends on them.
+    if use_llm and extracted:
+        by_type: dict[str, list] = {}
+        for doc, data in extracted:
+            by_type.setdefault(doc.doc_type, []).append(
+                (doc.doc_id, data, data.get("_text", "")))
+        try:
+            from src.llm import available
+            from src.llm_extract import enrich_thin_records
+            if available():
+                enrich_thin_records(by_type, verbose=verbose)
+            elif verbose:
+                print("  no model endpoint — keeping pattern extraction as-is")
+        except Exception as exc:                 # never let this sink the run
+            if verbose:
+                print(f"  re-read pass skipped ({type(exc).__name__}: {exc})")
+
+    written = 0
+    for doc, data in extracted:
         with open(out_dir / f"{doc.doc_id}.json", "w", encoding="utf-8") as fh:
             json.dump(data, fh, indent=2, ensure_ascii=False, default=str)
         written += 1

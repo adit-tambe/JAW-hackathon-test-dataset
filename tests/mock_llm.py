@@ -44,6 +44,27 @@ _OUT_OF_SCOPE_SQL: list[tuple[str, str]] = [
 ]
 
 
+
+def _extract_fields(prompt: str, fields: list[str]) -> dict:
+    """Crude stand-in for a model reading one document."""
+    body = prompt.split("--- document ---")[-1].split("--- end ---")[0]
+    flat = re.sub(r"\s+", " ", body)
+    out = {}
+    for f in fields:
+        val = ""
+        if "date" in f.lower():
+            m = re.search(r"(\d{4}-\d{2}-\d{2})", flat)
+            val = m.group(1) if m else ""
+        elif re.search(r"value|amount|billed|claimed|gst|retention|cumulative", f, re.I):
+            m = re.search(r"INR\s*([\d,]+)", flat)
+            val = m.group(1).replace(",", "") if m else ""
+        elif "no" == f.lower()[-2:] or "number" in f.lower():
+            m = re.search(r"([A-Z]{2,}[-/][\w/-]+)", flat)
+            val = m.group(1) if m else ""
+        out[f] = val
+    return out
+
+
 def _sql_for(question: str) -> str:
     """A crude intent guess — enough to produce executable, varied SQL."""
     just = _just_the_question(question).lower()
@@ -254,6 +275,11 @@ class Handler(BaseHTTPRequestHandler):
                        "confidence": "high", "why": "mock"}
             payload.update(_params_for(question))
             content = json.dumps(payload)
+        elif props and not ({"choice", "shape", "sql"} & props):
+            # A field-extraction call: the schema's properties are whatever
+            # fields that record is missing. Pull what we can out of the
+            # document text so the merge path is genuinely exercised.
+            content = json.dumps(_extract_fields(question, sorted(props)))
         elif "sql" in props and MODE == "repair" and "A previous attempt failed" not in question:
             # First look at a question: hand back SQL that cannot run, so the
             # repair pass has something real to recover from.

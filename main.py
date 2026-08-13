@@ -142,7 +142,7 @@ def main() -> int:
     if not args.skip_ingest:
         banner("1/4  Ingest — walk the document tree and type by content")
         from src.ingest import ingest
-        ingest(docs_root, EXTRACTED_DIR)
+        ingest(docs_root, EXTRACTED_DIR, use_llm=not args.no_llm)
 
         banner("2/4  Build — load records into SQLite and reconcile")
         from src.build_db import build_database, validate_database
