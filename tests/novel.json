@@ -1,0 +1,101 @@
+{
+ "note": "Questions none of the nineteen deterministic shapes computes. They reach plant and machinery, bank transactions, ledger postings, compliance checklists, tenders, RA bills, bills of quantity, certifications and published financials. The graded set is described as strengthened and carries an 'exhaustive' tier, so questions of this kind are likely. Answers are derived directly from the database by the SQL recorded in derived_by, so this measures whether the pipeline can REACH them, not whether the extraction is right.",
+ "questions": [
+  {
+   "qid": "NV-001",
+   "question": "I'm putting the asset schedule together \u2014 what did we pay in total for all the plant and machinery on the register?",
+   "answer_type": "money",
+   "answer": 10910600000.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(acquisition_cost) from assets"
+  },
+  {
+   "qid": "NV-002",
+   "question": "How many individual items are listed in our plant and machinery register?",
+   "answer_type": "count",
+   "answer": 210,
+   "shape": "out-of-scope",
+   "derived_by": "select count(*) from assets"
+  },
+  {
+   "qid": "NV-003",
+   "question": "Across every bank statement we hold, what is the total value of money paid in?",
+   "answer_type": "money",
+   "answer": 16174619071.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(amount) from bank_txns where direction=\"deposit\""
+  },
+  {
+   "qid": "NV-004",
+   "question": "How many transactions are recorded across all our bank statements?",
+   "answer_type": "count",
+   "answer": 973,
+   "shape": "out-of-scope",
+   "derived_by": "select count(*) from bank_txns"
+  },
+  {
+   "qid": "NV-005",
+   "question": "Totalling every debit posting in the general ledger, what does it come to?",
+   "answer_type": "money",
+   "answer": 200736554935.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(debit) from ledger_entries"
+  },
+  {
+   "qid": "NV-006",
+   "question": "Across the bid compliance checklists, how many requirements are marked as complied with?",
+   "answer_type": "count",
+   "answer": 168,
+   "shape": "out-of-scope",
+   "derived_by": "select count(*) from compliance_items where status=\"Complied\""
+  },
+  {
+   "qid": "NV-007",
+   "question": "Adding up every tender dossier we have submitted, what is the combined bid value?",
+   "answer_type": "money",
+   "answer": 6609900000.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(bid_value) from tenders"
+  },
+  {
+   "qid": "NV-008",
+   "question": "How many ISO certificates does the company currently hold?",
+   "answer_type": "count",
+   "answer": 5,
+   "shape": "out-of-scope",
+   "derived_by": "select count(*) from iso_certs"
+  },
+  {
+   "qid": "NV-009",
+   "question": "What is the total net amount claimed across all our running account bills?",
+   "answer_type": "money",
+   "answer": 316629186.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(net_claimed) from bills"
+  },
+  {
+   "qid": "NV-010",
+   "question": "For contract 71, what do the bill-of-quantity line items add up to?",
+   "answer_type": "money",
+   "answer": 1622001304.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(amount) from boq_items where contract_ref=\"Contract_71\""
+  },
+  {
+   "qid": "NV-011",
+   "question": "How many of our engineers hold a PMP credential?",
+   "answer_type": "count",
+   "answer": 39,
+   "shape": "out-of-scope",
+   "derived_by": "select count(distinct engineer_id) from engineer_certs where upper(cert_type)=\"PMP\""
+  },
+  {
+   "qid": "NV-012",
+   "question": "In the financial statements for fiscal year 2019, what was the contract revenue from EPC work?",
+   "answer_type": "money",
+   "answer": 481700000.0,
+   "shape": "out-of-scope",
+   "derived_by": "select sum(current_year) from statement_items where fiscal_year=2019 and section=\"revenue\" and particulars like \"Contract Revenue%\""
+  }
+ ]
+}

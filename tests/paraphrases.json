@@ -1,0 +1,79 @@
+{
+  "note": "Faithful rewrites of questions whose answers we have verified against source documents. Entity names are left intact on purpose: the variable under test is whether the pipeline still recognises WHICH CALCULATION is being asked for once the phrasing changes. That is the failure mode a question set we have never seen will actually produce.",
+  "questions": [
+    {"qid": "PP-0001", "from": "HV-IC-0001", "shape": "general_aggregate", "answer_type": "money", "answer": 2942400000,
+     "question": "Rajesh Rao holds Six Sigma Black Belt 6S-500161 and delivered the Material Handling Plant - Uttar Pradesh Pkg-47 job for the National Expressway Development Authority. Adding up everything he has finished for that same customer, what does it come to in rupees?"},
+
+    {"qid": "PP-0002", "from": "HV-IC-0002", "shape": "exclusion_aggregate", "answer_type": "money", "answer": 1516600000,
+     "question": "For Irrigation & Waterways Dept, Govt of Rajasthan, leave the water treatment jobs out of it. What do the remaining executed contracts add up to?"},
+
+    {"qid": "PP-0003", "from": "HV-IC-0003", "shape": "collection_percent", "answer_type": "percent", "answer": 90.19,
+     "question": "On the Ring Road - West Bengal Pkg-128 assignment under PMP with Amit Iyer as the contact: of everything we have billed that client, what proportion has actually reached us, as a percentage?"},
+
+    {"qid": "PP-0004", "from": "HV-IC-0006", "shape": "unbilled_gap", "answer_type": "money", "answer": 213836582,
+     "question": "Lakshya Engineering & Construction is under audit. How much of the work they awarded us have we not yet raised an invoice for?"},
+
+    {"qid": "PP-0005", "from": "HV-IC-0014", "shape": "date_span", "answer_type": "days", "answer": 536,
+     "question": "Pooja Bose's PMP came through in March 2021, and she was on the Madhya Pradesh water plant. Counting from that issue date, how long did it take before that project closed out?"},
+
+    {"qid": "PP-0006", "from": "HV-IC-0017", "shape": "avg_work_size", "answer_type": "money", "answer": 326933333,
+     "question": "Take the client behind Community Centre - Uttar Pradesh Pkg-139. Across everything we have completed for them, what does a typical contract come to?"},
+
+    {"qid": "PP-0007", "from": "HV-IC-0018", "shape": "threshold_aggregate", "answer_type": "money", "answer": 1150300000,
+     "question": "For the Irrigation & Waterways Dept, Govt of West Bengal account, add up only those projects worth forty crore or more."},
+
+    {"qid": "PP-0008", "from": "HV-IC-0020", "shape": "distinct_count", "answer_type": "count", "answer": 2,
+     "question": "Farhan Rao, PMP. Across the jobs he has seen through to the end, how many different kinds of work does that cover?"},
+
+    {"qid": "PP-0009", "from": "HV-IC-0021", "shape": "yearly_diff", "answer_type": "money", "answer": 1189100000,
+     "question": "Meridian Constructors & Co. Compare what we closed for them in 2020 against 2022 and tell me the size of the swing."},
+
+    {"qid": "PP-0010", "from": "HV-IC-0033", "shape": "mean_median_diff", "answer_type": "money", "answer": 76950000,
+     "question": "For the client behind Tanvir Menon's Six Sigma Black Belt work on the Rajasthan Pkg-58 water treatment plant: across their completed contracts, how far does the arithmetic mean sit above or below the midpoint value? Report it negative if the mean is the lower of the two."},
+
+    {"qid": "PP-0011", "from": "HV-IC-0039", "shape": "temporal_chain", "answer_type": "money", "answer": 507900000,
+     "question": "Sunita Joshi's PMP was issued on 2021-03-10. Of the projects she led, add up only those that were not finished until after she already held it."},
+
+    {"qid": "PP-0012", "from": "HV-IC-0046", "shape": "rank_value", "answer_type": "money", "answer": 658300000,
+     "question": "Lakshya Engineering & Construction. What is the spread in value between our biggest completed project for them and the runner-up?"},
+
+    {"qid": "PP-0013", "from": "HV-IC-0071", "shape": "gap_to_threshold", "answer_type": "money", "answer": 28500000,
+     "question": "We want fifty crore of completed credentials with Jharkhand Municipal Corporation. By how much are we short right now?"},
+
+    {"qid": "PP-0014", "from": "HV-IC-0095", "shape": "referenced_share", "answer_type": "percent", "answer": 88.89,
+     "question": "National Expressway Development Authority. What percentage of those completed projects came with a written endorsement from the client?"},
+
+    {"qid": "PP-0015", "from": "HV-IC-0263", "shape": "absence", "answer_type": "count", "answer": 3,
+     "question": "For the Public Health Engineering Dept, Odisha bid: among the completed jobs, how many have no client reference letter on file?"},
+
+    {"qid": "PP-0016", "from": "HV-IC-0381", "shape": "outstanding_balance", "answer_type": "money", "answer": 258859089,
+     "question": "Arunodaya Infrastructure. How much money have they still not paid us across their invoices?"},
+
+    {"qid": "PP-0017", "from": "HV-IC-0414", "shape": "category_difference", "answer_type": "money", "answer": 315700000,
+     "question": "Within the Public Works Department, Govt of Maharashtra account, how far apart in value are the expressways jobs and the water treatment jobs?"},
+
+    {"qid": "PP-0018", "from": "HV-IC-0425", "shape": "category_difference", "answer_type": "money", "answer": 188500000,
+     "question": "National Expressway Development Authority: set the roads and highways total beside the tunnels total. What separates the two?"},
+
+    {"qid": "PP-0019", "from": "HV-IC-0404", "shape": "outstanding_balance", "answer_type": "money", "answer": 7822,
+     "question": "Public Works Department, Govt of Tamil Nadu. Netting off everything we have received, what is left owing on their account?"},
+
+    {"qid": "PP-0020", "from": "HV-IC-0001", "shape": "general_aggregate", "answer_type": "money", "answer": 2942400000,
+     "question": "What is the running total of completed work we can claim with the National Expressway Development Authority?"},
+
+    {"qid": "PP-0021", "from": "HV-IC-0046", "shape": "rank_value", "answer_type": "money", "answer": 658300000,
+     "question": "For Lakshya Engineering & Construction, how much bigger is our top completed contract than the one immediately below it?"},
+
+    {"qid": "PP-0022", "from": "HV-IC-0018", "shape": "threshold_aggregate", "answer_type": "money", "answer": 1150300000,
+     "question": "Irrigation & Waterways Dept, Govt of West Bengal: totalling only the contracts that reach 40 crore or above, what is the figure?"},
+
+    {"qid": "PP-0023", "from": "HV-IC-0006", "shape": "unbilled_gap", "answer_type": "money", "answer": 213836582,
+     "question": "Lakshya Engineering & Construction: what is the shortfall between the value they handed us and the value we have claimed on bills so far?"},
+
+    {"qid": "PP-0024", "from": "HV-IC-0002", "shape": "exclusion_aggregate", "answer_type": "money", "answer": 1516600000,
+     "question": "Irrigation & Waterways Dept, Govt of Rajasthan: strip out the water treatment scope and total whatever is left."},
+
+    {"qid": "PP-0025", "from": "HV-IC-0021", "shape": "yearly_diff", "answer_type": "money", "answer": 1189100000,
+     "question": "For Meridian Constructors & Co., how much did the value of completed work move between 2020 and 2022?"}
+  ]
+}

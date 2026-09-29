@@ -26,9 +26,24 @@ from pathlib import Path
 import fitz  # PyMuPDF
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.config import DOCUMENTS_DIR
+from src.config import DOCUMENTS_DIR, EXTRACTED_DIR
 
-PORTFOLIO_PDF = DOCUMENTS_DIR / "past_performance_portfolio" / "DOC-PPP-001.pdf"
+# Kept only as a last resort for local development against the sample tree. At
+# run time the portfolio is located through the ingestion manifest, because the
+# directory layout and file names we are given will not be these.
+LEGACY_PORTFOLIO_PDF = DOCUMENTS_DIR / "past_performance_portfolio" / "DOC-PPP-001.pdf"
+
+
+def locate_portfolio() -> Path | None:
+    """Resolve the credentials pack through the ingestion manifest."""
+    try:
+        from src.ingest import find_source
+        found = find_source(EXTRACTED_DIR, "past_performance_portfolio")
+        if found and Path(found).exists():
+            return Path(found)
+    except Exception:
+        pass
+    return LEGACY_PORTFOLIO_PDF if LEGACY_PORTFOLIO_PDF.exists() else None
 
 MONTHS = {m: i + 1 for i, m in enumerate(
     ["January", "February", "March", "April", "May", "June",
@@ -56,9 +71,11 @@ def _crore(valstr: str) -> int:
     return int(round(num * mult))
 
 
-def parse_portfolio(pdf_path: Path = PORTFOLIO_PDF) -> dict:
+def parse_portfolio(pdf_path: Path = None) -> dict:
     """Return {pkg_number: {...}} for every work in the portfolio detail pages."""
-    if not Path(pdf_path).exists():
+    if pdf_path is None:
+        pdf_path = locate_portfolio()
+    if pdf_path is None or not Path(pdf_path).exists():
         return {}
 
     doc = fitz.open(pdf_path)

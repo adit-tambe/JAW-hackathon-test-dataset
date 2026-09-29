@@ -1,9 +1,11 @@
-pymupdf                # PDF text extraction (the offline extraction path)
-openpyxl               # Excel workbook parsing
-pandas                 # Data manipulation
-tqdm                   # Progress bars
-python-dotenv          # .env loading
+# Runtime dependencies. Pinned so a rerun resolves to the same versions.
+#
+# Everything here is pure ingestion and plumbing — there are no model weights
+# to fetch. Generation goes to the endpoint the harness provides, so nothing in
+# this pipeline downloads anything at run time.
 
-# Optional — only needed for the Gemini-based extraction path in
-# src/extract_pdfs.py. The default pipeline runs fully offline without it.
-# google-generativeai
+pymupdf==1.28.2         # PDF text extraction
+openpyxl==3.1.5         # XLSX parsing
+requests==2.32.5        # OpenAI-compatible calls to the provided vLLM endpoint
+tqdm==4.67.1            # progress output
+python-dotenv==1.2.1    # local .env loading during development

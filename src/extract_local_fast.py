@@ -19,7 +19,6 @@ from tqdm import tqdm
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import DOCUMENTS_DIR, EXTRACTED_DIR, PROJECT_ROOT
 from src.money import parse_indian_money
-from src.extract_pdfs import load_document_index
 from src.extract_records import (
     extract_financial_statement, extract_ledger_book, extract_bank_statement,
     extract_ra_bill, extract_final_ra_bill, extract_tender_dossier,
@@ -440,20 +439,40 @@ def extract_bond(text: str, doc_id: str) -> dict:
     bank_name = lines[0] if lines else "Unknown Bank"
     flat = re.sub(r'\s+', ' ', text)
     
-    bond_no_m = re.search(r'Bond No:\s*([^\n]+)', flat)
+    # `flat` has had its newlines collapsed, so a `[^\n]+` capture runs to the
+    # end of the document — which is how the bond number came to hold three
+    # pages of guarantee text. Bound the capture to the shape of a reference,
+    # and accept both layouts: one says "Bond No", the other "BG No".
+    bond_no_m = re.search(r'\b(?:Bond|BG)\s*(?:No|Ref|Reference)\.?:?\s*([A-Za-z0-9][\w/\-]*)',
+                          flat, re.I)
     bond_number = bond_no_m.group(1).strip() if bond_no_m else None
-    
-    val_m = re.search(r'not exceeding\s+([^\n)(,]+(?:Lakh|Crore|Cr)?)', flat) or \
+
+    val_m = re.search(r'not exceeding\s+Rs\.?\s*([\d,\.]+\s*(?:Lakh|Crore|Cr)?)', flat, re.I) or \
+            re.search(r'not exceeding\s+([^\n)(,]+(?:Lakh|Crore|Cr)?)', flat) or \
             re.search(r'Rs\.?\s*([\d,\.]+\s*(?:Lakh|Crore|Cr)?)', flat)
     bond_val_str = val_m.group(1).strip() if val_m else None
     raw_bond_val = parse_indian_money(bond_val_str)
-    
-    dates_m = re.search(r'valid from\s+(\S+)\s+until\s+(\S+)', flat)
-    issue_date = parse_date(dates_m.group(1)) if dates_m else None
-    expiry_date = parse_date(dates_m.group(2)) if dates_m else None
-    
+
+    dates_m = re.search(r'valid from\s+(\S+)\s+until\s+(\S+)', flat, re.I)
+    if dates_m:
+        issue_date = parse_date(dates_m.group(1))
+        expiry_date = parse_date(dates_m.group(2))
+    else:
+        # Second layout: "Date: 25 Apr 2019" ... "in force up to and including
+        # 05 Jul 2021".
+        issued = re.search(r'\bDate:\s*(\d{1,2}\s+\w+\s+\d{4}|\d{4}-\d{2}-\d{2})', flat)
+        until = re.search(r'in force up to and including\s+(\d{1,2}\s+\w+\s+\d{4}|\d{4}-\d{2}-\d{2})',
+                          flat, re.I)
+        issue_date = parse_date(issued.group(1)) if issued else None
+        expiry_date = parse_date(until.group(1)) if until else None
+
     proj_m = re.search(r'work of\s+([^,\n]+)', flat)
+    if not proj_m:
+        proj_m = re.search(r'Subject:\s*Performance Bond\s*[—\-–]\s*([^(\n]+)', flat, re.I)
     project_name = proj_m.group(1).strip() if proj_m else None
+
+    tender_m = re.search(r'\b(RFP-\d+)', flat)
+    tender_ref = tender_m.group(1) if tender_m else None
     
     return {
         "_doc_id": doc_id,
@@ -467,6 +486,7 @@ def extract_bond(text: str, doc_id: str) -> dict:
         "contract_value_raw": None,
         "bank_name": bank_name,
         "bond_number": bond_number,
+        "tender_ref": tender_ref,
         "issue_date": issue_date,
         "expiry_date": expiry_date
     }
@@ -501,47 +521,17 @@ EXTRACTORS = {
 
 
 def run_fast_extraction():
-    docs = load_document_index()
-    pdf_docs = [d for d in docs if d['filename'].endswith('.pdf')]
-    
-    print(f"Starting local extraction for {len(pdf_docs)} PDFs...")
-    
-    extracted_count = 0
-    errors = []
-    for doc_info in tqdm(pdf_docs, desc="Extracting PDFs"):
-        doc_id = doc_info['doc_id']
-        doc_type = doc_info['doc_type']
-        filepath = DOCUMENTS_DIR / doc_info['filename']
-        output_path = EXTRACTED_DIR / f"{doc_id}.json"
-        
-        if not filepath.exists():
-            continue
-        
-        try:
-            doc = fitz.open(filepath)
-            raw_text = '\n'.join(page.get_text() for page in doc)
-            doc.close()
-            
-            if doc_type == "reference_letter":
-                data = extract_ref(raw_text, doc_id, raw_text=raw_text)
-            else:
-                extractor = EXTRACTORS.get(doc_type,
-                                           lambda t, d: extract_generic(t, d, doc_type))
-                data = extractor(raw_text, doc_id)
-            data["_source_file"] = str(filepath)
-            # Keep the full text so the answer engine can fall back to reading
-            # a figure straight out of a document when no typed field holds it.
-            data["_text"] = raw_text
-            
-            with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            
-            extracted_count += 1
-        except Exception as e:
-            errors.append((doc_id, str(e)))
-            print(f"\n  Error on {doc_id}: {e}")
-            
-    print(f"\nExtracted {extracted_count} PDFs.")
+    """Deprecated shim.
+
+    Extraction used to be driven by a checked-in manifest of 687 known file
+    names resolved against a fixed `documents/` directory, which only ever
+    worked on the machine the manifest was built on. Discovery now happens by
+    content in `src/discover.py`; this remains so the older development entry
+    point keeps working.
+    """
+    from src.config import DOCUMENTS_DIR, EXTRACTED_DIR
+    from src.ingest import ingest
+    ingest(DOCUMENTS_DIR, EXTRACTED_DIR)
 
 
 if __name__ == "__main__":
